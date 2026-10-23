@@ -44,6 +44,10 @@ const logoWidth = Math.round((logo.width / logo.height) * logoHeight);
     </p>
     <h3 id={`edu-${institution.id}`}>{institution.degree[lang]}</h3>
     <p class="institution__university">{institution.university}</p>
+    <p class="institution__cycle">
+      {copy.cycle(institution.cycle, institution.cycles)} · {copy.expected}{" "}
+      {institution.expected}
+    </p>
     <a
       class="text-link institution__link"
       href={institution.url}
@@ -131,6 +135,11 @@ const logoWidth = Math.round((logo.width / logo.height) * logoHeight);
   .institution__university {
     color: var(--text-muted);
     font-size: var(--step--1);
+  }
+
+  .institution__cycle {
+    font-size: var(--step--1);
+    color: var(--text-muted);
   }
 
   .institution__link {

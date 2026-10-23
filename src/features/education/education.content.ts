@@ -11,6 +11,11 @@ export interface Institution {
   logoHeight: number;
   /** Year the degree started (confirmed by the owner). */
   since: string;
+  /** Current cycle (semester) and total. Update every semester. */
+  cycle: number;
+  cycles: number;
+  /** Expected graduation: two cycles per year from the start. */
+  expected: string;
   url: string;
   university: string;
   degree: Localized<string>;
@@ -24,6 +29,9 @@ export const institutions: Institution[] = [
     logo: untEscudo,
     logoHeight: 72,
     since: "2024",
+    cycle: 6,
+    cycles: 10,
+    expected: "2028",
     url: "https://www.unitru.edu.pe/",
     university: "Universidad Nacional de Trujillo",
     degree: { es: "Ingeniería Química", en: "Chemical Engineering" },
@@ -38,6 +46,9 @@ export const institutions: Institution[] = [
     logo: upaoLogo,
     logoHeight: 46,
     since: "2024",
+    cycle: 6,
+    cycles: 10,
+    expected: "2028",
     url: "https://www.upao.edu.pe/",
     university: "Universidad Privada Antenor Orrego",
     degree: {
@@ -67,6 +78,8 @@ export const educationCopy = {
     },
     status: "En curso",
     since: "desde",
+    cycle: (n: number, total: number) => `${n}.º ciclo de ${total}`,
+    expected: "egreso previsto",
     website: "Sitio oficial",
     venn: {
       label:
@@ -93,6 +106,8 @@ export const educationCopy = {
     },
     status: "In progress",
     since: "since",
+    cycle: (n: number, total: number) => `Semester ${n} of ${total}`,
+    expected: "expected graduation",
     website: "Official website",
     venn: {
       label:
