@@ -1,15 +1,14 @@
 ---
-import { Font } from "astro:assets";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { paths } from "@/shared/i18n/config";
 ---
 
-<html lang="es-PE">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Johel Andreé Vargas Villanueva</title>
-    <Font cssVariable="--font-manrope" preload />
-  </head>
-  <body>
-    <h1>Johel Andreé Vargas Villanueva</h1>
-  </body>
-</html>
+<BaseLayout
+  lang="es"
+  title="Johel Andreé Vargas Villanueva"
+  description="Web personal en construcción."
+  alternates={{ es: paths.home("es"), en: paths.home("en") }}
+  image={{ src: "/og/home-es.png", alt: "Johel Andreé Vargas Villanueva" }}
+>
+  <h1 class="container">Johel Andreé Vargas Villanueva</h1>
+</BaseLayout>

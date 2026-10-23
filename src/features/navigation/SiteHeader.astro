@@ -1,0 +1,322 @@
+---
+import BrandMark from "@/shared/ui/BrandMark.astro";
+import Icon from "@/shared/ui/Icon.astro";
+import ThemeToggle from "@/features/theme/ThemeToggle.astro";
+import { useTranslations } from "@/shared/i18n/ui";
+import {
+  LOCALES,
+  otherLang,
+  paths,
+  type Alternates,
+  type Lang,
+} from "@/shared/i18n/config";
+
+interface Props {
+  lang: Lang;
+  alternates: Alternates;
+}
+
+const { lang, alternates } = Astro.props;
+const t = useTranslations(lang);
+const other = otherLang(lang);
+
+const links = [
+  { href: paths.section(lang, "projects"), label: t("nav.projects") },
+  { href: paths.section(lang, "education"), label: t("nav.education") },
+  { href: paths.section(lang, "stack"), label: t("nav.stack") },
+  { href: paths.section(lang, "contact"), label: t("nav.contact") },
+];
+---
+
+<header class="site-header">
+  <div class="site-header__inner container">
+    <a class="brand" href={paths.home(lang)} aria-label={t("brand.label")}>
+      <BrandMark class="brand__mark" />
+      <span class="brand__word" aria-hidden="true">
+        andreé<span class="brand__dot">.</span>
+      </span>
+    </a>
+
+    <nav class="nav-desktop" aria-label={t("nav.label")}>
+      <ul role="list">
+        {links.map((link) => (
+          <li>
+            <a href={link.href}>{link.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="site-header__actions">
+      <a
+        class="lang-link"
+        href={alternates[other]}
+        hreflang={LOCALES[other].html}
+        lang={LOCALES[other].html}
+      >
+        {LOCALES[other].label}
+      </a>
+      <ThemeToggle lang={lang} />
+      <a class="cv-link" href={paths.cv(lang)}>
+        {t("nav.cv")}
+        <Icon name="arrow-up-right" />
+      </a>
+      <button
+        class="menu-button"
+        type="button"
+        popovertarget="site-menu"
+        aria-label={t("menu.label")}
+      >
+        <Icon name="menu" size="1.35rem" />
+      </button>
+    </div>
+  </div>
+
+  <nav
+    id="site-menu"
+    class="menu-panel"
+    popover
+    aria-label={t("nav.label")}
+    data-menu
+  >
+    <div class="menu-panel__head">
+      <span class="eyebrow">{t("menu.open")}</span>
+      <button
+        class="menu-close"
+        type="button"
+        popovertarget="site-menu"
+        popovertargetaction="hide"
+      >
+        <span class="visually-hidden">{t("menu.close")}</span>
+        <Icon name="close" size="1.35rem" />
+      </button>
+    </div>
+    <ul role="list">
+      {links.map((link, index) => (
+        <li>
+          <a href={link.href}>
+            <span class="menu-panel__index mono" aria-hidden="true">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            {link.label}
+          </a>
+        </li>
+      ))}
+      <li>
+        <a href={paths.cv(lang)}>
+          <span class="menu-panel__index mono" aria-hidden="true">
+            05
+          </span>
+          {t("nav.cv")}
+        </a>
+      </li>
+    </ul>
+    <a
+      class="menu-panel__lang text-link"
+      href={alternates[other]}
+      hreflang={LOCALES[other].html}
+      lang={LOCALES[other].html}
+    >
+      {LOCALES[other].label}
+    </a>
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--header-bg);
+    border-bottom: 1px solid var(--line);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+  }
+
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    min-height: var(--header-h);
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-inline-end: auto;
+    font-size: 1.3rem;
+    font-weight: 750;
+    letter-spacing: -0.04em;
+    text-decoration: none;
+  }
+
+  .brand :global(.brand__mark) {
+    inline-size: 1.9rem;
+    block-size: 1.9rem;
+    color: var(--accent);
+  }
+
+  .brand__dot {
+    color: var(--accent);
+  }
+
+  .nav-desktop ul {
+    display: flex;
+    gap: 0.25rem;
+  }
+
+  .nav-desktop a,
+  .lang-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding-inline: 0.8rem;
+    border-radius: 999px;
+    font-size: 0.9375rem;
+    font-weight: 550;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition:
+      color var(--dur-fast) ease,
+      background-color var(--dur-fast) ease;
+  }
+
+  .nav-desktop a:hover,
+  .lang-link:hover {
+    color: var(--text);
+    background: var(--surface-2);
+  }
+
+  .site-header__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .cv-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-height: 2.75rem;
+    padding-inline: 1.1rem;
+    border-radius: 999px;
+    background: var(--text);
+    color: var(--bg);
+    font-weight: 700;
+    font-size: 0.9375rem;
+    text-decoration: none;
+  }
+
+  .cv-link:hover {
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+
+  .menu-button,
+  .menu-close {
+    display: none;
+    place-items: center;
+    inline-size: 2.75rem;
+    block-size: 2.75rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--text);
+  }
+
+  .menu-close {
+    display: inline-grid;
+  }
+
+  /* ----- Mobile menu (popover) ----- */
+  .menu-panel {
+    inset: 0 0 auto auto;
+    inline-size: min(100%, 26rem);
+    block-size: 100dvh;
+    margin: 0;
+    padding: 1rem var(--gutter) 2rem;
+    border: 0;
+    border-inline-start: 1px solid var(--line);
+    background: var(--bg);
+    color: var(--text);
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .menu-panel:popover-open {
+    display: flex;
+  }
+
+  .menu-panel::backdrop {
+    background: rgb(0 0 0 / 0.45);
+  }
+
+  .menu-panel__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: calc(var(--header-h) - 1rem);
+  }
+
+  .menu-panel ul {
+    display: grid;
+    border-top: 1px solid var(--line);
+  }
+
+  .menu-panel li a {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    padding-block: 1rem;
+    border-bottom: 1px solid var(--line);
+    font-size: var(--step-2);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    text-decoration: none;
+  }
+
+  .menu-panel__index {
+    font-size: var(--step--1);
+    font-weight: 500;
+    color: var(--accent);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .menu-panel:popover-open {
+      animation: slide-in var(--dur) var(--ease-out);
+    }
+  }
+
+  @keyframes slide-in {
+    from {
+      transform: translateX(2rem);
+      opacity: 0;
+    }
+  }
+
+  @media (max-width: 60rem) {
+    .nav-desktop,
+    .lang-link {
+      display: none;
+    }
+
+    .menu-button {
+      display: inline-grid;
+    }
+  }
+
+  @media (max-width: 22rem) {
+    .cv-link {
+      padding-inline: 0.8rem;
+    }
+  }
+</style>
+
+<script>
+  // Closes the menu after choosing an in-page destination.
+  const menu = document.querySelector<HTMLElement>("[data-menu]");
+  menu?.addEventListener("click", (event) => {
+    if ((event.target as Element).closest("a")) menu.hidePopover();
+  });
+</script>

@@ -1,0 +1,78 @@
+---
+import { Font } from "astro:assets";
+import "@/styles/global.css";
+import SeoHead, { type SeoProps } from "@/features/seo/SeoHead.astro";
+import ThemeScript from "@/features/theme/ThemeScript.astro";
+import SiteHeader from "@/features/navigation/SiteHeader.astro";
+import SiteFooter from "@/features/navigation/SiteFooter.astro";
+import { LOCALES } from "@/shared/i18n/config";
+import { useTranslations } from "@/shared/i18n/ui";
+
+type Props = SeoProps & {
+  /** Hide header navigation extras (used by the printable CV). */
+  bodyClass?: string;
+};
+
+const { bodyClass, ...seo } = Astro.props;
+const t = useTranslations(seo.lang);
+---
+
+<!doctype html>
+<html lang={LOCALES[seo.lang].html} dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <ThemeScript />
+    <Font cssVariable="--font-manrope" preload />
+    <SeoHead {...seo} />
+    <meta
+      name="theme-color"
+      content="#f6f5f9"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta
+      name="theme-color"
+      content="#0d0d11"
+      media="(prefers-color-scheme: dark)"
+    />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="format-detection" content="telephone=no" />
+  </head>
+  <body class={bodyClass}>
+    <a class="skip-link" href="#main">
+      {t("skip")}
+    </a>
+    <SiteHeader lang={seo.lang} alternates={seo.alternates} />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <SiteFooter lang={seo.lang} />
+  </body>
+</html>
+
+<style>
+  .skip-link {
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 100;
+    padding: 0.75rem 1.1rem;
+    border-radius: var(--radius-s);
+    background: var(--accent);
+    color: var(--on-accent);
+    font-weight: 700;
+    text-decoration: none;
+    transform: translateY(-200%);
+  }
+
+  .skip-link:focus-visible {
+    transform: none;
+  }
+
+  main:focus {
+    outline: none;
+  }
+</style>

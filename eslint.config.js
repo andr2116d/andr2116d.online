@@ -21,4 +21,14 @@ export default [
   {
     languageOptions: { globals: { ...globals.browser, ...globals.node } },
   },
+  {
+    files: ["**/*.astro"],
+    rules: {
+      // Safari/VoiceOver drops list semantics when list-style is none; role="list" restores it.
+      "astro/jsx-a11y/no-redundant-roles": [
+        "error",
+        { ul: ["list"], ol: ["list"] },
+      ],
+    },
+  },
 ];

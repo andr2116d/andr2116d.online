@@ -1,0 +1,133 @@
+---
+import BrandMark from "@/shared/ui/BrandMark.astro";
+import Icon from "@/shared/ui/Icon.astro";
+import { SITE } from "@/shared/config/site";
+import { useTranslations } from "@/shared/i18n/ui";
+import type { Lang } from "@/shared/i18n/config";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const year = new Date(SITE.updated).getFullYear();
+const longitude = `${SITE.location.longitude}${lang === "es" ? "O" : "W"}`;
+
+const social = [
+  { label: "GitHub", href: SITE.links.github },
+  { label: "LinkedIn", href: SITE.links.linkedin },
+  { label: "Instagram", href: SITE.links.instagram },
+];
+---
+
+<footer class="site-footer">
+  <div class="site-footer__inner container">
+    <div class="site-footer__id">
+      <BrandMark class="site-footer__mark" />
+      <p>
+        <strong>{SITE.name}</strong>
+        <span class="mono">
+          © {year} · {SITE.location.city}, Perú · {SITE.location.latitude}
+          {longitude}
+        </span>
+      </p>
+    </div>
+
+    <ul class="site-footer__links" role="list">
+      {social.map((item) => (
+        <li>
+          <a href={item.href} rel="me noopener" target="_blank">
+            {item.label}
+            <Icon name="arrow-up-right" />
+            <span class="visually-hidden">{t("external.newTab")}</span>
+          </a>
+        </li>
+      ))}
+      <li>
+        <a href={`mailto:${SITE.email}`}>Email</a>
+      </li>
+    </ul>
+
+    <p class="site-footer__note">{t("footer.built")}</p>
+    <a class="site-footer__top text-link" href="#top">
+      {t("footer.top")}
+      <Icon name="arrow-up" />
+    </a>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--line);
+    padding-block: 2.5rem 3rem;
+    font-size: var(--step--1);
+    color: var(--text-muted);
+  }
+
+  .site-footer__inner {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1.5rem 2rem;
+    align-items: center;
+  }
+
+  .site-footer__id {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+
+  .site-footer__id p {
+    display: grid;
+    gap: 0.15rem;
+  }
+
+  .site-footer__id strong {
+    color: var(--text);
+    font-size: var(--step-0);
+  }
+
+  .site-footer :global(.site-footer__mark) {
+    inline-size: 2.25rem;
+    block-size: 2.25rem;
+    flex: none;
+    color: var(--accent);
+  }
+
+  .site-footer__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.25rem;
+    justify-content: end;
+  }
+
+  .site-footer__links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    min-height: 2.75rem;
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .site-footer__links a:hover {
+    text-decoration: underline;
+  }
+
+  .site-footer__top {
+    justify-self: end;
+  }
+
+  @media (max-width: 48rem) {
+    .site-footer__inner {
+      grid-template-columns: 1fr;
+    }
+
+    .site-footer__links,
+    .site-footer__top {
+      justify-content: start;
+      justify-self: start;
+    }
+  }
+</style>
