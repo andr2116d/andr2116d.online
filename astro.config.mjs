@@ -16,6 +16,8 @@ export default defineConfig({
     routing: { prefixDefaultLocale: false },
   },
   prefetch: { prefetchAll: false, defaultStrategy: "hover" },
+  // Content-Security-Policy <meta> with hashes for every inline script and style.
+  security: { csp: true },
   fonts: [
     {
       provider: fontProviders.local(),
