@@ -78,7 +78,7 @@ export function websiteNode(site: URL): Node {
     "@id": ids(site).website,
     url: absolute("/", site),
     name: SITE.name,
-    alternateName: [SITE.shortName, SITE.domain],
+    alternateName: [SITE.shortName, SITE.handle, SITE.domain],
     inLanguage: [LOCALES.es.html, LOCALES.en.html],
     publisher: { "@id": ids(site).person },
   };
