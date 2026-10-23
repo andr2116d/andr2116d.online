@@ -10,14 +10,14 @@
   --bg: light-dark(#f6f5f9, #0d0d11);
   --surface: light-dark(#ffffff, #15151b);
   --surface-2: light-dark(#eeecf3, #1c1c24);
-  --line: light-dark(#dcd8e4, #2a2a35);
-  --line-strong: light-dark(#bdb7ca, #3d3c4b);
+  --line: light-dark(#d6d1df, #2f2e3b);
+  --line-strong: light-dark(#aea8bd, #4a4960);
   --header-bg: light-dark(rgb(246 245 249 / 0.86), rgb(13 13 17 / 0.82));
 
   /* Text */
   --text: light-dark(#1c1a23, #f3f1f8);
-  --text-muted: light-dark(#575164, #b6b1c3);
-  --text-subtle: light-dark(#665f74, #918c9f);
+  --text-muted: light-dark(#4b4558, #c9c4d6);
+  --text-subtle: light-dark(#5a5367, #a9a4b8);
 
   /* Brand: lilac for systems & AI, mint for chemistry */
   --accent: light-dark(#5a3990, #c6b6f7);
@@ -80,12 +80,12 @@
     --bg: #f6f5f9;
     --surface: #ffffff;
     --surface-2: #eeecf3;
-    --line: #dcd8e4;
-    --line-strong: #bdb7ca;
+    --line: #d6d1df;
+    --line-strong: #aea8bd;
     --header-bg: rgb(246 245 249 / 0.94);
     --text: #1c1a23;
-    --text-muted: #575164;
-    --text-subtle: #665f74;
+    --text-muted: #4b4558;
+    --text-subtle: #5a5367;
     --accent: #5a3990;
     --on-accent: #ffffff;
     --accent-soft: #ebe5f6;
