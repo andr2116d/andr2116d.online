@@ -1,0 +1,98 @@
+---
+import type { Lang } from "@/shared/i18n/config";
+import { educationCopy } from "../education.content";
+
+interface Props {
+  lang: Lang;
+}
+
+const { venn } = educationCopy[Astro.props.lang];
+---
+
+<svg class="venn" viewBox="0 0 420 270" role="img" aria-labelledby="venn-title">
+  <title id="venn-title">{venn.label}</title>
+  <circle class="venn__set venn__set--chem" cx="155" cy="135" r="110"></circle>
+  <circle class="venn__set venn__set--ai" cx="265" cy="135" r="110"></circle>
+
+  <text class="venn__name venn__name--chem" x="96" y="128">
+    {venn.chem}
+  </text>
+  <text class="venn__note" x="96" y="150">
+    {venn.chemNote}
+  </text>
+
+  <text class="venn__name venn__name--ai" x="316" y="128">
+    {venn.ai}
+  </text>
+  <text class="venn__note" x="316" y="150">
+    {venn.aiNote}
+  </text>
+
+  {venn.center.map((line, i) => (
+    <text class="venn__center" x="210" y={112 + i * 22}>
+      {line}
+    </text>
+  ))}
+</svg>
+
+<style>
+  .venn {
+    inline-size: 100%;
+    max-inline-size: 30rem;
+    block-size: auto;
+    font-family: var(--font-sans);
+  }
+
+  .venn__set {
+    stroke-width: 1.5;
+  }
+
+  .venn__set--chem {
+    fill: color-mix(in oklab, var(--chem) 14%, transparent);
+    stroke: var(--chem);
+  }
+
+  .venn__set--ai {
+    fill: color-mix(in oklab, var(--accent) 14%, transparent);
+    stroke: var(--accent);
+  }
+
+  text {
+    text-anchor: middle;
+  }
+
+  .venn__name {
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .venn__name--chem {
+    fill: var(--chem);
+  }
+
+  .venn__name--ai {
+    fill: var(--accent);
+  }
+
+  .venn__note {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    fill: var(--text-muted);
+  }
+
+  .venn__center {
+    font-size: 12.5px;
+    font-weight: 650;
+    fill: var(--text);
+  }
+
+  @media (forced-colors: active) {
+    .venn__set {
+      stroke: CanvasText;
+      fill: none;
+    }
+    text {
+      fill: CanvasText;
+    }
+  }
+</style>

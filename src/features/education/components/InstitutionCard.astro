@@ -1,0 +1,131 @@
+---
+import { Image } from "astro:assets";
+import Icon from "@/shared/ui/Icon.astro";
+import { useTranslations } from "@/shared/i18n/ui";
+import type { Lang } from "@/shared/i18n/config";
+import { educationCopy, type Institution } from "../education.content";
+
+interface Props {
+  institution: Institution;
+  lang: Lang;
+}
+
+const { institution, lang } = Astro.props;
+const copy = educationCopy[lang];
+const t = useTranslations(lang);
+const { logo, logoHeight } = institution;
+const logoWidth = Math.round((logo.width / logo.height) * logoHeight);
+---
+
+<article
+  class:list={[
+    "institution",
+    `institution--${institution.discipline}`,
+    "reveal",
+  ]}
+  aria-labelledby={`edu-${institution.id}`}
+>
+  <div class="institution__plate">
+    <Image
+      src={logo}
+      alt={institution.logoAlt[lang]}
+      width={logoWidth}
+      height={logoHeight}
+      densities={[1, 2]}
+      loading="lazy"
+      decoding="async"
+      style={`block-size: ${logoHeight}px`}
+    />
+  </div>
+  <div class="institution__body">
+    <p class="institution__status mono">
+      <span class="institution__dot" aria-hidden="true"></span>
+      {copy.status}
+    </p>
+    <h3 id={`edu-${institution.id}`}>{institution.degree[lang]}</h3>
+    <p class="institution__university">{institution.university}</p>
+    <a
+      class="text-link institution__link"
+      href={institution.url}
+      target="_blank"
+      rel="noopener"
+    >
+      {copy.website}
+      <span class="visually-hidden">
+        {institution.university} {t("external.newTab")}
+      </span>
+      <Icon name="arrow-up-right" />
+    </a>
+  </div>
+</article>
+
+<style>
+  .institution {
+    --tone: var(--chem);
+    display: grid;
+    grid-template-rows: auto 1fr;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-l);
+    background: var(--surface);
+    overflow: hidden;
+  }
+
+  .institution--ai {
+    --tone: var(--accent);
+  }
+
+  /* Official color logos always sit on white, as both brand manuals require. */
+  .institution__plate {
+    display: grid;
+    place-items: center;
+    min-block-size: 9.5rem;
+    padding: 1.5rem;
+    background: var(--plate);
+    border-bottom: 3px solid var(--tone);
+  }
+
+  /* Height is fixed per logo; width follows the official proportions. */
+  .institution__plate :global(img) {
+    inline-size: auto;
+    max-inline-size: 100%;
+    object-fit: contain;
+  }
+
+  .institution__body {
+    display: grid;
+    align-content: start;
+    gap: 0.6rem;
+    padding: 1.5rem;
+  }
+
+  .institution__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--step--1);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--tone);
+  }
+
+  .institution__dot {
+    inline-size: 0.5rem;
+    block-size: 0.5rem;
+    border-radius: 50%;
+    background: currentColor;
+    box-shadow: 0 0 0 4px color-mix(in oklab, currentColor 22%, transparent);
+  }
+
+  .institution h3 {
+    font-size: var(--step-2);
+  }
+
+  .institution__university {
+    color: var(--text-muted);
+  }
+
+  .institution__link {
+    margin-top: 0.4rem;
+    font-size: var(--step--1);
+  }
+</style>

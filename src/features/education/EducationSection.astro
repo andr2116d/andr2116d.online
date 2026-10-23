@@ -1,0 +1,76 @@
+---
+import SectionHeading from "@/shared/ui/SectionHeading.astro";
+import { SECTION_IDS, type Lang } from "@/shared/i18n/config";
+import InstitutionCard from "./components/InstitutionCard.astro";
+import DisciplineVenn from "./components/DisciplineVenn.astro";
+import { educationCopy, institutions } from "./education.content";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const copy = educationCopy[lang];
+---
+
+<section
+  class="section container education"
+  id={SECTION_IDS.education[lang]}
+  aria-labelledby="education-title"
+>
+  <div class="education__intro">
+    <SectionHeading
+      index="02"
+      kicker={copy.kicker}
+      title={copy.title}
+      id="education-title"
+    >
+      {copy.intro.map((paragraph) => (
+        <p>{paragraph}</p>
+      ))}
+    </SectionHeading>
+    <div class="education__venn">
+      <DisciplineVenn lang={lang} />
+    </div>
+  </div>
+
+  <ul class="education__list" role="list">
+    {institutions.map((institution) => (
+      <li>
+        <InstitutionCard institution={institution} lang={lang} />
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .education__intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    align-items: center;
+    gap: clamp(2rem, 5vw, 4rem);
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .education__venn {
+    display: grid;
+    place-items: center;
+  }
+
+  .education__list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1rem, 2vw, 1.5rem);
+  }
+
+  .education__list > li {
+    display: grid;
+  }
+
+  @media (max-width: 56rem) {
+    .education__intro,
+    .education__list {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
