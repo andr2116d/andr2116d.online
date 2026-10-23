@@ -33,7 +33,7 @@ const links = [
     <a class="brand" href={paths.home(lang)} aria-label={t("brand.label")}>
       <BrandMark class="brand__mark" id="mark-header" />
       <span class="brand__word" aria-hidden="true">
-        andreé<span class="brand__dot">.</span>
+        andr2116d<span class="brand__dot">.</span>
       </span>
     </a>
 
@@ -152,6 +152,7 @@ const links = [
   }
 
   .brand :global(.brand__mark) {
+    flex: none;
     inline-size: 2.15rem;
     block-size: 2.15rem;
   }
@@ -305,9 +306,10 @@ const links = [
     }
   }
 
-  @media (max-width: 22rem) {
+  /* Very narrow phones: the CV link stays reachable from the menu. */
+  @media (max-width: 22.5rem) {
     .cv-link {
-      padding-inline: 0.8rem;
+      display: none;
     }
   }
 </style>
