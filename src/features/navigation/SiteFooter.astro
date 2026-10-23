@@ -28,8 +28,7 @@ const social = [
       <p>
         <strong>{SITE.name}</strong>
         <span class="mono">
-          © {year} · {SITE.location.city}, Perú · {SITE.location.latitude}
-          {longitude}
+          {`© ${year} · ${SITE.location.city}, ${lang === "es" ? "Perú" : "Peru"} · ${SITE.location.latitude} ${longitude}`}
         </span>
       </p>
     </div>

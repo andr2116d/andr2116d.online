@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import Hero from "@/features/hero/Hero.astro";
 import { paths } from "@/shared/i18n/config";
 ---
 
@@ -10,5 +11,5 @@ import { paths } from "@/shared/i18n/config";
   alternates={{ es: paths.home("es"), en: paths.home("en") }}
   image={{ src: "/og/home-es.png", alt: "Johel Andreé Vargas Villanueva" }}
 >
-  <h1 class="container">Johel Andreé Vargas Villanueva</h1>
+  <Hero lang="es" />
 </BaseLayout>

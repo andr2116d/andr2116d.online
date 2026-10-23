@@ -1,0 +1,324 @@
+---
+import Icon from "@/shared/ui/Icon.astro";
+import { SITE } from "@/shared/config/site";
+import { paths, type Lang } from "@/shared/i18n/config";
+import { heroContent } from "./hero.content";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const c = heroContent[lang];
+const longitude = `${SITE.location.longitude}${lang === "es" ? "O" : "W"}`;
+---
+
+<section class="hero container" aria-labelledby="hero-title">
+  <div class="hero__copy">
+    <p class="eyebrow hero__eyebrow">{c.eyebrow}</p>
+    <h1 id="hero-title" class="hero__title">
+      <span>{SITE.givenName}</span>
+      <span>{SITE.familyName}</span>
+    </h1>
+    <p class="hero__statement">{c.statement}</p>
+    <p class="lead hero__lead">{c.lead}</p>
+    <div class="hero__actions">
+      <a class="button button--primary" href={paths.section(lang, "projects")}>
+        {c.primary}
+        <Icon name="arrow-down" />
+      </a>
+      <a class="button button--ghost" href={paths.cv(lang)}>
+        {c.secondary}
+        <Icon name="arrow-up-right" />
+      </a>
+    </div>
+    <p class="hero__meta">
+      <Icon name="pin" />
+      <span>{c.location}</span>
+      <span class="hero__coords mono" aria-hidden="true">
+        {SITE.location.latitude} {longitude}
+      </span>
+    </p>
+  </div>
+
+  <div class="hero__art">
+    <div class="hero__art-frame" aria-hidden="true">
+      <span class="hero__corner hero__corner--tl"></span>
+      <span class="hero__corner hero__corner--br"></span>
+      <p class="hero__art-top mono">+ {c.art.top}</p>
+      <canvas class="hero__canvas" data-particle-field></canvas>
+      <span class="hero__label hero__label--chem">{c.art.chemistry}</span>
+      <span class="hero__label hero__label--software">{c.art.software}</span>
+      <span class="hero__label hero__label--ai">{c.art.ai}</span>
+    </div>
+    <div class="hero__art-foot">
+      <p class="hero__caption">{c.art.caption}</p>
+      <button
+        class="hero__motion"
+        type="button"
+        data-motion-toggle
+        data-label-pause={c.motion.pause}
+        data-label-play={c.motion.play}
+      >
+        <Icon name="pause" class="hero__motion-pause" />
+        <Icon name="play" class="hero__motion-play" />
+        <span data-label>{c.motion.pause}</span>
+        <span class="visually-hidden"> {c.motion.label}</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    align-items: center;
+    gap: clamp(2rem, 5vw, 4rem);
+    min-height: min(52rem, calc(100svh - var(--header-h)));
+    padding-block: clamp(3rem, 7vw, 6rem) clamp(3rem, 6vw, 5rem);
+  }
+
+  .hero__copy {
+    display: grid;
+    gap: 1.4rem;
+    justify-items: start;
+  }
+
+  .hero__eyebrow {
+    color: var(--chem);
+  }
+
+  .hero__title {
+    font-size: clamp(2.3rem, 1.2rem + 4.3vw, 4.9rem);
+    font-weight: 750;
+    line-height: 0.98;
+    letter-spacing: -0.055em;
+  }
+
+  .hero__title span {
+    display: block;
+  }
+
+  .hero__title span + span {
+    color: var(--text-muted);
+  }
+
+  .hero__statement {
+    font-size: var(--step-2);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+    background: linear-gradient(90deg, var(--chem), var(--accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  @media (forced-colors: active) {
+    .hero__statement {
+      color: CanvasText;
+      background: none;
+    }
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.4rem;
+  }
+
+  .hero__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    font-size: var(--step--1);
+    color: var(--text-muted);
+  }
+
+  .hero__coords {
+    padding-left: 0.75rem;
+    border-left: 1px solid var(--line-strong);
+    color: var(--text-subtle);
+  }
+
+  /* ----- Art ----- */
+  .hero__art {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .hero__art-frame {
+    position: relative;
+    aspect-ratio: 1;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-l);
+    background:
+      radial-gradient(circle at 50% 50%, var(--glow), transparent 65%),
+      color-mix(in oklab, var(--surface) 55%, transparent);
+    overflow: hidden;
+  }
+
+  .hero__canvas {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    /* Read by particle-field.ts to obtain resolved theme colors. */
+    color: var(--chem);
+    border: 0 solid var(--accent);
+    opacity: 0;
+    transition: opacity 600ms ease;
+  }
+
+  .hero__canvas[data-ready] {
+    opacity: 1;
+  }
+
+  .hero__corner {
+    position: absolute;
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
+    border-color: var(--line-strong);
+    border-style: solid;
+  }
+
+  .hero__corner--tl {
+    top: 1rem;
+    left: 1rem;
+    border-width: 1px 0 0 1px;
+  }
+
+  .hero__corner--br {
+    right: 1rem;
+    bottom: 1rem;
+    border-width: 0 1px 1px 0;
+  }
+
+  .hero__art-top {
+    position: absolute;
+    top: 1.1rem;
+    right: 1.25rem;
+    font-size: var(--step--1);
+    color: var(--text-subtle);
+  }
+
+  .hero__label {
+    position: absolute;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    color: var(--text-muted);
+  }
+
+  .hero__label::before {
+    content: "";
+    inline-size: 0.5rem;
+    block-size: 0.5rem;
+    border-radius: 50%;
+    border: 1.5px solid currentColor;
+  }
+
+  /* Labels sit in the free corners so they never cover the figure. */
+  .hero__label--chem {
+    top: 2.75rem;
+    left: 1.25rem;
+    color: var(--chem);
+  }
+
+  .hero__label--ai {
+    bottom: 1.1rem;
+    left: 1.25rem;
+    color: var(--accent);
+  }
+
+  .hero__label--software {
+    right: 3rem;
+    bottom: 1.1rem;
+  }
+
+  .hero__art-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: var(--step--1);
+    color: var(--text-muted);
+  }
+
+  .hero__motion {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 2.75rem;
+    padding-inline: 0.9rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--text);
+  }
+
+  .hero__motion:hover {
+    border-color: var(--line-strong);
+  }
+
+  .hero__motion[data-state="playing"] :global(.hero__motion-play),
+  .hero__motion[data-state="paused"] :global(.hero__motion-pause),
+  .hero__motion:not([data-state]) :global(.hero__motion-play) {
+    display: none;
+  }
+
+  :global(html:not([data-js])) .hero__motion {
+    display: none;
+  }
+
+  @media (max-width: 60rem) {
+    .hero {
+      grid-template-columns: 1fr;
+      min-height: 0;
+    }
+
+    .hero__art {
+      max-inline-size: 34rem;
+      inline-size: 100%;
+      justify-self: center;
+    }
+
+    .hero__art-frame {
+      aspect-ratio: 4 / 3;
+    }
+  }
+</style>
+
+<script>
+  import { mountParticleField } from "./particle-field";
+
+  const canvas = document.querySelector<HTMLCanvasElement>(
+    "[data-particle-field]",
+  );
+  const toggle = document.querySelector<HTMLButtonElement>(
+    "[data-motion-toggle]",
+  );
+
+  if (canvas) {
+    const start = () =>
+      mountParticleField({
+        canvas,
+        toggle,
+        labels: {
+          pause: toggle?.dataset.labelPause ?? "Pause",
+          play: toggle?.dataset.labelPlay ?? "Play",
+        },
+      });
+    // Deferred so the first paint and first input are never blocked by the art.
+    if ("requestIdleCallback" in window) {
+      requestIdleCallback(start, { timeout: 1500 });
+    } else {
+      setTimeout(start, 200);
+    }
+  }
+</script>
