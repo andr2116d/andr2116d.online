@@ -32,6 +32,7 @@ try {
     const page = await browser.newPage({
       locale: job.locale,
       colorScheme: "light",
+      reducedMotion: "reduce",
     });
     await page.goto(`http://localhost:${PORT}${job.path}`, {
       waitUntil: "networkidle",

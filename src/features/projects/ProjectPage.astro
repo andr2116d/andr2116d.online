@@ -95,7 +95,7 @@ const legend = ["source", "process", "store", "output"] as const;
       The site is two levels deep, so instead of breadcrumbs (meant for deeper
       hierarchies) the page offers a way back plus its place in the series.
     -->
-    <nav class="case-nav" aria-label={copy.caseNav}>
+    <nav class="case-nav enter enter-1" aria-label={copy.caseNav}>
       <a class="case-nav__back" href={paths.section(lang, "projects")}>
         <Icon name="arrow-left" />
         {copy.all}
@@ -135,18 +135,18 @@ const legend = ["source", "process", "store", "output"] as const;
 
     <header class="case__header">
       <div class="case__intro">
-        <p class="case__eyebrow">
+        <p class="case__eyebrow enter enter-2">
           <span class="case__tag">{projectTag(project)}</span>
           {text.kind}
         </p>
-        <h1 id="project-title" class="case__title">
+        <h1 id="project-title" class="case__title enter-move enter-2">
           {data.name}
         </h1>
-        <p class="case__tagline">{text.tagline}</p>
-        <p class="lead">{text.summary}</p>
+        <p class="case__tagline enter enter-3">{text.tagline}</p>
+        <p class="lead enter-move enter-3">{text.summary}</p>
       </div>
 
-      <dl class="case__facts">
+      <dl class="case__facts enter enter-4">
         <div>
           <dt>{copy.year}</dt>
           <dd>{data.year}</dd>
@@ -166,7 +166,9 @@ const legend = ["source", "process", "store", "output"] as const;
       </dl>
     </header>
 
-    <ProjectVisual project={project} lang={lang} size="hero" />
+    <div class="enter-pop enter-4">
+      <ProjectVisual project={project} lang={lang} size="hero" />
+    </div>
 
     <div class="case__body">
       <div class="case__main">
