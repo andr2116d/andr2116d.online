@@ -24,7 +24,6 @@ const ui = {
     "footer.built":
       "Diseñado y desarrollado por Johel Andreé con Astro. Sin rastreadores.",
     "footer.top": "Volver arriba",
-    "breadcrumb.label": "Ruta de navegación",
     "notFound.title": "Página no encontrada",
     "notFound.body":
       "Esta dirección no existe o ha cambiado. Puedes volver al inicio o revisar mis proyectos.",
@@ -52,7 +51,6 @@ const ui = {
     "footer.built":
       "Designed and built by Johel Andreé with Astro. No trackers.",
     "footer.top": "Back to top",
-    "breadcrumb.label": "Breadcrumb",
     "notFound.title": "Page not found",
     "notFound.body":
       "This address doesn’t exist or has changed. Head back home or browse my projects.",

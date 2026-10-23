@@ -131,18 +131,6 @@ export function webPageNode({
   };
 }
 
-export function breadcrumbNode(items: { name: string; url: string }[]): Node {
-  return {
-    "@type": "BreadcrumbList",
-    itemListElement: items.map((item, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      name: item.name,
-      item: item.url,
-    })),
-  };
-}
-
 interface SourceCodeInput {
   lang: Lang;
   site: URL;

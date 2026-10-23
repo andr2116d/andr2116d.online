@@ -7,7 +7,6 @@ import { paths, type Lang } from "@/shared/i18n/config";
 import { useTranslations } from "@/shared/i18n/ui";
 import {
   absolute,
-  breadcrumbNode,
   graph,
   personNode,
   sourceCodeNode,
@@ -21,10 +20,15 @@ import { projectTag, projectsCopy, type Project } from "./lib/projects";
 interface Props {
   lang: Lang;
   project: Project;
+  previous: Project;
+  next: Project;
   more: Project[];
+  position: number;
+  total: number;
 }
 
-const { lang, project, more } = Astro.props;
+const { lang, project, previous, next, more, position, total } = Astro.props;
+const pad = (n: number) => String(n).padStart(2, "0");
 const { data } = project;
 const text = data[lang];
 const copy = projectsCopy[lang];
@@ -62,14 +66,6 @@ const jsonLd = graph([
     image: absolute(ogImage, site),
     team: data.team,
   }),
-  breadcrumbNode([
-    { name: t("nav.home"), url: absolute(paths.home(lang), site) },
-    {
-      name: copy.breadcrumb,
-      url: absolute(paths.section(lang, "projects"), site),
-    },
-    { name: data.name, url },
-  ]),
 ]);
 
 // Numbered like the home sections; optional blocks shift the numbering.
@@ -95,18 +91,46 @@ const legend = ["source", "process", "store", "output"] as const;
   jsonLd={jsonLd}
 >
   <article class="case container" aria-labelledby="project-title">
-    <nav class="breadcrumb" aria-label={t("breadcrumb.label")}>
-      <ol role="list">
-        <li>
-          <a href={paths.home(lang)}>{t("nav.home")}</a>
-        </li>
-        <li>
-          <a href={paths.section(lang, "projects")}>{copy.breadcrumb}</a>
-        </li>
-        <li>
-          <span aria-current="page">{data.name}</span>
-        </li>
-      </ol>
+    <!--
+      The site is two levels deep, so instead of breadcrumbs (meant for deeper
+      hierarchies) the page offers a way back plus its place in the series.
+    -->
+    <nav class="case-nav" aria-label={copy.caseNav}>
+      <a class="case-nav__back" href={paths.section(lang, "projects")}>
+        <Icon name="arrow-left" />
+        {copy.all}
+      </a>
+      <div class="case-nav__pager">
+        <a
+          class="case-nav__arrow"
+          href={paths.project(lang, previous.id)}
+          rel="prev"
+          title={previous.data.name}
+        >
+          <Icon name="arrow-left" />
+          <span class="visually-hidden">
+            {copy.previous}: {previous.data.name}
+          </span>
+        </a>
+        <span class="case-nav__count mono">
+          <span class="visually-hidden">{copy.positionLabel} </span>
+          {pad(position)}
+          <span aria-hidden="true"> / </span>
+          <span class="visually-hidden">{copy.of}</span>
+          {pad(total)}
+        </span>
+        <a
+          class="case-nav__arrow"
+          href={paths.project(lang, next.id)}
+          rel="next"
+          title={next.data.name}
+        >
+          <Icon name="arrow-right" />
+          <span class="visually-hidden">
+            {copy.next}: {next.data.name}
+          </span>
+        </a>
+      </div>
     </nav>
 
     <header class="case__header">
@@ -306,26 +330,81 @@ const legend = ["source", "process", "store", "output"] as const;
     padding-block: clamp(1.5rem, 3vw, 2.5rem) clamp(3rem, 6vw, 5rem);
   }
 
-  .breadcrumb ol {
+  /* ----- Project bar: way back + place in the series ----- */
+  .case-nav {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .case-nav__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-block-size: 2.75rem;
+    font-weight: 650;
+    white-space: nowrap;
+    text-decoration: none;
+    color: var(--text);
+  }
+
+  .case-nav__back :global(svg) {
+    transition: transform var(--dur) var(--ease-out);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .case-nav__back:hover :global(svg) {
+      transform: translateX(-3px);
+    }
+  }
+
+  .case-nav__pager {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: clamp(0.4rem, 1.5vw, 0.75rem);
+  }
+
+  @media (max-width: 24rem) {
+    .case-nav__count {
+      position: absolute;
+      inline-size: 1px;
+      block-size: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+  }
+
+  .case-nav__count {
+    min-inline-size: 4.5ch;
+    text-align: center;
     font-size: var(--step--1);
     color: var(--text-muted);
   }
 
-  .breadcrumb li:not(:last-child)::after {
-    content: "/";
-    margin-inline-start: 0.4rem;
-    color: var(--text-subtle);
-  }
-
-  .breadcrumb a {
-    color: var(--text-muted);
-  }
-
-  .breadcrumb a:hover {
+  .case-nav__arrow {
+    display: grid;
+    place-items: center;
+    inline-size: 2.75rem;
+    block-size: 2.75rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
     color: var(--text);
+    transition:
+      background-color var(--dur-fast) ease,
+      border-color var(--dur-fast) ease,
+      color var(--dur-fast) ease;
+  }
+
+  .case-nav__arrow:hover {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--on-accent);
   }
 
   /* ----- Header ----- */
