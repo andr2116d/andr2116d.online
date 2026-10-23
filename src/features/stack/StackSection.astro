@@ -250,7 +250,8 @@ const revealRules = elements
     background: color-mix(in oklab, var(--tone) 14%, var(--surface));
   }
 
-  input:checked + .periodic__tile .periodic__name {
+  input:checked + .periodic__tile .periodic__name,
+  input:checked + .periodic__tile .periodic__number {
     color: var(--text);
   }
 
