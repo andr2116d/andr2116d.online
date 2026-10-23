@@ -6,7 +6,8 @@ const WCAG_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
 
 for (const scheme of ["light", "dark"] as const) {
   test.describe(`axe (${scheme})`, () => {
-    test.use({ colorScheme: scheme });
+    // Reduced motion: axe must measure final colors, not mid-animation opacity.
+    test.use({ colorScheme: scheme, reducedMotion: "reduce" });
 
     for (const { path } of [...pages, { path: "/404/" }]) {
       test(`${path} has no WCAG A/AA violations`, async ({ page }) => {

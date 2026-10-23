@@ -11,6 +11,8 @@ export default defineConfig({
   reporter: [["list"], ["html", { open: "never" }]],
   use: {
     baseURL: `http://localhost:${PORT}`,
+    // Spanish browser by default; language detection has its own tests.
+    locale: "es-PE",
     trace: "retain-on-failure",
   },
   projects: [
