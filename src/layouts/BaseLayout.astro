@@ -26,6 +26,8 @@ const hasTranslation = translated !== seo.alternates[seo.lang];
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Declares a native dark theme so forced dark modes (e.g. Samsung Internet) leave it alone. -->
+    <meta name="color-scheme" content="light dark" />
     <ThemeScript />
     <Font cssVariable="--font-manrope" preload />
     <SeoHead {...seo} />
