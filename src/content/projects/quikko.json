@@ -4,7 +4,7 @@
   "year": 2026,
   "team": false,
   "area": "product",
-  "accent": "#7c3aed",
+  "accent": "violet",
   "repository": "https://github.com/andr2116d/Quikko",
   "demo": "https://quikko.vercel.app/",
   "stack": [

@@ -21,6 +21,7 @@ const logoWidth = Math.round((logo.width / logo.height) * logoHeight);
   class:list={[
     "institution",
     `institution--${institution.discipline}`,
+    `institution--${institution.id}`,
     "reveal",
   ]}
   aria-labelledby={`edu-${institution.id}`}
@@ -34,7 +35,6 @@ const logoWidth = Math.round((logo.width / logo.height) * logoHeight);
       densities={[1, 2]}
       loading="lazy"
       decoding="async"
-      style={`block-size: ${logoHeight}px`}
     />
   </div>
   <div class="institution__body">
@@ -83,11 +83,19 @@ const logoWidth = Math.round((logo.width / logo.height) * logoHeight);
     border-right: 3px solid var(--tone);
   }
 
-  /* Height is fixed per logo; width follows the official proportions. */
+  /* Height is fixed per logo (matches logoHeight); width keeps the official ratio. */
   .institution__plate :global(img) {
     inline-size: auto;
     max-inline-size: 100%;
     object-fit: contain;
+  }
+
+  .institution--unt .institution__plate :global(img) {
+    block-size: 72px;
+  }
+
+  .institution--upao .institution__plate :global(img) {
+    block-size: 46px;
   }
 
   .institution__body {

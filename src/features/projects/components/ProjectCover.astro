@@ -42,7 +42,7 @@ const terminal = {
 }[lang];
 ---
 
-<div class="cover" style={`--brand: ${data.accent}`}>
+<div class:list={["cover", `cover--${data.accent}`]}>
   <div class="cover__window">
     <div class="cover__bar" aria-hidden="true">
       <span class="cover__dots">
@@ -91,6 +91,26 @@ const terminal = {
       var(--surface-2);
     overflow: hidden;
     isolation: isolate;
+  }
+
+  /* Brand tints as classes: no inline styles, so the CSP needs no 'unsafe-inline'. */
+  .cover--violet {
+    --brand: #7c3aed;
+  }
+  .cover--yellow {
+    --brand: #ffd400;
+  }
+  .cover--blue {
+    --brand: #3b82f6;
+  }
+  .cover--wine {
+    --brand: #8a3d66;
+  }
+  .cover--orange {
+    --brand: #ff9900;
+  }
+  .cover--green {
+    --brand: #16a34a;
   }
 
   .cover__window {

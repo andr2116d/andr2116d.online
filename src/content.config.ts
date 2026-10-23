@@ -37,8 +37,8 @@ const projects = defineCollection({
       year: z.number().int(),
       team: z.boolean(),
       area: z.enum(["product", "data-ai", "cloud"]),
-      /** Product brand color, used only to tint the cover (never for text). */
-      accent: z.string().regex(/^#[0-9a-f]{6}$/i),
+      /** Product brand tint for the cover (never used for text). See ProjectCover. */
+      accent: z.enum(["violet", "yellow", "blue", "wine", "orange", "green"]),
       repository: z.url(),
       demo: z.url().optional(),
       stack: z.array(z.string()).min(1),
