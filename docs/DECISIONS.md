@@ -28,6 +28,18 @@ Registro breve de las decisiones importantes y su motivo. Fecha de referencia: 2
 - **Pantallas muy grandes**: todo está en `rem`; a partir de 1800 px se aumenta el tamaño raíz por tramos (hasta 187,5 % en 4K) para que la composición crezca en proporción en lugar de quedar como una columna estrecha.
 - **Logotipos institucionales sobre placa blanca** en ambos temas: el manual de UPAO prohíbe su versión a color sobre fondo oscuro, y ambos manuales prohíben alterarlos.
 
+## Preferencias del visitante
+
+- **Idioma**: no se redirige nunca según el idioma del navegador (Google lo desaconseja, porque oculta versiones a buscadores y personas). Si `navigator.languages` no incluye español en una página en español (o empieza por español en una página en inglés), aparece un aviso discreto para cambiar. La elección o el descarte se recuerdan en `localStorage`. El país no se usa: un sitio estático no lo conoce sin servidor y no indica el idioma.
+- **Tema**: sin elección guardada se sigue `prefers-color-scheme` en tiempo real. Si se elige manualmente el mismo tema que el sistema, se borra la preferencia y se vuelve a seguir al sistema.
+
+## CV
+
+- Basado en guías de reclutamiento y ATS (Harvard Office of Career Services, estudio de _eye tracking_ de Ladders 2018, guías de formato ATS): una página A4, una columna, títulos estándar, viñetas con verbo de acción, enlaces visibles como texto, sin foto, edad, iconos ni gráficos con información.
+- La misma hoja se ve en pantalla, se imprime y se exporta a PDF (`@page` A4 sin márgenes del navegador).
+- **Fuente estática para el PDF**: Chrome incrusta las fuentes variables como Type 3 y, además, el espacio estrecho de Manrope queda por debajo del umbral de los extractores de texto. Con instancias estáticas y `word-spacing: 0.1em`, `pdftotext` recupera el texto con todos sus espacios, que es lo que leen los ATS.
+- `scripts/generate-cv-pdf.mjs` comprueba que el contenido cabe en una página y falla en lugar de recortar.
+
 ## Accesibilidad
 
 - HTML semántico, un `h1` por página, `skip link`, foco visible, objetivos táctiles ≥ 44 px y textos alternativos descriptivos.

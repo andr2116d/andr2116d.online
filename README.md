@@ -20,18 +20,19 @@ pnpm dev                                # http://localhost:4321
 
 ## Comandos
 
-| Comando                             | Qué hace                                                                                                     |
-| ----------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| `pnpm dev`                          | Servidor de desarrollo con recarga.                                                                          |
-| `pnpm build`                        | Genera el sitio estático en `dist/`.                                                                         |
-| `pnpm preview`                      | Sirve `dist/` con Astro (en terminales sin TTY corre en segundo plano).                                      |
-| `pnpm check`                        | Validación de tipos de Astro y TypeScript.                                                                   |
-| `pnpm lint`                         | ESLint con reglas de Astro y accesibilidad (`jsx-a11y`).                                                     |
-| `pnpm format` / `pnpm format:check` | Prettier.                                                                                                    |
-| `pnpm contrast`                     | Verifica el contraste WCAG de todos los pares de color de `tokens.css`.                                      |
-| `pnpm test`                         | Playwright sobre la build: axe (WCAG 2.2 AA, claro y oscuro), SEO, teclado, sin JS, móvil y escritorio.      |
-| `pnpm lighthouse`                   | Lighthouse móvil (4G lenta simulada) y escritorio; informes en `reports/lighthouse/`. Requiere `pnpm build`. |
-| `pnpm verify`                       | Formato, lint, tipos, contraste, build y pruebas en cadena.                                                  |
+| Comando                             | Qué hace                                                                                                                                          |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm dev`                          | Servidor de desarrollo con recarga.                                                                                                               |
+| `pnpm build`                        | Genera el sitio estático en `dist/`.                                                                                                              |
+| `pnpm preview`                      | Sirve `dist/` con Astro (en terminales sin TTY corre en segundo plano).                                                                           |
+| `pnpm check`                        | Validación de tipos de Astro y TypeScript.                                                                                                        |
+| `pnpm lint`                         | ESLint con reglas de Astro y accesibilidad (`jsx-a11y`).                                                                                          |
+| `pnpm format` / `pnpm format:check` | Prettier.                                                                                                                                         |
+| `pnpm contrast`                     | Verifica el contraste WCAG de todos los pares de color de `tokens.css`.                                                                           |
+| `pnpm test`                         | Playwright sobre la build: axe (WCAG 2.2 AA, claro y oscuro), SEO, teclado, sin JS, móvil y escritorio.                                           |
+| `pnpm lighthouse`                   | Lighthouse móvil (4G lenta simulada) y escritorio; informes en `reports/lighthouse/`. Requiere `pnpm build`.                                      |
+| `pnpm cv:pdf`                       | Compila y genera los PDF del CV de una página (`public/cv/`); falla si el contenido no cabe en un A4. Ejecutar tras editar el CV o los proyectos. |
+| `pnpm verify`                       | Formato, lint, tipos, contraste, build y pruebas en cadena.                                                                                       |
 
 Scripts de mantenimiento (`scripts/`):
 
@@ -90,6 +91,7 @@ Además: `/404.html`, `/robots.txt`, `/sitemap-index.xml`.
 - **Datos personales y enlaces**: `src/shared/config/site.ts`. Actualiza `updated` al revisar contenido (se usa en el sitemap y en JSON-LD).
 - **Proyectos**: añade o edita `src/content/projects/<slug>.json`. El esquema valida campos y longitudes al compilar. Luego ejecuta `node scripts/generate-og.mjs`. Las pruebas detectan el nuevo proyecto automáticamente.
 - **Textos de secciones**: archivo `*.content.ts` de cada feature; textos de interfaz en `src/shared/i18n/ui.ts`.
+- **CV**: datos opcionales que solo tú puedes confirmar (teléfono, fechas de estudio, ciclo, idiomas y certificaciones) en `src/features/cv/cv.content.ts`. Los bloques vacíos no se muestran. Las viñetas del CV están en el campo `highlights` de cada proyecto. Después ejecuta `pnpm cv:pdf`.
 - **Stack**: `src/features/stack/stack.content.ts` (cada tecnología enlaza a los proyectos donde se usa).
 
 Regla del proyecto: no se añade experiencia, métricas, roles ni características sin respaldo verificable (repositorio, perfil público o confirmación del autor).
