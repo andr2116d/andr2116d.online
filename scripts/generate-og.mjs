@@ -4,6 +4,9 @@
 import { chromium } from "@playwright/test";
 import { mkdir, readFile, readdir } from "node:fs/promises";
 import { join } from "node:path";
+import { trefoilSvg } from "../src/shared/brand/trefoil.ts";
+
+const MARK = trefoilSvg({ size: 64 });
 
 const OUT = "public/og";
 const NAME = "Johel Andreé Vargas Villanueva";
@@ -74,12 +77,15 @@ function template({ kicker, title, subtitle, tag }) {
     background: linear-gradient(90deg, #8edcc3, #c6b6f7); -webkit-background-clip: text; color: transparent; }
   .foot { display: flex; align-items: center; justify-content: space-between; font-size: 26px; color: #b6b1c3; }
   .brand { display: flex; align-items: center; gap: 14px; color: #f3f1f8; font-weight: 700; }
+  .mark, .mark svg { width: 52px; height: 52px; display: block; }
+  .watermark { position: absolute; right: -70px; top: 50%; width: 540px; height: 540px; transform: translateY(-50%); opacity: .16; }
+  .watermark svg { width: 100%; height: 100%; display: block; }
+  body > div:not(.watermark) { position: relative; }
   </style></head><body>
+  <div class="watermark">${MARK}</div>
   <div class="top">${tag ? `<span class="tag">${escape(tag)}</span>` : ""}<span>${escape(kicker)}</span></div>
   <div><h1>${escape(title)}</h1><p>${escape(subtitle)}</p></div>
-  <div class="foot"><span class="brand"><svg width="44" height="44" viewBox="0 0 40 40" fill="none" stroke="#c6b6f7" stroke-width="2.6">
-    <ellipse cx="20" cy="20" rx="17" ry="7" transform="rotate(-45 20 20)"/><ellipse cx="20" cy="20" rx="17" ry="7" transform="rotate(45 20 20)"/>
-    <circle cx="20" cy="20" r="2.8" fill="#8edcc3" stroke="none"/></svg>${escape(tag ? NAME : "andreé.")}</span>
+  <div class="foot"><span class="brand"><span class="mark">${MARK}</span>${escape(tag ? NAME : "andreé.")}</span>
     <span>${DOMAIN}</span></div></body></html>`;
 }
 
