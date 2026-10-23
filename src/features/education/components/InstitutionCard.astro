@@ -63,7 +63,7 @@ const logoWidth = Math.round((logo.width / logo.height) * logoHeight);
   .institution {
     --tone: var(--chem);
     display: grid;
-    grid-template-rows: auto 1fr;
+    grid-template-columns: minmax(7rem, 11rem) 1fr;
     border: 1px solid var(--line);
     border-radius: var(--radius-l);
     background: var(--surface);
@@ -78,10 +78,9 @@ const logoWidth = Math.round((logo.width / logo.height) * logoHeight);
   .institution__plate {
     display: grid;
     place-items: center;
-    min-block-size: 9.5rem;
-    padding: 1.5rem;
+    padding: 1rem;
     background: var(--plate);
-    border-bottom: 3px solid var(--tone);
+    border-right: 3px solid var(--tone);
   }
 
   /* Height is fixed per logo; width follows the official proportions. */
@@ -93,9 +92,9 @@ const logoWidth = Math.round((logo.width / logo.height) * logoHeight);
 
   .institution__body {
     display: grid;
-    align-content: start;
-    gap: 0.6rem;
-    padding: 1.5rem;
+    align-content: center;
+    gap: 0.35rem;
+    padding: 1.1rem 1.25rem;
   }
 
   .institution__status {
@@ -117,15 +116,29 @@ const logoWidth = Math.round((logo.width / logo.height) * logoHeight);
   }
 
   .institution h3 {
-    font-size: var(--step-2);
+    font-size: var(--step-1);
+    letter-spacing: -0.02em;
   }
 
   .institution__university {
     color: var(--text-muted);
+    font-size: var(--step--1);
   }
 
   .institution__link {
-    margin-top: 0.4rem;
+    margin-top: 0.25rem;
     font-size: var(--step--1);
+  }
+
+  @media (max-width: 26rem) {
+    .institution {
+      grid-template-columns: 1fr;
+    }
+
+    .institution__plate {
+      padding: 0.9rem;
+      border-right: 0;
+      border-bottom: 3px solid var(--tone);
+    }
   }
 </style>

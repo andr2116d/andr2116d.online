@@ -20,7 +20,7 @@ export const institutions: Institution[] = [
     id: "unt",
     discipline: "chem",
     logo: untEscudo,
-    logoHeight: 96,
+    logoHeight: 72,
     url: "https://www.unitru.edu.pe/",
     university: "Universidad Nacional de Trujillo",
     degree: { es: "Ingeniería Química", en: "Chemical Engineering" },
@@ -33,7 +33,7 @@ export const institutions: Institution[] = [
     id: "upao",
     discipline: "ai",
     logo: upaoLogo,
-    logoHeight: 72,
+    logoHeight: 46,
     url: "https://www.upao.edu.pe/",
     university: "Universidad Privada Antenor Orrego",
     degree: {
