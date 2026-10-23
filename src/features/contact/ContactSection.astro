@@ -1,0 +1,251 @@
+---
+import Icon from "@/shared/ui/Icon.astro";
+import SectionHeading from "@/shared/ui/SectionHeading.astro";
+import { SITE } from "@/shared/config/site";
+import { SECTION_IDS, type Lang } from "@/shared/i18n/config";
+import { useTranslations } from "@/shared/i18n/ui";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const copy = {
+  es: {
+    kicker: "Contacto",
+    title: "¿Y si construimos algo interesante?",
+    intro:
+      "Las buenas ideas empiezan conversando. Escríbeme por el canal que prefieras.",
+    write: "Escríbeme",
+    copy: "Copiar correo",
+    copied: "Correo copiado al portapapeles",
+    copyError: "No se pudo copiar. Selecciona el correo para copiarlo.",
+    channels: {
+      linkedin: "Perfil profesional",
+      github: "Código y proyectos",
+      instagram: "Día a día",
+    },
+  },
+  en: {
+    kicker: "Contact",
+    title: "What if we build something interesting?",
+    intro:
+      "Good ideas start with a conversation. Reach out on whichever channel you prefer.",
+    write: "Email me",
+    copy: "Copy email",
+    copied: "Email copied to clipboard",
+    copyError: "Couldn’t copy. Select the address to copy it.",
+    channels: {
+      linkedin: "Professional profile",
+      github: "Code and projects",
+      instagram: "Day to day",
+    },
+  },
+}[lang];
+
+const channels = [
+  {
+    name: "LinkedIn",
+    handle: SITE.name,
+    href: SITE.links.linkedin,
+    note: copy.channels.linkedin,
+  },
+  {
+    name: "GitHub",
+    handle: `@${SITE.handle}`,
+    href: SITE.links.github,
+    note: copy.channels.github,
+  },
+  {
+    name: "Instagram",
+    handle: "@andvtr_2",
+    href: SITE.links.instagram,
+    note: copy.channels.instagram,
+  },
+];
+---
+
+<section
+  class="section container contact"
+  id={SECTION_IDS.contact[lang]}
+  aria-labelledby="contact-title"
+>
+  <div class="contact__panel">
+    <SectionHeading
+      index="04"
+      kicker={copy.kicker}
+      title={copy.title}
+      id="contact-title"
+    >
+      <p>{copy.intro}</p>
+    </SectionHeading>
+
+    <div class="contact__email">
+      <a class="contact__address" href={`mailto:${SITE.email}`}>
+        <Icon name="mail" size="1.25rem" />
+        <span>{SITE.email}</span>
+      </a>
+      <div class="contact__actions">
+        <a class="button button--primary" href={`mailto:${SITE.email}`}>
+          {copy.write}
+          <Icon name="arrow-right" />
+        </a>
+        <button
+          class="button button--ghost contact__copy"
+          type="button"
+          data-copy={SITE.email}
+          data-copied={copy.copied}
+          data-error={copy.copyError}
+        >
+          {copy.copy}
+        </button>
+      </div>
+      <p class="contact__status" role="status" data-copy-status></p>
+    </div>
+
+    <ul class="contact__channels" role="list">
+      {channels.map((channel) => (
+        <li>
+          <a href={channel.href} target="_blank" rel="me noopener">
+            <span class="contact__channel-name">
+              {channel.name}
+              <Icon name="arrow-up-right" />
+            </span>
+            <span class="contact__channel-handle">{channel.handle}</span>
+            <span class="contact__channel-note mono">{channel.note}</span>
+            <span class="visually-hidden">{t("external.newTab")}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .contact__panel {
+    position: relative;
+    display: grid;
+    gap: clamp(2rem, 4vw, 3rem);
+    padding: clamp(1.5rem, 5vw, 4rem);
+    border: 1px solid var(--line);
+    border-radius: calc(var(--radius-l) * 1.4);
+    background:
+      radial-gradient(40rem 20rem at 100% 0%, var(--glow), transparent 70%),
+      var(--surface);
+    overflow: hidden;
+  }
+
+  .contact__email {
+    display: grid;
+    gap: 1.25rem;
+    justify-items: start;
+  }
+
+  .contact__address {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: clamp(1.05rem, 0.65rem + 2.2vw, 2rem);
+    font-weight: 650;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+  }
+
+  .contact__address span {
+    background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px
+      no-repeat;
+    transition: background-size var(--dur) var(--ease-out);
+  }
+
+  .contact__address:hover span {
+    background-size: 100% 1px;
+  }
+
+  .contact__address :global(svg) {
+    flex: none;
+    color: var(--accent);
+  }
+
+  .contact__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  :global(html:not([data-js])) .contact__copy {
+    display: none;
+  }
+
+  .contact__status {
+    min-block-size: 1.5em;
+    font-size: var(--step--1);
+    color: var(--chem);
+  }
+
+  .contact__channels {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .contact__channels a {
+    display: grid;
+    gap: 0.3rem;
+    block-size: 100%;
+    padding: 1.25rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-m);
+    background: var(--bg);
+    text-decoration: none;
+    transition: border-color var(--dur-fast) ease;
+  }
+
+  .contact__channels a:hover {
+    border-color: var(--accent);
+  }
+
+  .contact__channel-name {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 700;
+    font-size: var(--step-1);
+  }
+
+  .contact__channel-handle {
+    color: var(--text-muted);
+    overflow-wrap: anywhere;
+  }
+
+  .contact__channel-note {
+    font-size: var(--step--1);
+    color: var(--text-subtle);
+  }
+
+  @media (max-width: 48rem) {
+    .contact__channels {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  for (const button of document.querySelectorAll<HTMLButtonElement>(
+    "[data-copy]",
+  )) {
+    const status = button
+      .closest(".contact__email")
+      ?.querySelector<HTMLElement>("[data-copy-status]");
+    button.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(button.dataset.copy ?? "");
+        if (status) status.textContent = button.dataset.copied ?? "";
+      } catch {
+        if (status) status.textContent = button.dataset.error ?? "";
+      }
+    });
+  }
+</script>
