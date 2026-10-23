@@ -23,6 +23,7 @@ const types = {
   ".ico": "image/x-icon",
   ".woff2": "font/woff2",
   ".webmanifest": "application/manifest+json",
+  ".pdf": "application/pdf",
 };
 
 async function resolveFile(urlPath) {
