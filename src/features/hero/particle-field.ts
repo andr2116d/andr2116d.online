@@ -10,6 +10,21 @@
 
 const DEPTH_BUCKETS = 6;
 const FRAME_MS = 1000 / 30;
+/** Entrance: particles fly in from a scattered cloud and assemble the knot. */
+const INTRO_MS = 1900;
+const INTRO_FRAME_MS = 1000 / 60;
+
+const easeOutCubic = (t: number) => 1 - (1 - t) ** 3;
+
+/** Small deterministic PRNG, so the scatter is the same on every visit. */
+function mulberry32(seed: number) {
+  return () => {
+    seed = (seed + 0x6d2b79f5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
 
 interface Field {
   count: number;
@@ -20,6 +35,9 @@ interface Field {
   ny: Float32Array;
   nz: Float32Array;
   tone: Uint8Array;
+  /** Starting offset of each particle for the entrance, in canvas-size units. */
+  scatterX: Float32Array;
+  scatterY: Float32Array;
 }
 
 function center(t: number): [number, number, number] {
@@ -49,7 +67,10 @@ function buildField(compact: boolean): Field {
     ny: new Float32Array(count),
     nz: new Float32Array(count),
     tone: new Uint8Array(count),
+    scatterX: new Float32Array(count),
+    scatterY: new Float32Array(count),
   };
+  const random = mulberry32(2116);
   let i = 0;
   for (let ring = 0; ring < rings; ring++) {
     const t = (ring / rings) * Math.PI * 2;
@@ -79,6 +100,10 @@ function buildField(compact: boolean): Field {
       field.ny[i] = oy;
       field.nz[i] = oz;
       field.tone[i] = Math.sin(v + t * 3) > 0 ? 1 : 0;
+      const angle = random() * Math.PI * 2;
+      const distance = 0.35 + random() * 0.65;
+      field.scatterX[i] = Math.cos(angle) * distance;
+      field.scatterY[i] = Math.sin(angle) * distance;
       i++;
     }
   }
@@ -111,6 +136,9 @@ export function mountParticleField({
 
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   let paused = reduced.matches;
+  // 0 → 1 while assembling; reduced motion skips straight to the finished knot.
+  let intro = paused ? 1 : 0;
+  let introStart = 0;
   let visible = true;
   let request = 0;
   let lastFrame = 0;
@@ -150,6 +178,12 @@ export function mountParticleField({
     const scale = Math.min(width, height) * 0.145;
     // Dot radius follows the canvas size so 4K screens get the same density of ink.
     const dot = Math.min(2.4, Math.max(0.85, width / 520));
+    const settled = easeOutCubic(intro);
+    const spread = (1 - settled) * Math.max(width, height) * 0.8;
+    // A slight swirl while assembling: offsets rotate as they shrink.
+    const swirl = (1 - settled) * 1.6;
+    const sw = Math.sin(swirl),
+      cw = Math.cos(swirl);
 
     for (let i = 0; i < field.count; i++) {
       // Rotate position (X, then Y, then Z axis) and normal with the same matrix.
@@ -170,6 +204,12 @@ export function mountParticleField({
       const perspective = 9 / (9 - z2);
       px[i] = width * 0.5 + x3 * scale * perspective;
       py[i] = height * 0.5 + y3 * scale * perspective;
+      if (spread > 0) {
+        const fx = field.scatterX[i]!,
+          fy = field.scatterY[i]!;
+        px[i]! += (fx * cw - fy * sw) * spread;
+        py[i]! += (fx * sw + fy * cw) * spread;
+      }
       size[i] = perspective * dot * 0.95;
       const light = Math.max(0, nx3 * -0.4 + ny3 * -0.55 + nz2 * 0.7);
       const depth = Math.min(1, Math.max(0, (z2 + 3.4) / 6.8 + light * 0.35));
@@ -181,14 +221,21 @@ export function mountParticleField({
 
     // Far buckets first, so nearer, brighter particles paint on top.
     for (let level = 0; level < DEPTH_BUCKETS; level++) {
-      ctx.globalAlpha = 0.14 + (level / (DEPTH_BUCKETS - 1)) * 0.8;
+      ctx.globalAlpha =
+        (0.14 + (level / (DEPTH_BUCKETS - 1)) * 0.8) * (0.25 + 0.75 * settled);
       for (let tone = 0; tone < 2; tone++) {
         ctx.fillStyle = colors[tone]!;
         ctx.beginPath();
         for (let i = 0; i < field.count; i++) {
           if (bucket[i] !== level || field.tone[i] !== tone) continue;
-          ctx.moveTo(px[i]! + size[i]!, py[i]!);
-          ctx.arc(px[i]!, py[i]!, size[i]!, 0, Math.PI * 2);
+          const r = size[i]!;
+          // Dots under ~1.2px look identical as squares and cost far less than arcs.
+          if (r < 1.2) {
+            ctx.rect(px[i]! - r, py[i]! - r, r * 2, r * 2);
+          } else {
+            ctx.moveTo(px[i]! + r, py[i]!);
+            ctx.arc(px[i]!, py[i]!, r, 0, Math.PI * 2);
+          }
         }
         ctx.fill();
       }
@@ -199,7 +246,14 @@ export function mountParticleField({
   function frame(now: number) {
     request = 0;
     if (!visible || document.hidden || paused) return;
-    if (now - lastFrame >= FRAME_MS) {
+    if (intro < 1) {
+      // Starts the first time the canvas is actually on screen (e.g. after scrolling on phones).
+      introStart ||= now;
+      intro = Math.min(1, (now - introStart) / INTRO_MS);
+    }
+    // Phones keep 30 fps during the entrance too, to leave the main thread free.
+    const budget = intro < 1 && width >= 480 ? INTRO_FRAME_MS : FRAME_MS;
+    if (now - lastFrame >= budget) {
       const elapsed = lastFrame ? Math.min(now - lastFrame, 60) : 33;
       phase += elapsed * 0.00008;
       tiltX += (pointerX - tiltX) * 0.06;
@@ -262,12 +316,14 @@ export function mountParticleField({
 
   toggle?.addEventListener("click", () => {
     paused = !paused;
+    if (paused) intro = 1;
     syncToggle();
     syncLoop();
   });
 
   reduced.addEventListener("change", (event) => {
     paused = event.matches;
+    if (paused) intro = 1;
     syncToggle();
     syncLoop();
   });
