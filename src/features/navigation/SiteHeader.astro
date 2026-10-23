@@ -31,7 +31,7 @@ const links = [
 <header class="site-header">
   <div class="site-header__inner container">
     <a class="brand" href={paths.home(lang)} aria-label={t("brand.label")}>
-      <BrandMark class="brand__mark" />
+      <BrandMark class="brand__mark" id="mark-header" />
       <span class="brand__word" aria-hidden="true">
         andreé<span class="brand__dot">.</span>
       </span>
@@ -152,9 +152,8 @@ const links = [
   }
 
   .brand :global(.brand__mark) {
-    inline-size: 1.9rem;
-    block-size: 1.9rem;
-    color: var(--accent);
+    inline-size: 2.15rem;
+    block-size: 2.15rem;
   }
 
   .brand__dot {

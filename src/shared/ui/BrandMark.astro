@@ -1,33 +1,41 @@
 ---
-/** Two crossed orbits: the personal mark inherited from the prototype and the favicon. */
+/**
+ * The personal mark: a trefoil knot (the hero's knot, simplified) with real
+ * over/under crossings, tinted with the theme's chemistry → systems colors.
+ */
+import { trefoilMark, trefoilMarkup } from "@/shared/brand/trefoil";
+
 interface Props {
   class?: string;
+  /** Unique per page: the SVG gradient and mask need distinct ids. */
+  id: string;
 }
-const { class: className } = Astro.props;
+
+const { class: className, id } = Astro.props;
+const mark = trefoilMark(40, 2.5);
+const markup = trefoilMarkup(mark, { id });
 ---
 
 <svg
   class:list={["brand-mark", className]}
-  viewBox="0 0 40 40"
-  fill="none"
-  stroke="currentColor"
-  stroke-width="2.4"
+  viewBox={mark.viewBox}
   aria-hidden="true"
   focusable="false"
->
-  <ellipse
-    cx="20"
-    cy="20"
-    rx="17"
-    ry="7"
-    transform="rotate(-45 20 20)"
-  ></ellipse>
-  <ellipse
-    cx="20"
-    cy="20"
-    rx="17"
-    ry="7"
-    transform="rotate(45 20 20)"
-  ></ellipse>
-  <circle cx="20" cy="20" r="2.6" fill="currentColor" stroke="none"></circle>
-</svg>
+  set:html={markup}
+/>
+
+<style>
+  .brand-mark :global(.trefoil-from) {
+    stop-color: var(--chem);
+  }
+
+  .brand-mark :global(.trefoil-to) {
+    stop-color: var(--accent);
+  }
+
+  @media (forced-colors: active) {
+    .brand-mark :global(stop) {
+      stop-color: CanvasText;
+    }
+  }
+</style>
