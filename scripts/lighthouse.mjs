@@ -50,7 +50,7 @@ try {
     }
   }
 } finally {
-  await chrome.kill();
+  chrome.kill();
   server.kill();
 }
 
