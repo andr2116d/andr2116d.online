@@ -53,6 +53,13 @@ Registro breve de las decisiones importantes y su motivo. Fecha de referencia: 2
 - El color nunca es el único portador de información (grupos de la tabla y estado «En equipo» llevan texto).
 - Contraste verificado en dos niveles: `pnpm contrast` (tokens) y axe en las páginas reales (ambos temas).
 
+## Animación de entrada
+
+- El nudo de partículas se ensambla desde una nube dispersa (≈1,9 s) cuando el lienzo entra en pantalla; los textos del hero entran escalonados y un destello menta/lila recorre el nombre una vez.
+- El `h1` y el párrafo principal solo se desplazan (sin opacidad 0), para no retrasar el LCP.
+- Las secciones aparecen al hacer scroll con `animation-timeline` y, donde no existe (Safari, Firefox), con `IntersectionObserver`.
+- Todo se omite con `prefers-reduced-motion` y en impresión. Los puntos pequeños se dibujan como cuadrados y en móvil la intro va a 30 fps: Lighthouse móvil mantiene TBT 0 ms.
+
 ## Rendimiento
 
 - Canvas del hero inicializado en `requestIdleCallback`, 30 fps como máximo, partículas agrupadas por capas (≈12 `fill()` por fotograma en vez de ≈6 000).
