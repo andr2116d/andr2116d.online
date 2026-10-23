@@ -59,7 +59,11 @@
       "Comparación de comunidades detectadas con Louvain y con GraphSAGE + KMeans, con el índice de Rand ajustado calculado en el navegador.",
       "Mapa en Leaflet, explorador de embeddings (t-SNE) y simulador «¿Qué pasaría si…?» que consulta el modelo a través de FastAPI."
     ],
-    "imageAlt": "Vista principal del Gemelo Digital: «Comunidades socioeconómicas de La Libertad», la explicación del modelo y tarjetas de métricas como los 83 distritos."
+    "imageAlt": "Vista principal del Gemelo Digital: «Comunidades socioeconómicas de La Libertad», la explicación del modelo y tarjetas de métricas como los 83 distritos.",
+    "highlights": [
+      "Modelé los 83 distritos de La Libertad como un grafo y obtuve embeddings por distrito con GraphSAGE (PyTorch Geometric).",
+      "Comparé comunidades de Louvain y GraphSAGE + KMeans en un mapa Leaflet con simulador de escenarios servido por FastAPI."
+    ]
   },
   "en": {
     "kind": "Data · Artificial intelligence",
@@ -72,6 +76,10 @@
       "Communities found with Louvain are compared with GraphSAGE + KMeans, including the Adjusted Rand Index computed in the browser.",
       "Leaflet map, t-SNE embedding explorer and a “What if…?” simulator that queries the model through FastAPI."
     ],
-    "imageAlt": "Gemelo Digital main view: “Socioeconomic communities of La Libertad”, the model explanation and metric cards such as the 83 districts."
+    "imageAlt": "Gemelo Digital main view: “Socioeconomic communities of La Libertad”, the model explanation and metric cards such as the 83 districts.",
+    "highlights": [
+      "Modeled La Libertad’s 83 districts as a graph and learned district embeddings with GraphSAGE (PyTorch Geometric).",
+      "Compared Louvain and GraphSAGE + KMeans communities on a Leaflet map with a FastAPI-backed scenario simulator."
+    ]
   }
 }

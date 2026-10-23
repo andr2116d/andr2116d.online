@@ -19,6 +19,8 @@ const copy = z.object({
   /** Documented personal responsibility in team projects. */
   role: z.string().optional(),
   imageAlt: z.string().optional(),
+  /** CV bullets: action verb + what + technology. Verifiable, no invented metrics. */
+  highlights: z.array(z.string()).min(1).max(3),
 });
 
 const flowStep = z.object({

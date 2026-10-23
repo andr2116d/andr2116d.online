@@ -49,7 +49,10 @@
       "Infraestructura en módulos de Terraform para dev, qa y prod, con estado remoto por entorno.",
       "Pipeline en GitHub Actions con autenticación OIDC, sin access keys guardadas en el repositorio."
     ],
-    "role": "Mi responsabilidad documentada: bootstrap (estado remoto, OIDC y roles de despliegue), pipeline, módulo de red y entornos de QA y producción."
+    "role": "Mi responsabilidad documentada: bootstrap (estado remoto, OIDC y roles de despliegue), pipeline, módulo de red y entornos de QA y producción.",
+    "highlights": [
+      "Responsable del bootstrap (estado remoto, OIDC), el pipeline de GitHub Actions, la red y los entornos de QA y producción de un procesador serverless (API Gateway, Lambda, S3, SQS) en un equipo de cinco."
+    ]
   },
   "en": {
     "kind": "Cloud · Team project",
@@ -62,6 +65,9 @@
       "Terraform modules for dev, qa and prod, each with its own remote state.",
       "GitHub Actions pipeline with OIDC authentication, so no access keys live in the repository."
     ],
-    "role": "My documented responsibilities: bootstrap (remote state, OIDC and deployment roles), pipeline, networking module, and the QA and production environments."
+    "role": "My documented responsibilities: bootstrap (remote state, OIDC and deployment roles), pipeline, networking module, and the QA and production environments.",
+    "highlights": [
+      "Owned the bootstrap (remote state, OIDC), GitHub Actions pipeline, networking and QA/production environments of a serverless processor (API Gateway, Lambda, S3, SQS) in a five-person team."
+    ]
   }
 }

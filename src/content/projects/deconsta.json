@@ -65,7 +65,11 @@
       "Backend en FastAPI con arquitectura hexagonal, workers de Celery sobre Redis y notificaciones en tiempo real por SSE."
     ],
     "role": "Proyecto de tres integrantes. Soy autor de la mayoría de los commits del repositorio.",
-    "imageAlt": "Resumen de la gerencia en Deconsta: montos por pagar, deudas que esperan autorización y una bandeja de decisiones ordenada por vencimiento."
+    "imageAlt": "Resumen de la gerencia en Deconsta: montos por pagar, deudas que esperan autorización y una bandeja de decisiones ordenada por vencimiento.",
+    "highlights": [
+      "Desarrollé en un equipo de tres una plataforma de pagos delegados con roles, reglas de autorización e historial auditable; autor de la mayoría de los commits.",
+      "Análisis de documentos en tres capas (inspección, OCR con PaddleOCR y revisión estructurada con Claude) sobre FastAPI, Celery y Redis."
+    ]
   },
   "en": {
     "kind": "Product · AI-assisted automation",
@@ -79,6 +83,10 @@
       "FastAPI backend with hexagonal architecture, Celery workers on Redis and real-time notifications over SSE."
     ],
     "role": "Three-person project. I authored most of the repository’s commits.",
-    "imageAlt": "Deconsta manager overview: amounts due, debts awaiting approval and a decision inbox sorted by due date."
+    "imageAlt": "Deconsta manager overview: amounts due, debts awaiting approval and a decision inbox sorted by due date.",
+    "highlights": [
+      "Developed, in a three-person team, a delegated-payments platform with roles, approval rules and an auditable history; authored most commits.",
+      "Three-layer document analysis (file inspection, PaddleOCR and structured review with Claude) on FastAPI, Celery and Redis."
+    ]
   }
 }

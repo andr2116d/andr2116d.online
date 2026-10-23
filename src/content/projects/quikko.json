@@ -51,7 +51,11 @@
       "Analíticas en InfluxDB con país de origen por GeoIP y actualizaciones en vivo por WebSocket.",
       "Dashboard responsive en Next.js con autenticación JWT (access y refresh tokens) y documentación OpenAPI."
     ],
-    "imageAlt": "Página de inicio de Quikko con el titular «Acorta enlaces. Mira los clics llegar al instante» y una vista previa del dashboard con clics por hora."
+    "imageAlt": "Página de inicio de Quikko con el titular «Acorta enlaces. Mira los clics llegar al instante» y una vista previa del dashboard con clics por hora.",
+    "highlights": [
+      "Desarrollé una API REST en Go (Echo, Clean Architecture) con caché de redirecciones en Redis y autenticación JWT.",
+      "Implementé analíticas en tiempo real con InfluxDB, GeoIP y WebSocket, visibles en un dashboard en Next.js."
+    ]
   },
   "en": {
     "kind": "Product · Full stack",
@@ -64,6 +68,10 @@
       "InfluxDB analytics with GeoIP country detection and live WebSocket updates.",
       "Responsive Next.js dashboard with JWT authentication (access and refresh tokens) and OpenAPI docs."
     ],
-    "imageAlt": "Quikko landing page with the headline “Shorten links. Watch clicks arrive instantly” and a dashboard preview showing clicks per hour."
+    "imageAlt": "Quikko landing page with the headline “Shorten links. Watch clicks arrive instantly” and a dashboard preview showing clicks per hour.",
+    "highlights": [
+      "Built a Go REST API (Echo, Clean Architecture) with Redis redirect caching and JWT authentication.",
+      "Implemented real-time analytics with InfluxDB, GeoIP and WebSockets, shown in a Next.js dashboard."
+    ]
   }
 }

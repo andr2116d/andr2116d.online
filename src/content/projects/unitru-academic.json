@@ -53,7 +53,11 @@
       "Predictor de las combinaciones de notas que permiten aprobar y optimizador de horarios sin conflictos.",
       "Las credenciales nunca se guardan: solo existen durante la sesión WebSocket activa."
     ],
-    "imageAlt": "Pantalla de inicio de UNITRU Academic: logotipo amarillo, el título y el botón «Iniciar sesión» para consultar notas, horarios y asistencia del SUV."
+    "imageAlt": "Pantalla de inicio de UNITRU Academic: logotipo amarillo, el título y el botón «Iniciar sesión» para consultar notas, horarios y asistencia del SUV.",
+    "highlights": [
+      "Automaticé la extracción de datos del SUV de la UNT con Playwright y FastAPI, con captcha resuelto por OCR local (Tesseract).",
+      "Construí un predictor de notas y un optimizador de horarios en Next.js; las credenciales nunca se almacenan."
+    ]
   },
   "en": {
     "kind": "Product · Education",
@@ -67,6 +71,10 @@
       "Grade-combination predictor for passing courses and a conflict-free schedule optimizer.",
       "Credentials are never stored: they only exist during the active WebSocket session."
     ],
-    "imageAlt": "UNITRU Academic start screen: yellow logo, title and a “Sign in” button to check grades, schedules and attendance from the UNT portal."
+    "imageAlt": "UNITRU Academic start screen: yellow logo, title and a “Sign in” button to check grades, schedules and attendance from the UNT portal.",
+    "highlights": [
+      "Automated data extraction from UNT’s university portal with Playwright and FastAPI, solving the captcha with local OCR (Tesseract).",
+      "Built a grade predictor and a schedule optimizer in Next.js; credentials are never stored."
+    ]
   }
 }

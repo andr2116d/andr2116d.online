@@ -55,7 +55,10 @@
       "Trabajo por sprints, con una rama por integrante, CI y pull requests hacia la rama dev."
     ],
     "role": "Según el flujo de trabajo documentado, apruebo los pull requests del equipo hacia dev. También soy autor de la mayoría de los commits del repositorio.",
-    "imageAlt": "Pantalla de inicio de La Previa con el logotipo, el lema «Reserva tu turno en segundos y juega sin complicarte» y los botones para iniciar sesión o crear cuenta."
+    "imageAlt": "Pantalla de inicio de La Previa con el logotipo, el lema «Reserva tu turno en segundos y juega sin complicarte» y los botones para iniciar sesión o crear cuenta.",
+    "highlights": [
+      "Aprobé los pull requests del equipo y fui autor de la mayoría de los commits de un sistema de reservas con roles de administrador, recepción y jugador."
+    ]
   },
   "en": {
     "kind": "Product · Team project",
@@ -69,6 +72,9 @@
       "Sprint-based work, with one branch per member, CI and pull requests into the dev branch."
     ],
     "role": "Per the documented workflow, I approve the team’s pull requests into dev. I also authored most of the repository’s commits.",
-    "imageAlt": "La Previa start screen with its logo, the tagline “Book your slot in seconds and play hassle-free” and buttons to sign in or create an account."
+    "imageAlt": "La Previa start screen with its logo, the tagline “Book your slot in seconds and play hassle-free” and buttons to sign in or create an account.",
+    "highlights": [
+      "Approved the team’s pull requests and authored most commits of a booking system with administrator, reception and player roles."
+    ]
   }
 }
