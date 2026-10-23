@@ -14,6 +14,8 @@ export const cvExtras: {
   >;
   /** e.g. { name: { es: "Inglés", en: "English" }, level: { es: "Intermedio (B1)", en: "Intermediate (B1)" } } */
   languages: { name: Localized<string>; level: Localized<string> }[];
+  /** Personal interests, shown as the last skills row. */
+  interests?: Localized<string>;
   /** Courses or certificates with issuer and year. */
   certifications: { name: string; issuer: string; year: string }[];
 } = {
@@ -29,6 +31,10 @@ export const cvExtras: {
     },
   ],
   certifications: [],
+  interests: {
+    es: "Música (toco el saxofón)",
+    en: "Music (I play the saxophone)",
+  },
 };
 
 /** Grouped from the GitHub profile stack and the documented projects. */
@@ -81,6 +87,7 @@ export const cvCopy = {
     team: "En equipo",
     skillsTitle: "Habilidades técnicas",
     languagesTitle: "Idiomas",
+    interestsTitle: "Intereses",
     certificationsTitle: "Cursos y certificaciones",
     portfolio: "Portafolio y casos detallados",
     updated: "Actualizado: octubre de 2026",
@@ -107,6 +114,7 @@ export const cvCopy = {
     team: "Team",
     skillsTitle: "Technical skills",
     languagesTitle: "Languages",
+    interestsTitle: "Interests",
     certificationsTitle: "Courses & certifications",
     portfolio: "Portfolio and detailed case studies",
     updated: "Updated: October 2026",

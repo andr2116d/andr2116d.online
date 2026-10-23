@@ -209,6 +209,11 @@ const studies = institutions.map((institution) => {
               .join(", ")}
           </p>
         )}
+        {cvExtras.interests && (
+          <p class="sheet__skill">
+            <strong>{copy.interestsTitle}:</strong> {cvExtras.interests[lang]}
+          </p>
+        )}
       </section>
 
       {cvExtras.certifications.length > 0 && (
@@ -531,15 +536,15 @@ const studies = institutions.map((institution) => {
       transform: none !important;
     }
 
+    /* Never clipped: overflowing content spills onto a 2nd page, which the PDF
+       generator detects and rejects. Slightly under 297mm to avoid a blank page. */
     .sheet {
       inline-size: 210mm;
-      min-block-size: 0;
-      block-size: 297mm;
+      min-block-size: 296mm;
       margin: 0;
       border-radius: 0;
       box-shadow: none;
       background: #fff;
-      overflow: hidden;
       print-color-adjust: exact;
       -webkit-print-color-adjust: exact;
     }
