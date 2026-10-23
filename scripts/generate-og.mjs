@@ -85,7 +85,7 @@ function template({ kicker, title, subtitle, tag }) {
   <div class="watermark">${MARK}</div>
   <div class="top">${tag ? `<span class="tag">${escape(tag)}</span>` : ""}<span>${escape(kicker)}</span></div>
   <div><h1>${escape(title)}</h1><p>${escape(subtitle)}</p></div>
-  <div class="foot"><span class="brand"><span class="mark">${MARK}</span>${escape(tag ? NAME : "andreé.")}</span>
+  <div class="foot"><span class="brand"><span class="mark">${MARK}</span>${escape(tag ? NAME : "andr2116d")}</span>
     <span>${DOMAIN}</span></div></body></html>`;
 }
 
