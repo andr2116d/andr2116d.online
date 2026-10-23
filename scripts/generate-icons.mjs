@@ -1,7 +1,14 @@
-// Rasterizes public/favicon.svg into the PNG/ICO icons referenced by the layout.
+// Writes public/favicon.svg from the trefoil mark, then rasterizes it into the
+// PNG/ICO icons referenced by the layout.
 // Usage: node scripts/generate-icons.mjs
 import sharp from "sharp";
 import { writeFile } from "node:fs/promises";
+import { trefoilSvg } from "../src/shared/brand/trefoil.ts";
+
+await writeFile(
+  "public/favicon.svg",
+  trefoilSvg({ background: "#0d0d11", radius: 14, size: 64 }) + "\n",
+);
 
 const source = "public/favicon.svg";
 const png = (size) =>
