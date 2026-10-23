@@ -36,12 +36,12 @@ pnpm dev                                # http://localhost:4321
 
 Scripts de mantenimiento (`scripts/`):
 
-| Script                                 | Uso                                                                                           |
-| -------------------------------------- | --------------------------------------------------------------------------------------------- |
-| `node scripts/capture-projects.mjs`    | Vuelve a capturar las demos públicas en `src/assets/projects/`.                               |
-| `node scripts/generate-og.mjs`         | Regenera las imágenes Open Graph (1200×630) en `public/og/`. Ejecutar tras cambiar proyectos. |
-| `node scripts/generate-icons.mjs`      | Regenera favicon ICO/PNG desde `public/favicon.svg`.                                          |
-| `node scripts/serve-dist.mjs [puerto]` | Servidor estático mínimo de `dist/` (usado por pruebas y Lighthouse).                         |
+| Script                                 | Uso                                                                                                 |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `node scripts/capture-projects.mjs`    | Vuelve a capturar las demos públicas en `src/assets/projects/`.                                     |
+| `node scripts/generate-og.mjs`         | Regenera las imágenes Open Graph (1200×630) en `public/og/`. Ejecutar tras cambiar proyectos.       |
+| `node scripts/generate-icons.mjs`      | Genera `public/favicon.svg` desde el logotipo (`src/shared/brand/trefoil.ts`) y los iconos ICO/PNG. |
+| `node scripts/serve-dist.mjs [puerto]` | Servidor estático mínimo de `dist/` (usado por pruebas y Lighthouse).                               |
 
 ## Estructura
 

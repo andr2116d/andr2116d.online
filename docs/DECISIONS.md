@@ -28,6 +28,12 @@ Registro breve de las decisiones importantes y su motivo. Fecha de referencia: 2
 - **Pantallas muy grandes**: todo está en `rem`; a partir de 1800 px se aumenta el tamaño raíz por tramos (hasta 187,5 % en 4K) para que la composición crezca en proporción en lugar de quedar como una columna estrecha.
 - **Logotipos institucionales sobre placa blanca** en ambos temas: el manual de UPAO prohíbe su versión a color sobre fondo oscuro, y ambos manuales prohíben alterarlos.
 
+## Marca
+
+- El logotipo es un **nudo trébol**, el mismo nudo matemático del hero, simplificado: una cinta con degradado menta → lila (química → sistemas e IA) y cruces reales por encima/por debajo.
+- Se genera desde una sola fuente (`src/shared/brand/trefoil.ts`): la cabecera, el pie, el favicon, los iconos de app y las imágenes Open Graph usan la misma geometría.
+- Los cortes de los cruces son una máscara SVG (transparencia real), así funciona sobre cualquier fondo; la curva se escribe como Béziers suaves (favicon de 5 KB).
+
 ## Preferencias del visitante
 
 - **Idioma**: no se redirige nunca según el idioma del navegador (Google lo desaconseja, porque oculta versiones a buscadores y personas). Si `navigator.languages` no incluye español en una página en español (o empieza por español en una página en inglés), aparece un aviso discreto para cambiar. La elección o el descarte se recuerdan en `localStorage`. El país no se usa: un sitio estático no lo conoce sin servidor y no indica el idioma.
