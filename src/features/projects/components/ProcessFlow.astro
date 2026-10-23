@@ -1,0 +1,192 @@
+---
+/**
+ * A project's architecture drawn with process-flow-diagram (PFD) conventions:
+ * feed arrows for inputs, vessels for processes, tanks for storage and a product
+ * arrow for the output. Numbered diamonds tag each stream, as on a real PFD.
+ * The SVG is one image with a text alternative listing the full flow.
+ */
+import type { Lang } from "@/shared/i18n/config";
+import { flowLabel, projectsCopy, type FlowStep } from "../lib/projects";
+
+interface Props {
+  steps: FlowStep[];
+  lang: Lang;
+  id: string;
+  size?: "card" | "large";
+}
+
+const { steps, lang, id, size = "card" } = Astro.props;
+const copy = projectsCopy[lang];
+
+const W = 640;
+const H = size === "large" ? 210 : 190;
+const PAD = 24;
+const cy = 82;
+const slot = (W - PAD * 2) / steps.length;
+const w = Math.min(84, slot * 0.6);
+const h = 52;
+
+const nodes = steps.map((step, i) => {
+  const cx = PAD + slot * (i + 0.5);
+  const x0 = cx - w / 2;
+  const x1 = cx + w / 2;
+  const y0 = cy - h / 2;
+  const y1 = cy + h / 2;
+  let d: string;
+  switch (step.type) {
+    case "source":
+    case "output": {
+      const t = 16;
+      d = `M${x0} ${cy - 18}H${x1 - t}L${x1} ${cy}L${x1 - t} ${cy + 18}H${x0}Z`;
+      break;
+    }
+    case "store": {
+      const r = 7;
+      d = `M${x0} ${y0 + r}V${y1 - r}A${w / 2} ${r} 0 0 0 ${x1} ${y1 - r}V${y0 + r}A${w / 2} ${r} 0 0 0 ${x0} ${y0 + r}ZM${x0} ${y0 + r}A${w / 2} ${r} 0 0 0 ${x1} ${y0 + r}`;
+      break;
+    }
+    default:
+      d = `M${x0 + 10} ${y0}H${x1 - 10}Q${x1} ${y0} ${x1} ${y0 + 10}V${y1 - 10}Q${x1} ${y1} ${x1 - 10} ${y1}H${x0 + 10}Q${x0} ${y1} ${x0} ${y1 - 10}V${y0 + 10}Q${x0} ${y0} ${x0 + 10} ${y0}Z`;
+  }
+  return { cx, x0, x1, d, type: step.type, label: flowLabel(step, lang) };
+});
+
+const streams = nodes.slice(0, -1).map((node, i) => {
+  const next = nodes[i + 1]!;
+  const from = node.x1 + 6;
+  const to = next.x0 - 8;
+  return { from, to, mid: (from + to) / 2, n: i + 1 };
+});
+
+const titleId = `flow-${id}-title`;
+const description = `${copy.flowLabel}: ${nodes.map((node) => node.label).join(" → ")}`;
+---
+
+<svg
+  class:list={["flow", `flow--${size}`]}
+  viewBox={`0 0 ${W} ${H}`}
+  role="img"
+  aria-labelledby={titleId}
+>
+  <title id={titleId}>{description}</title>
+  {streams.map((s) => (
+    <g class="flow__stream">
+      <path class="flow__line" d={`M${s.from} ${cy}H${s.to}`} />
+      <path
+        class="flow__head"
+        d={`M${s.to - 1} ${cy - 5}L${s.to + 7} ${cy}L${s.to - 1} ${cy + 5}Z`}
+      />
+      <path class="flow__tag" d={`M${s.mid} ${cy - 30}l9 9-9 9-9-9Z`} />
+      <text class="flow__tag-text" x={s.mid} y={cy - 17.5}>
+        {s.n}
+      </text>
+    </g>
+  ))}
+  {nodes.map((node) => (
+    <g class:list={["flow__node", `flow__node--${node.type}`]}>
+      <path d={node.d} />
+      <text class="flow__label" x={node.cx} y={cy + h / 2 + 34}>
+        {node.label}
+      </text>
+    </g>
+  ))}
+</svg>
+
+<style>
+  .flow {
+    inline-size: 100%;
+    block-size: auto;
+    overflow: visible;
+    font-family: var(--font-mono);
+  }
+
+  .flow__line {
+    fill: none;
+    stroke: var(--text-subtle);
+    stroke-width: 1.5;
+    stroke-dasharray: 5 5;
+  }
+
+  .flow__head {
+    fill: var(--text-subtle);
+  }
+
+  .flow__tag {
+    fill: var(--surface);
+    stroke: var(--line-strong);
+    stroke-width: 1;
+  }
+
+  .flow__tag-text {
+    font-size: 11px;
+    text-anchor: middle;
+    fill: var(--text-muted);
+  }
+
+  .flow__node path {
+    fill: var(--surface);
+    stroke-width: 1.75;
+  }
+
+  .flow__node--source path {
+    stroke: var(--text-muted);
+  }
+
+  .flow__node--process path {
+    stroke: var(--accent);
+    fill: var(--accent-soft);
+  }
+
+  .flow__node--store path {
+    stroke: var(--chem);
+    fill: var(--chem-soft);
+  }
+
+  .flow__node--output path {
+    stroke: var(--text);
+    fill: var(--surface-2);
+  }
+
+  .flow__label {
+    font-size: 18px;
+    text-anchor: middle;
+    fill: var(--text-muted);
+  }
+
+  .flow--large .flow__label {
+    font-size: 15px;
+  }
+
+  .flow--large .flow__tag-text {
+    font-size: 10px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :global(:is(article, figure):hover) .flow__line,
+    :global(article:focus-within) .flow__line {
+      animation: flow-dash 1.2s linear infinite;
+    }
+  }
+
+  @keyframes flow-dash {
+    to {
+      stroke-dashoffset: -20;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .flow__node path,
+    .flow__tag {
+      stroke: CanvasText;
+      fill: Canvas;
+    }
+    .flow__line {
+      stroke: CanvasText;
+    }
+    .flow__head,
+    .flow__label,
+    .flow__tag-text {
+      fill: CanvasText;
+    }
+  }
+</style>

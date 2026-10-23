@@ -1,0 +1,74 @@
+---
+import Icon from "@/shared/ui/Icon.astro";
+import SectionHeading from "@/shared/ui/SectionHeading.astro";
+import { SITE } from "@/shared/config/site";
+import { SECTION_IDS, type Lang } from "@/shared/i18n/config";
+import { useTranslations } from "@/shared/i18n/ui";
+import ProjectCard from "./components/ProjectCard.astro";
+import { getProjects, projectsCopy } from "./lib/projects";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const copy = projectsCopy[lang];
+const t = useTranslations(lang);
+const projects = await getProjects();
+---
+
+<section
+  class="section container"
+  id={SECTION_IDS.projects[lang]}
+  aria-labelledby="projects-title"
+>
+  <div class="projects__head">
+    <SectionHeading
+      index="01"
+      kicker={copy.kicker}
+      title={copy.title}
+      id="projects-title"
+    >
+      <p>{copy.intro}</p>
+    </SectionHeading>
+    <a
+      class="text-link"
+      href={`${SITE.links.github}?tab=repositories`}
+      target="_blank"
+      rel="noopener"
+    >
+      {copy.allRepos}
+      <Icon name="arrow-up-right" />
+      <span class="visually-hidden">{t("external.newTab")}</span>
+    </a>
+  </div>
+
+  <ul class="projects__grid" role="list">
+    {projects.map((project) => (
+      <li>
+        <ProjectCard project={project} lang={lang} />
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .projects__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1.5rem 3rem;
+    margin-bottom: clamp(2rem, 4vw, 3.5rem);
+  }
+
+  .projects__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 30rem), 1fr));
+    gap: clamp(1rem, 2vw, 1.5rem);
+  }
+
+  .projects__grid > li {
+    display: grid;
+  }
+</style>

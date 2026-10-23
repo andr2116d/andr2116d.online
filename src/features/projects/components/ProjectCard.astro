@@ -1,0 +1,178 @@
+---
+import Icon from "@/shared/ui/Icon.astro";
+import { paths, type Lang } from "@/shared/i18n/config";
+import ProcessFlow from "./ProcessFlow.astro";
+import { projectTag, projectsCopy, type Project } from "../lib/projects";
+
+interface Props {
+  project: Project;
+  lang: Lang;
+}
+
+const { project, lang } = Astro.props;
+const { data } = project;
+const copy = projectsCopy[lang];
+const text = data[lang];
+const href = paths.project(lang, project.id);
+const titleId = `card-${project.id}`;
+---
+
+<article class="project-card reveal" aria-labelledby={titleId}>
+  <div class="project-card__top">
+    <span class="project-card__tag mono" aria-hidden="true">
+      {projectTag(project)}
+    </span>
+    <span class="project-card__kind">{text.kind}</span>
+    {data.team && (
+      <span class="project-card__team">
+        <Icon name="team" />
+        {copy.team}
+      </span>
+    )}
+  </div>
+
+  <div class="project-card__diagram">
+    <ProcessFlow steps={data.flow} lang={lang} id={project.id} />
+  </div>
+
+  <div class="project-card__body">
+    <h3 class="project-card__title" id={titleId}>
+      <a href={href} data-astro-prefetch>
+        {data.name}
+      </a>
+    </h3>
+    <p class="project-card__tagline">{text.tagline}</p>
+    <ul class="chip-list" role="list">
+      {data.stack.slice(0, 4).map((item) => (
+        <li class="chip">{item}</li>
+      ))}
+    </ul>
+  </div>
+
+  <span class="project-card__cta" aria-hidden="true">
+    {copy.open}
+    <Icon name="arrow-right" />
+  </span>
+</article>
+
+<style>
+  .project-card {
+    position: relative;
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    gap: 1.25rem;
+    padding: 1.25rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-l);
+    background: var(--surface);
+    transition:
+      border-color var(--dur) ease,
+      transform var(--dur) var(--ease-out),
+      box-shadow var(--dur) ease;
+  }
+
+  .project-card:hover,
+  .project-card:focus-within {
+    border-color: color-mix(in oklab, var(--accent) 55%, var(--line));
+    box-shadow: 0 1.5rem 3rem -2rem
+      color-mix(in oklab, var(--accent) 45%, transparent);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .project-card:hover {
+      transform: translateY(-3px);
+    }
+  }
+
+  .project-card__top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    font-size: var(--step--1);
+    color: var(--text-muted);
+  }
+
+  .project-card__tag {
+    padding: 0.1rem 0.45rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 0.375rem;
+    color: var(--accent);
+  }
+
+  .project-card__team {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-inline-start: auto;
+    padding: 0.15rem 0.6rem;
+    border-radius: 999px;
+    background: var(--chem-soft);
+    color: var(--chem);
+    font-weight: 600;
+  }
+
+  .project-card__diagram {
+    padding: 1rem 0.75rem 0.5rem;
+    border-radius: var(--radius-m);
+    border: 1px solid var(--line);
+    background-color: var(--bg);
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 1.25rem 1.25rem;
+  }
+
+  .project-card__body {
+    display: grid;
+    align-content: start;
+    gap: 0.6rem;
+  }
+
+  .project-card__title {
+    font-size: var(--step-2);
+  }
+
+  .project-card__title a {
+    text-decoration: none;
+  }
+
+  /* The whole card is clickable through the title link (one link, one tab stop). */
+  .project-card__title a::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+
+  .project-card__title a:focus-visible {
+    outline: none;
+  }
+
+  .project-card__title a:focus-visible::after {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+  }
+
+  .project-card__tagline {
+    color: var(--text-muted);
+  }
+
+  .project-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 650;
+    color: var(--accent);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .project-card__cta :global(svg) {
+      transition: transform var(--dur) var(--ease-out);
+    }
+
+    .project-card:hover .project-card__cta :global(svg) {
+      transform: translateX(4px);
+    }
+  }
+</style>

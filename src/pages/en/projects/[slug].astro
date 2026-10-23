@@ -1,0 +1,8 @@
+---
+import ProjectPage from "@/features/projects/ProjectPage.astro";
+import { projectPaths } from "@/features/projects/lib/routes";
+
+export const getStaticPaths = projectPaths;
+---
+
+<ProjectPage lang="en" {...Astro.props} />

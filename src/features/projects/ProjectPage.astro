@@ -1,0 +1,512 @@
+---
+import { Picture } from "astro:assets";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Icon from "@/shared/ui/Icon.astro";
+import { SITE } from "@/shared/config/site";
+import { paths, type Lang } from "@/shared/i18n/config";
+import { useTranslations } from "@/shared/i18n/ui";
+import {
+  absolute,
+  breadcrumbNode,
+  graph,
+  personNode,
+  sourceCodeNode,
+  websiteNode,
+} from "@/features/seo/structured-data";
+import ProcessFlow from "./components/ProcessFlow.astro";
+import { projectTag, projectsCopy, type Project } from "./lib/projects";
+
+interface Props {
+  lang: Lang;
+  project: Project;
+  previous: Project;
+  next: Project;
+}
+
+const { lang, project, previous, next } = Astro.props;
+const { data } = project;
+const text = data[lang];
+const copy = projectsCopy[lang];
+const t = useTranslations(lang);
+const site = Astro.site ?? new URL(`https://${SITE.domain}`);
+
+const alternates = {
+  es: paths.project("es", project.id),
+  en: paths.project("en", project.id),
+};
+const url = absolute(alternates[lang], site);
+const title = `${data.name} — ${text.tagline} | ${SITE.shortName}`;
+const ogImage = `/og/${lang}/${project.id}.png`;
+
+const jsonLd = graph([
+  personNode(lang, site),
+  websiteNode(site),
+  sourceCodeNode({
+    lang,
+    site,
+    url,
+    name: data.name,
+    description: text.description,
+    repository: data.repository,
+    demo: data.demo,
+    languages: data.languages,
+    image: absolute(ogImage, site),
+    team: data.team,
+  }),
+  breadcrumbNode([
+    { name: t("nav.home"), url: absolute(paths.home(lang), site) },
+    {
+      name: copy.breadcrumb,
+      url: absolute(paths.section(lang, "projects"), site),
+    },
+    { name: data.name, url },
+  ]),
+]);
+
+const legend = ["source", "process", "store", "output"] as const;
+---
+
+<BaseLayout
+  lang={lang}
+  title={title}
+  description={text.description}
+  alternates={alternates}
+  image={{ src: ogImage, alt: `${data.name}: ${text.tagline}` }}
+  type="article"
+  jsonLd={jsonLd}
+>
+  <article class="project container" aria-labelledby="project-title">
+    <nav class="breadcrumb" aria-label={t("breadcrumb.label")}>
+      <ol role="list">
+        <li>
+          <a href={paths.home(lang)}>{t("nav.home")}</a>
+        </li>
+        <li>
+          <a href={paths.section(lang, "projects")}>{copy.breadcrumb}</a>
+        </li>
+        <li>
+          <span aria-current="page">{data.name}</span>
+        </li>
+      </ol>
+    </nav>
+
+    <header class="project__header">
+      <p class="eyebrow">
+        <span class="mono project__tag">{projectTag(project)}</span>
+        {text.kind}
+      </p>
+      <h1 id="project-title" class="project__title">
+        {data.name}
+      </h1>
+      <p class="lead">{text.summary}</p>
+
+      <dl class="project__facts">
+        <div>
+          <dt>{copy.year}</dt>
+          <dd>{data.year}</dd>
+        </div>
+        <div>
+          <dt>{copy.type}</dt>
+          <dd>{data.team ? copy.teamProject : copy.personalProject}</dd>
+        </div>
+      </dl>
+
+      <div class="project__actions">
+        <a
+          class="button button--primary"
+          href={data.repository}
+          target="_blank"
+          rel="noopener"
+        >
+          <Icon name="code" />
+          {copy.code}
+          <span class="visually-hidden">{t("external.newTab")}</span>
+        </a>
+        {data.demo && (
+          <a
+            class="button button--ghost"
+            href={data.demo}
+            target="_blank"
+            rel="noopener"
+          >
+            {copy.demo}
+            <Icon name="arrow-up-right" />
+            <span class="visually-hidden">{t("external.newTab")}</span>
+          </a>
+        )}
+      </div>
+    </header>
+
+    {data.image && text.imageAlt && (
+      <figure class="project__shot">
+        <div class="project__window" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+        </div>
+        <Picture
+          src={data.image}
+          alt={text.imageAlt}
+          formats={["avif", "webp"]}
+          widths={[640, 960, 1280, 1440]}
+          sizes="(min-width: 76rem) 72rem, calc(100vw - 2rem)"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </figure>
+    )}
+
+    <div class="project__content">
+      <section aria-labelledby="problem-title">
+        <h2 id="problem-title">{copy.problem}</h2>
+        <p>{text.problem}</p>
+      </section>
+
+      <section aria-labelledby="approach-title">
+        <h2 id="approach-title">{copy.approach}</h2>
+        <ol class="project__steps" role="list">
+          {text.approach.map((step) => (
+            <li>{step}</li>
+          ))}
+        </ol>
+      </section>
+
+      {text.role && (
+        <section class="project__role" aria-labelledby="role-title">
+          <h2 id="role-title">
+            <Icon name="team" />
+            {copy.role}
+          </h2>
+          <p>{text.role}</p>
+        </section>
+      )}
+
+      <section class="project__flow" aria-labelledby="flow-title">
+        <h2 id="flow-title">{copy.architecture}</h2>
+        <figure>
+          <ProcessFlow
+            steps={data.flow}
+            lang={lang}
+            id={`${project.id}-large`}
+            size="large"
+          />
+          <figcaption>
+            <ul class="legend" role="list">
+              {legend.map((type) => (
+                <li>
+                  <span
+                    class:list={["legend__swatch", `legend__swatch--${type}`]}
+                    aria-hidden="true"
+                  />
+                  {copy.legend[type]}
+                </li>
+              ))}
+            </ul>
+          </figcaption>
+        </figure>
+      </section>
+
+      <section aria-labelledby="stack-title">
+        <h2 id="stack-title">{copy.stack}</h2>
+        <ul class="chip-list" role="list">
+          {data.stack.map((item) => (
+            <li class="chip">{item}</li>
+          ))}
+        </ul>
+      </section>
+
+      <p class="project__evidence">{copy.evidence}</p>
+    </div>
+
+    <nav class="project__pager" aria-label={copy.breadcrumb}>
+      <a href={paths.project(lang, previous.id)} rel="prev">
+        <span class="project__pager-label">
+          <Icon name="arrow-left" />
+          {copy.previous}
+        </span>
+        <span class="project__pager-name">{previous.data.name}</span>
+      </a>
+      <a
+        class="project__pager-next"
+        href={paths.project(lang, next.id)}
+        rel="next"
+      >
+        <span class="project__pager-label">
+          {copy.next}
+          <Icon name="arrow-right" />
+        </span>
+        <span class="project__pager-name">{next.data.name}</span>
+      </a>
+    </nav>
+  </article>
+</BaseLayout>
+
+<style>
+  .project {
+    padding-block: clamp(2rem, 4vw, 3.5rem) var(--section-space);
+  }
+
+  .breadcrumb ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    font-size: var(--step--1);
+    color: var(--text-muted);
+  }
+
+  .breadcrumb li:not(:last-child)::after {
+    content: "/";
+    margin-inline-start: 0.4rem;
+    color: var(--text-subtle);
+  }
+
+  .breadcrumb a {
+    color: var(--text-muted);
+  }
+
+  .breadcrumb a:hover {
+    color: var(--text);
+  }
+
+  .project__header {
+    display: grid;
+    gap: 1.25rem;
+    justify-items: start;
+    max-width: 52rem;
+    margin-block: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  .project__tag {
+    color: var(--accent);
+  }
+
+  .project__title {
+    font-size: var(--step-4);
+    letter-spacing: -0.05em;
+  }
+
+  .project__facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 2.5rem;
+  }
+
+  .project__facts div {
+    display: grid;
+    gap: 0.1rem;
+  }
+
+  .project__facts dt {
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+  }
+
+  .project__facts dd {
+    font-weight: 650;
+  }
+
+  .project__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .project__shot {
+    margin-bottom: clamp(2.5rem, 6vw, 4.5rem);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-l);
+    overflow: hidden;
+    background: var(--surface);
+  }
+
+  .project__window {
+    display: flex;
+    gap: 0.4rem;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .project__window span {
+    inline-size: 0.65rem;
+    block-size: 0.65rem;
+    border-radius: 50%;
+    background: var(--line-strong);
+  }
+
+  .project__shot :global(img) {
+    inline-size: 100%;
+  }
+
+  .project__content {
+    display: grid;
+    gap: clamp(2.25rem, 4vw, 3.25rem);
+    max-width: 52rem;
+  }
+
+  .project__content h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+    font-size: var(--step-2);
+  }
+
+  .project__content p {
+    color: var(--text-muted);
+    font-size: var(--step-1);
+    line-height: 1.6;
+  }
+
+  .project__steps {
+    display: grid;
+    gap: 1rem;
+    counter-reset: step;
+  }
+
+  .project__steps li {
+    position: relative;
+    padding-inline-start: 3rem;
+    color: var(--text-muted);
+    counter-increment: step;
+  }
+
+  .project__steps li::before {
+    content: counter(step, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 0.1rem;
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    color: var(--accent);
+  }
+
+  .project__role {
+    padding: 1.5rem;
+    border: 1px solid color-mix(in oklab, var(--chem) 40%, var(--line));
+    border-radius: var(--radius-m);
+    background: var(--chem-soft);
+  }
+
+  .project__role h2 {
+    color: var(--chem);
+    font-size: var(--step-1);
+  }
+
+  .project__role p {
+    color: var(--text);
+  }
+
+  .project__flow figure {
+    padding: 1.5rem 1.25rem 1.25rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-m);
+    background-color: var(--bg);
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 1.25rem 1.25rem;
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    margin-top: 1rem;
+    font-size: var(--step--1);
+    color: var(--text-muted);
+  }
+
+  .legend li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .legend__swatch {
+    inline-size: 1.1rem;
+    block-size: 0.75rem;
+    border: 1.5px solid;
+    border-radius: 0.2rem;
+  }
+
+  .legend__swatch--source {
+    border-color: var(--text-muted);
+    clip-path: polygon(0 0, 70% 0, 100% 50%, 70% 100%, 0 100%);
+  }
+
+  .legend__swatch--process {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+
+  .legend__swatch--store {
+    border-color: var(--chem);
+    background: var(--chem-soft);
+    border-radius: 40% / 30%;
+  }
+
+  .legend__swatch--output {
+    border-color: var(--text);
+    background: var(--surface-2);
+    clip-path: polygon(0 0, 70% 0, 100% 50%, 70% 100%, 0 100%);
+  }
+
+  .project__evidence {
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+    font-size: var(--step--1) !important;
+  }
+
+  .project__pager {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: clamp(3rem, 6vw, 5rem);
+  }
+
+  .project__pager a {
+    display: grid;
+    gap: 0.35rem;
+    padding: 1.25rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-m);
+    background: var(--surface);
+    text-decoration: none;
+  }
+
+  .project__pager a:hover {
+    border-color: var(--accent);
+  }
+
+  .project__pager-next {
+    text-align: end;
+    justify-items: end;
+  }
+
+  .project__pager-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: var(--step--1);
+    color: var(--text-muted);
+  }
+
+  .project__pager-name {
+    font-size: var(--step-1);
+    font-weight: 700;
+  }
+
+  @media (max-width: 36rem) {
+    .project__pager {
+      grid-template-columns: 1fr;
+    }
+
+    .project__pager-next {
+      text-align: start;
+      justify-items: start;
+    }
+  }
+</style>
