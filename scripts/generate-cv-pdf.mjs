@@ -1,6 +1,6 @@
 // Generates the one-page A4 CV PDFs from the built site into public/cv/.
 // Usage: pnpm cv:pdf   (builds, renders /cv/ and /en/cv/, then rebuilds with the PDFs)
-// Fails if the content does not fit on one page, instead of silently clipping it.
+// Fails if the content does not fit on one page (print never clips the sheet).
 import { chromium } from "@playwright/test";
 import { spawn } from "node:child_process";
 import { mkdir, writeFile } from "node:fs/promises";
@@ -32,6 +32,8 @@ try {
     const page = await browser.newPage({
       locale: job.locale,
       colorScheme: "light",
+      // A4-wide viewport: screen-only zoom rules never apply, so measurements are exact.
+      viewport: { width: 794, height: 1123 },
       reducedMotion: "reduce",
     });
     await page.goto(`http://localhost:${PORT}${job.path}`, {
@@ -40,42 +42,24 @@ try {
     await page.emulateMedia({ media: "print" });
     await page.evaluate(() => document.fonts.ready);
 
-    // The last block must end inside the sheet's bottom padding (overflow is clipped).
-    const fit = await page.evaluate(() => {
-      const sheet = document.querySelector(".sheet");
-      const last = sheet?.lastElementChild;
-      if (!sheet || !last) return null;
-      const bottom = sheet.getBoundingClientRect().bottom;
-      const padding = parseFloat(getComputedStyle(sheet).paddingBottom);
-      return {
-        content: Math.ceil(
-          last.getBoundingClientRect().bottom -
-            sheet.getBoundingClientRect().top,
-        ),
-        page: Math.floor(bottom - padding - sheet.getBoundingClientRect().top),
-      };
-    });
-    if (!fit || fit.content > fit.page) {
-      console.error(
-        `✗ ${job.path}: content (${fit?.content}px) exceeds one A4 page (${fit?.page}px)`,
-      );
-      failed = true;
-    }
-
     const pdf = await page.pdf({
       preferCSSPageSize: true,
       printBackground: true,
     });
     const pages = (pdf.toString("latin1").match(/\/Type\s*\/Page[^s]/g) ?? [])
       .length;
+    // The sheet is never clipped in print, so overflow shows up as extra pages.
     if (pages !== 1) {
-      console.error(`✗ ${job.path}: ${pages} pages`);
+      console.error(
+        `✗ ${job.path}: ${pages} pages — the CV must fit on one A4 page`,
+      );
       failed = true;
+    } else {
+      await writeFile(job.file, pdf);
+      console.log(
+        `✓ ${job.file} (1 page, ${Math.round(pdf.length / 1024)} KB)`,
+      );
     }
-    await writeFile(job.file, pdf);
-    console.log(
-      `✓ ${job.file} (${pages} page, ${Math.round(pdf.length / 1024)} KB, ${fit?.content}/${fit?.page}px)`,
-    );
     await page.close();
   }
 } finally {
