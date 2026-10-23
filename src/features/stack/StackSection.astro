@@ -16,14 +16,9 @@ const projectNames = new Map(
 
 /*
  * The table is a native radio group: arrow keys move between elements, it works without
- * JavaScript, and each radio is described by its detail. :has() reveals the active detail.
+ * JavaScript, and each radio is described by its detail. Every detail is a sibling of its
+ * radio, so `input:checked ~ .stack__detail` reveals it with no generated or inline CSS.
  */
-const revealRules = elements
-  .map(
-    (el) =>
-      `.stack:has(#el-${el.id}:checked) [data-detail="${el.id}"]{display:grid}`,
-  )
-  .join("");
 ---
 
 <section
@@ -84,43 +79,38 @@ const revealRules = elements
               {el.tileName && <span class="visually-hidden">{el.name}</span>}
               <span class="visually-hidden">, {groups[el.group][lang]}</span>
             </label>
+            <div
+              class="stack__detail"
+              id={`detail-${el.id}`}
+              data-detail={el.id}
+            >
+              <p class="stack__detail-head">
+                <span class="stack__detail-symbol" aria-hidden="true">
+                  {el.symbol}
+                </span>
+                <span>
+                  <strong>{el.name}</strong>
+                  <span class="stack__detail-group mono">
+                    {groups[el.group][lang]}
+                  </span>
+                </span>
+              </p>
+              <p>{el.description[lang]}</p>
+              <p class="stack__used">
+                <span class="mono">{copy.usedIn}:</span>
+                {el.usedIn.map((slug, i) => (
+                  <>
+                    {i > 0 && ", "}
+                    <a href={paths.project(lang, slug)}>
+                      {projectNames.get(slug) ?? slug}
+                    </a>
+                  </>
+                ))}
+              </p>
+            </div>
           </div>
         ))}
       </fieldset>
-
-      <div class="stack__details">
-        {elements.map((el) => (
-          <div
-            class:list={["stack__detail", `group-${el.group}`]}
-            id={`detail-${el.id}`}
-            data-detail={el.id}
-          >
-            <p class="stack__detail-head">
-              <span class="stack__detail-symbol" aria-hidden="true">
-                {el.symbol}
-              </span>
-              <span>
-                <strong>{el.name}</strong>
-                <span class="stack__detail-group mono">
-                  {groups[el.group][lang]}
-                </span>
-              </span>
-            </p>
-            <p>{el.description[lang]}</p>
-            <p class="stack__used">
-              <span class="mono">{copy.usedIn}:</span>
-              {el.usedIn.map((slug, i) => (
-                <>
-                  {i > 0 && ", "}
-                  <a href={paths.project(lang, slug)}>
-                    {projectNames.get(slug) ?? slug}
-                  </a>
-                </>
-              ))}
-            </p>
-          </div>
-        ))}
-      </div>
     </div>
   </div>
 
@@ -133,8 +123,6 @@ const revealRules = elements
     </ul>
   </div>
 </section>
-
-<style is:inline set:html={revealRules}></style>
 
 <style>
   .stack__layout {
@@ -196,8 +184,9 @@ const revealRules = elements
     min-inline-size: 0;
   }
 
+  /* Cells dissolve so tiles and the shared detail row are placed by the grid itself. */
   .periodic__cell {
-    display: grid;
+    display: contents;
   }
 
   .periodic__tile {
@@ -266,13 +255,12 @@ const revealRules = elements
     }
   }
 
-  /* ----- Detail ----- */
-  .stack__details {
-    margin-top: 1rem;
-  }
-
+  /* ----- Detail: only the checked element's panel is rendered, in a row below ----- */
   .stack__detail {
     display: none;
+    grid-row: 4;
+    grid-column: 1 / -1;
+    margin-top: 0.6rem;
     gap: 0.6rem;
     min-block-size: 9.5rem;
     padding: 1.25rem;
@@ -283,12 +271,8 @@ const revealRules = elements
     color: var(--text-muted);
   }
 
-  /* Without :has(), every detail stays visible as a plain list. */
-  @supports not selector(:has(*)) {
-    .stack__detail {
-      display: grid;
-      margin-bottom: 0.75rem;
-    }
+  input:checked ~ .stack__detail {
+    display: grid;
   }
 
   .stack__detail-head {
