@@ -14,16 +14,17 @@ import {
   websiteNode,
 } from "@/features/seo/structured-data";
 import ProcessFlow from "./components/ProcessFlow.astro";
+import ProjectCard from "./components/ProjectCard.astro";
+import ProjectVisual from "./components/ProjectVisual.astro";
 import { projectTag, projectsCopy, type Project } from "./lib/projects";
 
 interface Props {
   lang: Lang;
   project: Project;
-  previous: Project;
-  next: Project;
+  more: Project[];
 }
 
-const { lang, project, previous, next } = Astro.props;
+const { lang, project, more } = Astro.props;
 const { data } = project;
 const text = data[lang];
 const copy = projectsCopy[lang];
@@ -42,6 +43,9 @@ const title = [
   `${data.name} | ${SITE.shortName}`,
 ].find((candidate) => candidate.length <= 62)!;
 const ogImage = `/og/${lang}/${project.id}.png`;
+const host = (data.demo ?? data.repository)
+  .replace(/^https?:\/\//, "")
+  .replace(/\/$/, "");
 
 const jsonLd = graph([
   personNode(lang, site),
@@ -68,6 +72,16 @@ const jsonLd = graph([
   ]),
 ]);
 
+// Numbered like the home sections; optional blocks shift the numbering.
+const hasShot = Boolean(data.image && text.imageAlt);
+const order = [
+  "problem",
+  "approach",
+  ...(text.role ? ["role"] : []),
+  ...(hasShot ? ["screen"] : []),
+  "flow",
+];
+const num = (id: string) => String(order.indexOf(id) + 1).padStart(2, "0");
 const legend = ["source", "process", "store", "output"] as const;
 ---
 
@@ -80,7 +94,7 @@ const legend = ["source", "process", "store", "output"] as const;
   type="article"
   jsonLd={jsonLd}
 >
-  <article class="project container" aria-labelledby="project-title">
+  <article class="case container" aria-labelledby="project-title">
     <nav class="breadcrumb" aria-label={t("breadcrumb.label")}>
       <ol role="list">
         <li>
@@ -95,17 +109,20 @@ const legend = ["source", "process", "store", "output"] as const;
       </ol>
     </nav>
 
-    <header class="project__header">
-      <p class="eyebrow">
-        <span class="mono project__tag">{projectTag(project)}</span>
-        {text.kind}
-      </p>
-      <h1 id="project-title" class="project__title">
-        {data.name}
-      </h1>
-      <p class="lead">{text.summary}</p>
+    <header class="case__header">
+      <div class="case__intro">
+        <p class="case__eyebrow">
+          <span class="case__tag">{projectTag(project)}</span>
+          {text.kind}
+        </p>
+        <h1 id="project-title" class="case__title">
+          {data.name}
+        </h1>
+        <p class="case__tagline">{text.tagline}</p>
+        <p class="lead">{text.summary}</p>
+      </div>
 
-      <dl class="project__facts">
+      <dl class="case__facts">
         <div>
           <dt>{copy.year}</dt>
           <dd>{data.year}</dd>
@@ -114,142 +131,179 @@ const legend = ["source", "process", "store", "output"] as const;
           <dt>{copy.type}</dt>
           <dd>{data.team ? copy.teamProject : copy.personalProject}</dd>
         </div>
+        <div>
+          <dt>{copy.languages}</dt>
+          <dd>{data.languages.join(", ")}</dd>
+        </div>
+        <div>
+          <dt>Demo</dt>
+          <dd>{data.demo ? copy.demoPublic : copy.demoNone}</dd>
+        </div>
       </dl>
-
-      <div class="project__actions">
-        <a
-          class="button button--primary"
-          href={data.repository}
-          target="_blank"
-          rel="noopener"
-        >
-          <Icon name="code" />
-          {copy.code}
-          <span class="visually-hidden">{t("external.newTab")}</span>
-        </a>
-        {data.demo && (
-          <a
-            class="button button--ghost"
-            href={data.demo}
-            target="_blank"
-            rel="noopener"
-          >
-            {copy.demo}
-            <Icon name="arrow-up-right" />
-            <span class="visually-hidden">{t("external.newTab")}</span>
-          </a>
-        )}
-      </div>
     </header>
 
-    {data.image && text.imageAlt && (
-      <figure class="project__shot">
-        <div class="project__window" aria-hidden="true">
-          <span />
-          <span />
-          <span />
-        </div>
-        <Picture
-          src={data.image}
-          alt={text.imageAlt}
-          formats={["avif", "webp"]}
-          widths={[640, 960, 1280, 1440]}
-          sizes="(min-width: 76rem) 72rem, calc(100vw - 2rem)"
-          loading="eager"
-          fetchpriority="high"
-        />
-      </figure>
-    )}
+    <ProjectVisual project={project} lang={lang} size="hero" />
 
-    <div class="project__content">
-      <section aria-labelledby="problem-title">
-        <h2 id="problem-title">{copy.problem}</h2>
-        <p>{text.problem}</p>
-      </section>
-
-      <section aria-labelledby="approach-title">
-        <h2 id="approach-title">{copy.approach}</h2>
-        <ol class="project__steps" role="list">
-          {text.approach.map((step) => (
-            <li>{step}</li>
-          ))}
-        </ol>
-      </section>
-
-      {text.role && (
-        <section class="project__role" aria-labelledby="role-title">
-          <h2 id="role-title">
-            <Icon name="team" />
-            {copy.role}
+    <div class="case__body">
+      <div class="case__main">
+        <section class="case__block" aria-labelledby="problem-title">
+          <h2 id="problem-title">
+            <span class="case__num" aria-hidden="true">
+              {num("problem")}
+            </span>
+            {copy.problem}
           </h2>
-          <p>{text.role}</p>
+          <p class="case__text">{text.problem}</p>
         </section>
-      )}
 
-      <section class="project__flow" aria-labelledby="flow-title">
-        <h2 id="flow-title">{copy.architecture}</h2>
-        <p class="project__flow-note">{copy.architectureNote}</p>
-        <figure>
-          <ProcessFlow
-            steps={data.flow}
-            lang={lang}
-            id={`${project.id}-large`}
-            size="large"
-          />
-          <figcaption>
-            <ul class="legend" role="list">
-              {legend.map((type) => (
-                <li>
-                  <span
-                    class:list={["legend__swatch", `legend__swatch--${type}`]}
-                    aria-hidden="true"
-                  />
-                  {copy.legend[type]}
-                </li>
-              ))}
-            </ul>
-          </figcaption>
-        </figure>
-      </section>
+        <section class="case__block" aria-labelledby="approach-title">
+          <h2 id="approach-title">
+            <span class="case__num" aria-hidden="true">
+              {num("approach")}
+            </span>
+            {copy.approach}
+          </h2>
+          <ul class="case__steps" role="list">
+            {text.approach.map((step) => (
+              <li>{step}</li>
+            ))}
+          </ul>
+        </section>
 
-      <section aria-labelledby="stack-title">
-        <h2 id="stack-title">{copy.stack}</h2>
-        <ul class="chip-list" role="list">
-          {data.stack.map((item) => (
-            <li class="chip">{item}</li>
-          ))}
-        </ul>
-      </section>
+        {text.role && (
+          <section class="case__block case__role" aria-labelledby="role-title">
+            <h2 id="role-title">
+              <span class="case__num" aria-hidden="true">
+                {num("role")}
+              </span>
+              {copy.role}
+            </h2>
+            <p class="case__text">{text.role}</p>
+          </section>
+        )}
 
-      <p class="project__evidence">{copy.evidence}</p>
-    </div>
+        {hasShot && data.image && (
+          <section class="case__block" aria-labelledby="screen-title">
+            <h2 id="screen-title">
+              <span class="case__num" aria-hidden="true">
+                {num("screen")}
+              </span>
+              {copy.screen}
+            </h2>
+            <figure class="case__shot">
+              <div class="case__window" aria-hidden="true">
+                <i />
+                <i />
+                <i />
+                <span class="case__url">{host}</span>
+              </div>
+              <Picture
+                src={data.image}
+                alt={text.imageAlt ?? ""}
+                formats={["avif", "webp"]}
+                widths={[640, 960, 1280, 1600]}
+                sizes="(min-width: 76rem) 48rem, calc(100vw - 2rem)"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>
+                {data.demo ? copy.screenNote : copy.screenNoteRepo}
+              </figcaption>
+            </figure>
+          </section>
+        )}
 
-    <nav class="project__pager" aria-label={copy.breadcrumb}>
-      <a href={paths.project(lang, previous.id)} rel="prev">
-        <span class="project__pager-label">
+        <section class="case__block" aria-labelledby="flow-title">
+          <h2 id="flow-title">
+            <span class="case__num" aria-hidden="true">
+              {num("flow")}
+            </span>
+            {copy.architecture}
+          </h2>
+          <p class="case__note">{copy.architectureNote}</p>
+          <figure class="case__flow">
+            <ProcessFlow
+              steps={data.flow}
+              lang={lang}
+              id={`${project.id}-large`}
+              size="large"
+            />
+            <figcaption>
+              <ul class="legend" role="list">
+                {legend.map((type) => (
+                  <li>
+                    <span
+                      class:list={["legend__swatch", `legend__swatch--${type}`]}
+                      aria-hidden="true"
+                    />
+                    {copy.legend[type]}
+                  </li>
+                ))}
+              </ul>
+            </figcaption>
+          </figure>
+        </section>
+      </div>
+
+      <aside class="case__aside" aria-label={copy.details}>
+        <div class="case__panel">
+          <h2 class="case__panel-title">{copy.stack}</h2>
+          <ul class="chip-list" role="list">
+            {data.stack.map((item) => (
+              <li class="chip">{item}</li>
+            ))}
+          </ul>
+          <div class="case__actions">
+            <a
+              class="button button--primary"
+              href={data.repository}
+              target="_blank"
+              rel="noopener"
+            >
+              <Icon name="code" />
+              {copy.code}
+              <span class="visually-hidden">{t("external.newTab")}</span>
+            </a>
+            {data.demo && (
+              <a
+                class="button button--ghost"
+                href={data.demo}
+                target="_blank"
+                rel="noopener"
+              >
+                {copy.demo}
+                <Icon name="arrow-up-right" />
+                <span class="visually-hidden">{t("external.newTab")}</span>
+              </a>
+            )}
+          </div>
+          <p class="case__evidence">{copy.evidence}</p>
+        </div>
+        <a class="text-link case__back" href={paths.section(lang, "projects")}>
           <Icon name="arrow-left" />
-          {copy.previous}
-        </span>
-        <span class="project__pager-name">{previous.data.name}</span>
-      </a>
-      <a
-        class="project__pager-next"
-        href={paths.project(lang, next.id)}
-        rel="next"
-      >
-        <span class="project__pager-label">
-          {copy.next}
-          <Icon name="arrow-right" />
-        </span>
-        <span class="project__pager-name">{next.data.name}</span>
-      </a>
-    </nav>
+          {copy.back}
+        </a>
+      </aside>
+    </div>
   </article>
+
+  <section class="more container" aria-labelledby="more-title">
+    <h2 id="more-title" class="more__title">
+      {copy.more}
+    </h2>
+    <ul class="more__grid" role="list">
+      {more.map((other) => (
+        <li>
+          <ProjectCard project={other} lang={lang} />
+        </li>
+      ))}
+    </ul>
+  </section>
 </BaseLayout>
 
 <style>
-  .project {
-    padding-block: clamp(2rem, 4vw, 3.5rem) var(--section-space);
+  .case {
+    padding-block: clamp(1.5rem, 3vw, 2.5rem) clamp(3rem, 6vw, 5rem);
   }
 
   .breadcrumb ol {
@@ -274,143 +328,213 @@ const legend = ["source", "process", "store", "output"] as const;
     color: var(--text);
   }
 
-  .project__header {
+  /* ----- Header ----- */
+  .case__header {
     display: grid;
-    gap: 1.25rem;
-    justify-items: start;
-    max-width: 52rem;
-    margin-block: clamp(2rem, 5vw, 3.5rem);
+    grid-template-columns: minmax(0, 1fr) minmax(14rem, 20rem);
+    align-items: end;
+    gap: clamp(1.5rem, 4vw, 4rem);
+    margin-block: clamp(2rem, 4vw, 3rem) clamp(1.75rem, 3vw, 2.5rem);
   }
 
-  .project__tag {
+  .case__intro {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .case__eyebrow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .case__tag {
+    padding: 0.1rem 0.45rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 0.375rem;
     color: var(--accent);
   }
 
-  .project__title {
+  .case__title {
     font-size: var(--step-4);
-    letter-spacing: -0.05em;
+    letter-spacing: -0.055em;
+    line-height: 0.98;
   }
 
-  .project__facts {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem 2.5rem;
+  .case__tagline {
+    font-size: var(--step-2);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+    background: linear-gradient(90deg, var(--chem), var(--accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 
-  .project__facts div {
+  @media (forced-colors: active) {
+    .case__tagline {
+      color: CanvasText;
+      background: none;
+    }
+  }
+
+  .case__facts {
     display: grid;
-    gap: 0.1rem;
+    border-top: 1px solid var(--line);
   }
 
-  .project__facts dt {
-    font-family: var(--font-mono);
+  .case__facts div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 0.7rem;
+    border-bottom: 1px solid var(--line);
     font-size: var(--step--1);
+  }
+
+  .case__facts dt {
+    font-family: var(--font-mono);
     text-transform: uppercase;
     letter-spacing: 0.04em;
     color: var(--text-muted);
   }
 
-  .project__facts dd {
+  .case__facts dd {
     font-weight: 650;
+    text-align: end;
   }
 
-  .project__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-  }
-
-  .project__shot {
-    margin-bottom: clamp(2.5rem, 6vw, 4.5rem);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-l);
-    overflow: hidden;
-    background: var(--surface);
-  }
-
-  .project__window {
-    display: flex;
-    gap: 0.4rem;
-    padding: 0.75rem 1rem;
-    border-bottom: 1px solid var(--line);
-  }
-
-  .project__window span {
-    inline-size: 0.65rem;
-    block-size: 0.65rem;
-    border-radius: 50%;
-    background: var(--line-strong);
-  }
-
-  .project__shot :global(img) {
-    inline-size: 100%;
-  }
-
-  .project__content {
+  /* ----- Body ----- */
+  .case__body {
     display: grid;
-    gap: clamp(2.25rem, 4vw, 3.25rem);
-    max-width: 52rem;
+    grid-template-columns: minmax(0, 1fr) minmax(16rem, 21rem);
+    align-items: start;
+    gap: clamp(2rem, 5vw, 5rem);
+    margin-top: clamp(2.5rem, 5vw, 4rem);
   }
 
-  .project__content h2 {
+  .case__main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(2.5rem, 4vw, 3.5rem);
+    min-inline-size: 0;
+  }
+
+  .case__block h2 {
     display: flex;
-    align-items: center;
-    gap: 0.6rem;
+    align-items: baseline;
+    gap: 0.9rem;
     margin-bottom: 1rem;
     font-size: var(--step-2);
   }
 
-  .project__content p {
-    color: var(--text-muted);
-    font-size: var(--step-1);
-    line-height: 1.6;
-  }
-
-  .project__steps {
-    display: grid;
-    gap: 1rem;
-    counter-reset: step;
-  }
-
-  .project__steps li {
-    position: relative;
-    padding-inline-start: 3rem;
-    color: var(--text-muted);
-    counter-increment: step;
-  }
-
-  .project__steps li::before {
-    content: counter(step, decimal-leading-zero);
-    position: absolute;
-    left: 0;
-    top: 0.1rem;
+  .case__num {
     font-family: var(--font-mono);
     font-size: var(--step--1);
+    font-weight: 500;
+    letter-spacing: 0;
     color: var(--accent);
   }
 
-  .project__role {
-    padding: 1.5rem;
+  .case__text {
+    max-inline-size: 62ch;
+    font-size: var(--step-1);
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+
+  .case__steps {
+    display: grid;
+    border-top: 1px solid var(--line);
+  }
+
+  .case__steps li {
+    position: relative;
+    padding: 1rem 0 1rem 2.25rem;
+    border-bottom: 1px solid var(--line);
+    color: var(--text-muted);
+  }
+
+  .case__steps li::before {
+    content: "";
+    position: absolute;
+    left: 0.35rem;
+    top: 1.55rem;
+    inline-size: 0.6rem;
+    block-size: 0.6rem;
+    border: 1.5px solid var(--accent);
+    border-radius: 50%;
+  }
+
+  .case__role {
+    padding: clamp(1.25rem, 3vw, 1.75rem);
     border: 1px solid color-mix(in oklab, var(--chem) 40%, var(--line));
     border-radius: var(--radius-m);
     background: var(--chem-soft);
   }
 
-  .project__role h2 {
+  .case__role .case__num {
     color: var(--chem);
-    font-size: var(--step-1);
   }
 
-  .project__role p {
+  .case__role .case__text {
     color: var(--text);
   }
 
-  .project__flow-note {
-    margin-block: -0.5rem 1rem;
-    font-size: var(--step--1) !important;
+  .case__shot {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-m);
+    overflow: hidden;
+    background: var(--surface);
   }
 
-  .project__flow figure {
+  .case__window {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.65rem 0.9rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .case__window i {
+    inline-size: 0.6rem;
+    block-size: 0.6rem;
+    border-radius: 50%;
+    background: var(--line-strong);
+  }
+
+  .case__url {
+    margin-inline-start: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+  }
+
+  .case__shot :global(img) {
+    inline-size: 100%;
+  }
+
+  .case__shot figcaption {
+    padding: 0.75rem 1rem;
+    border-top: 1px solid var(--line);
+    font-size: var(--step--1);
+    color: var(--text-muted);
+  }
+
+  .case__note {
+    margin: -0.4rem 0 1rem;
+    font-size: var(--step--1);
+    color: var(--text-muted);
+  }
+
+  .case__flow {
     padding: 1.5rem 1.25rem 1.25rem;
     border: 1px solid var(--line);
     border-radius: var(--radius-m);
@@ -465,59 +589,84 @@ const legend = ["source", "process", "store", "output"] as const;
     clip-path: polygon(0 0, 70% 0, 100% 50%, 70% 100%, 0 100%);
   }
 
-  .project__evidence {
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--line);
-    font-size: var(--step--1) !important;
+  /* ----- Aside ----- */
+  .case__aside {
+    position: sticky;
+    top: calc(var(--header-h) + 1.5rem);
+    display: grid;
+    gap: 1.25rem;
   }
 
-  .project__pager {
+  .case__panel {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    margin-top: clamp(3rem, 6vw, 5rem);
-  }
-
-  .project__pager a {
-    display: grid;
-    gap: 0.35rem;
-    padding: 1.25rem;
+    gap: 1.1rem;
+    padding: 1.4rem;
     border: 1px solid var(--line);
-    border-radius: var(--radius-m);
+    border-radius: var(--radius-l);
     background: var(--surface);
-    text-decoration: none;
   }
 
-  .project__pager a:hover {
-    border-color: var(--accent);
+  .case__panel-title {
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-muted);
   }
 
-  .project__pager-next {
-    text-align: end;
-    justify-items: end;
+  .case__actions {
+    display: grid;
+    gap: 0.6rem;
   }
 
-  .project__pager-label {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
+  .case__actions .button {
+    white-space: normal;
+    text-align: center;
+  }
+
+  .case__evidence {
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
     font-size: var(--step--1);
     color: var(--text-muted);
   }
 
-  .project__pager-name {
-    font-size: var(--step-1);
-    font-weight: 700;
+  .case__back {
+    justify-self: start;
   }
 
-  @media (max-width: 36rem) {
-    .project__pager {
-      grid-template-columns: 1fr;
+  /* ----- More projects ----- */
+  .more {
+    padding-block: clamp(3rem, 6vw, 5rem) var(--section-space);
+    border-top: 1px solid var(--line);
+  }
+
+  .more__title {
+    margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+    font-size: var(--step-3);
+  }
+
+  .more__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(2.5rem, 4vw, 3.5rem) clamp(1.25rem, 2.5vw, 2rem);
+  }
+
+  @media (max-width: 60rem) {
+    .case__header,
+    .case__body {
+      grid-template-columns: minmax(0, 1fr);
     }
 
-    .project__pager-next {
-      text-align: start;
-      justify-items: start;
+    .case__aside {
+      position: static;
+    }
+  }
+
+  @media (max-width: 52rem) {
+    .more__grid {
+      grid-template-columns: 1fr;
     }
   }
 </style>
