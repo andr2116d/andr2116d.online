@@ -1,0 +1,7 @@
+dist/
+.astro/
+prototipos/
+pnpm-lock.yaml
+reports/
+test-results/
+playwright-report/
