@@ -61,7 +61,7 @@ test("mobile menu opens, closes with Escape and closes after navigating", async 
   await expect(menu).toBeHidden();
 
   await button.click();
-  await menu.getByRole("link", { name: "Formación" }).click();
+  await menu.getByRole("link", { name: "Sobre mí" }).click();
   await expect(menu).toBeHidden();
   await expect(page).toHaveURL(/#formacion$/);
 });

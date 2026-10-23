@@ -1,6 +1,7 @@
 ---
+import Icon from "@/shared/ui/Icon.astro";
 import SectionHeading from "@/shared/ui/SectionHeading.astro";
-import { SECTION_IDS, type Lang } from "@/shared/i18n/config";
+import { SECTION_IDS, paths, type Lang } from "@/shared/i18n/config";
 import InstitutionCard from "./components/InstitutionCard.astro";
 import DisciplineVenn from "./components/DisciplineVenn.astro";
 import { educationCopy, institutions } from "./education.content";
@@ -29,8 +30,24 @@ const copy = educationCopy[lang];
         <p>{paragraph}</p>
       ))}
     </SectionHeading>
-    <div class="education__venn">
-      <DisciplineVenn lang={lang} />
+    <div class="education__side">
+      <div class="education__venn">
+        <DisciplineVenn lang={lang} />
+      </div>
+      <div class="looking">
+        <h3 class="looking__title">{copy.looking.title}</h3>
+        <p>{copy.looking.text}</p>
+        <a class="text-link" href={paths.section(lang, "contact")}>
+          {copy.looking.action}
+          <Icon name="arrow-right" />
+        </a>
+      </div>
+      <p class="offscreen">
+        <span class="offscreen__note" aria-hidden="true">
+          ♪
+        </span>
+        {copy.offscreen}
+      </p>
     </div>
   </div>
 
@@ -47,14 +64,68 @@ const copy = educationCopy[lang];
   .education__intro {
     display: grid;
     grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-    align-items: center;
+    align-items: start;
     gap: clamp(2rem, 5vw, 4rem);
     margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .education__side {
+    display: grid;
+    gap: 1.5rem;
+    justify-items: center;
   }
 
   .education__venn {
     display: grid;
     place-items: center;
+    inline-size: 100%;
+  }
+
+  .looking {
+    display: grid;
+    gap: 0.6rem;
+    justify-items: start;
+    inline-size: 100%;
+    max-inline-size: 30rem;
+    padding: 1.25rem 1.4rem;
+    border: 1px solid color-mix(in oklab, var(--accent) 40%, var(--line));
+    border-radius: var(--radius-m);
+    background: var(--accent-soft);
+  }
+
+  .looking__title {
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .looking p {
+    color: var(--text);
+  }
+
+  .offscreen {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    inline-size: 100%;
+    max-inline-size: 30rem;
+    font-size: var(--step--1);
+    color: var(--text-muted);
+  }
+
+  .offscreen__note {
+    display: grid;
+    place-items: center;
+    flex: none;
+    inline-size: 2rem;
+    block-size: 2rem;
+    border-radius: 50%;
+    background: var(--chem-soft);
+    color: var(--chem);
+    font-size: 1rem;
   }
 
   .education__list {

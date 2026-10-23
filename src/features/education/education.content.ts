@@ -53,12 +53,18 @@ export const institutions: Institution[] = [
 
 export const educationCopy = {
   es: {
-    kicker: "Formación",
+    kicker: "Sobre mí · Formación",
     title: "Dos ingenierías. Una misma curiosidad.",
     intro: [
-      "Soy Johel Andreé Vargas Villanueva, desarrollador autodidacta de Trujillo, Perú. Curso dos carreras en paralelo: Ingeniería Química en la Universidad Nacional de Trujillo e Ingeniería de Sistemas e Inteligencia Artificial en la Universidad Privada Antenor Orrego.",
-      "La primera me enseña a entender los procesos; la segunda, a transformarlos con tecnología. Me interesa lo que sucede entre disciplinas: una interfaz que simplifica lo complejo, una API bien pensada o un proceso que deja de hacerse a mano.",
+      "Soy Johel Andreé Vargas Villanueva, desarrollador autodidacta de Trujillo, Perú. Empecé a programar por pura curiosidad: quería entender cómo funciona por dentro una web o una app. Hoy curso dos carreras en paralelo: Ingeniería Química en la Universidad Nacional de Trujillo e Ingeniería de Sistemas e Inteligencia Artificial en la Universidad Privada Antenor Orrego.",
+      "La primera me enseña a entender los procesos; la segunda, a transformarlos con tecnología. Me gusta inventar, aprendo rápido y no me gustan las cosas mal hechas. Me equivoco a menudo, y es justo así como aprendo: cada error me deja algo que hacer mejor.",
     ],
+    offscreen: "Fuera de la pantalla: música. Toco el saxofón.",
+    looking: {
+      title: "Lo que busco",
+      text: "Seguir aprendiendo y desarrollar soluciones que resuelvan problemas reales. Si tienes un proyecto o una oportunidad en la que pueda aportar, conversemos.",
+      action: "Escríbeme",
+    },
     status: "En curso",
     since: "desde",
     website: "Sitio oficial",
@@ -73,12 +79,18 @@ export const educationCopy = {
     },
   },
   en: {
-    kicker: "Education",
+    kicker: "About · Education",
     title: "Two engineering degrees. One curiosity.",
     intro: [
-      "I’m Johel Andreé Vargas Villanueva, a self-taught developer from Trujillo, Peru. I’m pursuing two degrees at the same time: Chemical Engineering at Universidad Nacional de Trujillo and Systems Engineering & Artificial Intelligence at Universidad Privada Antenor Orrego.",
-      "The first teaches me to understand processes; the second, to transform them with technology. I’m drawn to what happens between disciplines: an interface that makes complexity manageable, a well-designed API or a process that no longer has to be done by hand.",
+      "I’m Johel Andreé Vargas Villanueva, a self-taught developer from Trujillo, Peru. I started programming out of pure curiosity: I wanted to understand how a website or an app works on the inside. Today I’m pursuing two degrees at the same time: Chemical Engineering at Universidad Nacional de Trujillo and Systems Engineering & Artificial Intelligence at Universidad Privada Antenor Orrego.",
+      "The first teaches me to understand processes; the second, to transform them with technology. I like inventing things, I learn fast and I don’t like sloppy work. I make mistakes often, and that’s exactly how I learn: every mistake leaves me something to do better.",
     ],
+    offscreen: "Away from the screen: music. I play the saxophone.",
+    looking: {
+      title: "What I’m looking for",
+      text: "To keep learning and build solutions to real problems. If you have a project or an opportunity where I can contribute, let’s talk.",
+      action: "Get in touch",
+    },
     status: "In progress",
     since: "since",
     website: "Official website",
