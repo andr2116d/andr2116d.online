@@ -15,14 +15,14 @@ const longitude = `${SITE.location.longitude}${lang === "es" ? "O" : "W"}`;
 
 <section class="hero container" aria-labelledby="hero-title">
   <div class="hero__copy">
-    <p class="eyebrow hero__eyebrow">{c.eyebrow}</p>
+    <p class="eyebrow hero__eyebrow enter enter-1">{c.eyebrow}</p>
     <h1 id="hero-title" class="hero__title">
-      <span>{SITE.givenName}</span>
-      <span>{SITE.familyName}</span>
+      <span class="hero__line">{SITE.givenName}</span>
+      <span class="hero__line">{SITE.familyName}</span>
     </h1>
-    <p class="hero__statement">{c.statement}</p>
-    <p class="lead hero__lead">{c.lead}</p>
-    <div class="hero__actions">
+    <p class="hero__statement enter enter-3">{c.statement}</p>
+    <p class="lead hero__lead enter-move enter-3">{c.lead}</p>
+    <div class="hero__actions enter enter-4">
       <a class="button button--primary" href={paths.section(lang, "projects")}>
         {c.primary}
         <Icon name="arrow-down" />
@@ -32,7 +32,7 @@ const longitude = `${SITE.location.longitude}${lang === "es" ? "O" : "W"}`;
         <Icon name="arrow-up-right" />
       </a>
     </div>
-    <p class="hero__meta">
+    <p class="hero__meta enter enter-5">
       <Icon name="pin" />
       <span>{c.location}</span>
       <span class="hero__coords mono" aria-hidden="true">
@@ -41,7 +41,7 @@ const longitude = `${SITE.location.longitude}${lang === "es" ? "O" : "W"}`;
     </p>
   </div>
 
-  <div class="hero__art">
+  <div class="hero__art enter-pop enter-2">
     <div class="hero__art-frame" aria-hidden="true">
       <span class="hero__corner hero__corner--tl"></span>
       <span class="hero__corner hero__corner--br"></span>
@@ -96,12 +96,65 @@ const longitude = `${SITE.location.longitude}${lang === "es" ? "O" : "W"}`;
     letter-spacing: -0.055em;
   }
 
-  .hero__title span {
+  .hero__line {
     display: block;
+    color: var(--text);
   }
 
-  .hero__title span + span {
+  .hero__line + .hero__line {
     color: var(--text-muted);
+  }
+
+  /*
+   * Entrance: each line rises (no opacity change, so the LCP is not delayed) and a
+   * band of brand light sweeps across the name once, mint then lilac.
+   */
+  @media (prefers-reduced-motion: no-preference) {
+    .hero__line {
+      --ink: var(--text);
+      --shine: var(--chem);
+      background: linear-gradient(
+          100deg,
+          var(--ink) 0 32%,
+          var(--shine) 44% 56%,
+          var(--ink) 68% 100%
+        )
+        100% 0 / 260% 100% no-repeat;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation:
+        line-rise 950ms var(--ease-out) both,
+        name-shine 1700ms 500ms cubic-bezier(0.45, 0, 0.2, 1) both;
+    }
+
+    .hero__line + .hero__line {
+      --ink: var(--text-muted);
+      --shine: var(--accent);
+      animation-delay: 110ms, 700ms;
+    }
+  }
+
+  @keyframes line-rise {
+    from {
+      transform: translateY(0.45em);
+    }
+  }
+
+  @keyframes name-shine {
+    from {
+      background-position: 100% 0;
+    }
+    to {
+      background-position: 0% 0;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .hero__line {
+      color: CanvasText;
+      background: none;
+    }
   }
 
   .hero__statement {
