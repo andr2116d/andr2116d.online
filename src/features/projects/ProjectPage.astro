@@ -35,7 +35,12 @@ const alternates = {
   en: paths.project("en", project.id),
 };
 const url = absolute(alternates[lang], site);
-const title = `${data.name} — ${text.tagline} | ${SITE.shortName}`;
+// Search results truncate around 60 characters: add detail only while it fits.
+const title = [
+  `${data.name} — ${text.tagline} | ${SITE.shortName}`,
+  `${data.name} — ${text.tagline}`,
+  `${data.name} | ${SITE.shortName}`,
+].find((candidate) => candidate.length <= 62)!;
 const ogImage = `/og/${lang}/${project.id}.png`;
 
 const jsonLd = graph([
