@@ -6,6 +6,7 @@ import ThemeScript from "@/features/theme/ThemeScript.astro";
 import SiteHeader from "@/features/navigation/SiteHeader.astro";
 import SiteFooter from "@/features/navigation/SiteFooter.astro";
 import LanguageSuggestion from "@/features/navigation/LanguageSuggestion.astro";
+import RevealObserver from "@/shared/ui/RevealObserver.astro";
 import { LOCALES, otherLang } from "@/shared/i18n/config";
 import { useTranslations } from "@/shared/i18n/ui";
 
@@ -54,6 +55,7 @@ const hasTranslation = translated !== seo.alternates[seo.lang];
       <slot />
     </main>
     <SiteFooter lang={seo.lang} />
+    <RevealObserver />
     {hasTranslation && <LanguageSuggestion lang={seo.lang} href={translated} />}
   </body>
 </html>

@@ -314,7 +314,9 @@ a {
   padding: 0;
 }
 
-/* ---------- Scroll reveal (progressive, CSS-only) ---------- */
+/* ---------- Scroll reveal ---------- */
+/* Scroll-driven where supported (Chromium); IntersectionObserver fallback adds
+   html.reveal-io and .is-in (Safari, Firefox). Nothing hides without motion allowed. */
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {
     .reveal {
@@ -322,6 +324,19 @@ a {
       animation-timeline: view();
       animation-range: entry 0% entry 28%;
     }
+  }
+
+  .reveal-io .reveal {
+    opacity: 0;
+    transform: translateY(1.75rem);
+    transition:
+      opacity 700ms var(--ease-out),
+      transform 700ms var(--ease-out);
+  }
+
+  .reveal-io .reveal.is-in {
+    opacity: 1;
+    transform: none;
   }
 }
 
@@ -333,6 +348,65 @@ a {
   to {
     opacity: 1;
     transform: none;
+  }
+}
+
+/* ---------- Entrance on load ---------- */
+/*
+ * .enter fades and rises; .enter-move only rises (for the largest text blocks, so
+ * the Largest Contentful Paint is never delayed by an opacity animation).
+ * .enter-1…6 stagger the sequence.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .enter {
+    animation: enter 800ms var(--ease-out) both;
+  }
+
+  .enter-move {
+    animation: enter-move 900ms var(--ease-out) both;
+  }
+
+  .enter-pop {
+    animation: enter-pop 1100ms var(--ease-out) both;
+  }
+
+  .enter-1 {
+    animation-delay: 80ms;
+  }
+  .enter-2 {
+    animation-delay: 180ms;
+  }
+  .enter-3 {
+    animation-delay: 300ms;
+  }
+  .enter-4 {
+    animation-delay: 420ms;
+  }
+  .enter-5 {
+    animation-delay: 540ms;
+  }
+  .enter-6 {
+    animation-delay: 660ms;
+  }
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+}
+
+@keyframes enter-move {
+  from {
+    transform: translateY(0.6em);
+  }
+}
+
+@keyframes enter-pop {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem) scale(0.94);
   }
 }
 

@@ -1,0 +1,37 @@
+---
+/**
+ * Fallback for `.reveal` where scroll-driven animations are unsupported
+ * (Safari, Firefox): IntersectionObserver adds `.is-in` as elements enter the viewport.
+ * Only runs when the visitor allows motion; otherwise content is simply visible.
+ */
+---
+
+<script>
+  const motionOk = matchMedia(
+    "(prefers-reduced-motion: no-preference)",
+  ).matches;
+  const native = CSS.supports("animation-timeline: view()");
+
+  if (motionOk && !native && "IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          entry.target.classList.add("is-in");
+          observer.unobserve(entry.target);
+        }
+      },
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.08 },
+    );
+
+    for (const element of document.querySelectorAll(".reveal")) {
+      // Already on screen: show it right away so nothing flashes on load.
+      if (element.getBoundingClientRect().top < window.innerHeight) {
+        element.classList.add("is-in");
+      } else {
+        observer.observe(element);
+      }
+    }
+    document.documentElement.classList.add("reveal-io");
+  }
+</script>
