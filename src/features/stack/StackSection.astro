@@ -1,0 +1,373 @@
+---
+import SectionHeading from "@/shared/ui/SectionHeading.astro";
+import { SECTION_IDS, paths, type Lang } from "@/shared/i18n/config";
+import { getProjects } from "@/features/projects/lib/projects";
+import { alsoUsed, elements, groups, stackCopy } from "./stack.content";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const copy = stackCopy[lang];
+const projectNames = new Map(
+  (await getProjects()).map((project) => [project.id, project.data.name]),
+);
+
+/*
+ * The table is a native radio group: arrow keys move between elements, it works without
+ * JavaScript, and each radio is described by its detail. :has() reveals the active detail.
+ */
+const revealRules = elements
+  .map(
+    (el) =>
+      `.stack:has(#el-${el.id}:checked) [data-detail="${el.id}"]{display:grid}`,
+  )
+  .join("");
+---
+
+<section
+  class="section container stack"
+  id={SECTION_IDS.stack[lang]}
+  aria-labelledby="stack-title"
+>
+  <div class="stack__layout">
+    <div class="stack__copy">
+      <SectionHeading
+        index="03"
+        kicker={copy.kicker}
+        title={copy.title}
+        id="stack-title"
+      >
+        <p>{copy.intro}</p>
+      </SectionHeading>
+      <ul class="stack__legend" role="list">
+        {Object.entries(groups).map(([key, label]) => (
+          <li>
+            <span
+              class:list={["stack__swatch", `group-${key}`]}
+              aria-hidden="true"
+            />
+            {label[lang]}
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="stack__interactive">
+      <fieldset class="periodic">
+        <legend class="visually-hidden">{copy.legend}</legend>
+        {elements.map((el, index) => (
+          <div class:list={["periodic__cell", `group-${el.group}`]}>
+            <input
+              class="visually-hidden"
+              type="radio"
+              name="element"
+              id={`el-${el.id}`}
+              value={el.id}
+              checked={index === 0}
+              aria-describedby={`detail-${el.id}`}
+            />
+            <label for={`el-${el.id}`} class="periodic__tile">
+              <span class="periodic__number mono" aria-hidden="true">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <span class="periodic__symbol" aria-hidden="true">
+                {el.symbol}
+              </span>
+              <span
+                class="periodic__name"
+                aria-hidden={el.tileName ? "true" : undefined}
+              >
+                {el.tileName ?? el.name}
+              </span>
+              {el.tileName && <span class="visually-hidden">{el.name}</span>}
+              <span class="visually-hidden">, {groups[el.group][lang]}</span>
+            </label>
+          </div>
+        ))}
+      </fieldset>
+
+      <div class="stack__details">
+        {elements.map((el) => (
+          <div
+            class:list={["stack__detail", `group-${el.group}`]}
+            id={`detail-${el.id}`}
+            data-detail={el.id}
+          >
+            <p class="stack__detail-head">
+              <span class="stack__detail-symbol" aria-hidden="true">
+                {el.symbol}
+              </span>
+              <span>
+                <strong>{el.name}</strong>
+                <span class="stack__detail-group mono">
+                  {groups[el.group][lang]}
+                </span>
+              </span>
+            </p>
+            <p>{el.description[lang]}</p>
+            <p class="stack__used">
+              <span class="mono">{copy.usedIn}:</span>
+              {el.usedIn.map((slug, i) => (
+                <>
+                  {i > 0 && ", "}
+                  <a href={paths.project(lang, slug)}>
+                    {projectNames.get(slug) ?? slug}
+                  </a>
+                </>
+              ))}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <div class="stack__also">
+    <h3 class="stack__also-title">{copy.also}</h3>
+    <ul class="chip-list" role="list">
+      {alsoUsed.map((name) => (
+        <li class="chip">{name}</li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style is:inline set:html={revealRules}></style>
+
+<style>
+  .stack__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: start;
+  }
+
+  .stack__copy {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .group-backend {
+    --tone: var(--group-backend);
+  }
+  .group-frontend {
+    --tone: var(--group-frontend);
+  }
+  .group-data {
+    --tone: var(--group-data);
+  }
+  .group-cloud {
+    --tone: var(--group-cloud);
+  }
+
+  .stack__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    font-size: var(--step--1);
+    color: var(--text-muted);
+  }
+
+  .stack__legend li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .stack__swatch {
+    inline-size: 0.75rem;
+    block-size: 0.75rem;
+    border-radius: 0.2rem;
+    background: var(--tone);
+  }
+
+  /* ----- Periodic grid: one column per family ----- */
+  .periodic {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows: repeat(3, auto);
+    grid-auto-flow: column;
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-inline-size: 0;
+  }
+
+  .periodic__cell {
+    display: grid;
+  }
+
+  .periodic__tile {
+    position: relative;
+    display: grid;
+    align-content: space-between;
+    gap: 0.35rem;
+    min-block-size: 6.5rem;
+    padding: 0.75rem;
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--tone);
+    border-radius: var(--radius-s);
+    background: var(--surface);
+    cursor: pointer;
+    transition:
+      background-color var(--dur-fast) ease,
+      border-color var(--dur-fast) ease,
+      transform var(--dur-fast) var(--ease-out);
+  }
+
+  .periodic__tile:hover {
+    background: var(--surface-2);
+  }
+
+  .periodic__number {
+    position: absolute;
+    top: 0.55rem;
+    right: 0.6rem;
+    font-size: 0.75rem;
+    color: var(--text-subtle);
+  }
+
+  .periodic__symbol {
+    font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.1rem);
+    font-weight: 750;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: var(--tone);
+  }
+
+  .periodic__name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    overflow-wrap: anywhere;
+  }
+
+  input:checked + .periodic__tile {
+    border-color: var(--tone);
+    background: color-mix(in oklab, var(--tone) 14%, var(--surface));
+  }
+
+  input:checked + .periodic__tile .periodic__name {
+    color: var(--text);
+  }
+
+  input:focus-visible + .periodic__tile {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    input:checked + .periodic__tile {
+      transform: translateY(-2px);
+    }
+  }
+
+  /* ----- Detail ----- */
+  .stack__details {
+    margin-top: 1rem;
+  }
+
+  .stack__detail {
+    display: none;
+    gap: 0.6rem;
+    min-block-size: 9.5rem;
+    padding: 1.25rem;
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--tone);
+    border-radius: var(--radius-m);
+    background: var(--surface);
+    color: var(--text-muted);
+  }
+
+  /* Without :has(), every detail stays visible as a plain list. */
+  @supports not selector(:has(*)) {
+    .stack__detail {
+      display: grid;
+      margin-bottom: 0.75rem;
+    }
+  }
+
+  .stack__detail-head {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+
+  .stack__detail-head strong {
+    display: block;
+    color: var(--text);
+    font-size: var(--step-1);
+  }
+
+  .stack__detail-symbol {
+    display: grid;
+    place-items: center;
+    inline-size: 2.75rem;
+    block-size: 2.75rem;
+    border-radius: var(--radius-s);
+    background: color-mix(in oklab, var(--tone) 18%, transparent);
+    color: var(--tone);
+    font-weight: 750;
+  }
+
+  .stack__detail-group {
+    font-size: var(--step--1);
+    color: var(--tone);
+  }
+
+  .stack__used {
+    font-size: var(--step--1);
+  }
+
+  .stack__used .mono {
+    margin-inline-end: 0.4rem;
+  }
+
+  .stack__used a {
+    color: var(--text);
+  }
+
+  .stack__also {
+    display: grid;
+    gap: 1rem;
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+    padding-top: 2rem;
+    border-top: 1px dashed var(--line-strong);
+  }
+
+  .stack__also-title {
+    font-size: var(--step-0);
+    font-weight: 650;
+    letter-spacing: 0;
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 60rem) {
+    .stack__layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 30rem) {
+    .periodic {
+      gap: 0.3rem;
+    }
+
+    .periodic__tile {
+      min-block-size: 5.25rem;
+      padding: 0.55rem 0.35rem 0.5rem;
+    }
+
+    .periodic__number {
+      display: none;
+    }
+
+    .periodic__name {
+      font-size: 0.75rem;
+      overflow-wrap: normal;
+    }
+  }
+</style>
