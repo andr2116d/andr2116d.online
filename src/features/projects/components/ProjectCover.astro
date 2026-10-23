@@ -1,0 +1,184 @@
+---
+/**
+ * Card cover: the real product screen inside a browser frame, tinted with the
+ * product's brand color. Projects without a UI (infrastructure) show a terminal
+ * with the usage commands documented in their README.
+ */
+import { Picture } from "astro:assets";
+import type { Lang } from "@/shared/i18n/config";
+import type { Project } from "../lib/projects";
+
+interface Props {
+  project: Project;
+  lang: Lang;
+  /** The first cards are above the fold on wide screens. */
+  eager?: boolean;
+}
+
+const { project, lang, eager = false } = Astro.props;
+const { data } = project;
+const text = data[lang];
+const host = (data.demo ?? data.repository)
+  .replace(/^https?:\/\//, "")
+  .replace(/\/$/, "");
+
+const terminal = {
+  es: [
+    { prompt: true, text: 'curl -X POST "$API/upload" -F "file=@foto.jpg"' },
+    { prompt: false, text: "# La respuesta incluye la key en uploads/" },
+    { prompt: false, text: "# SQS dispara la Lambda de recorte" },
+    { prompt: false, text: "# → processed/foto_circular.png" },
+    { prompt: false, text: "# 3 fallos → DLQ → alarma en CloudWatch" },
+    { prompt: true, text: "terraform -chdir=envs/prod plan" },
+  ],
+  en: [
+    { prompt: true, text: 'curl -X POST "$API/upload" -F "file=@photo.jpg"' },
+    { prompt: false, text: "# The response includes the key in uploads/" },
+    { prompt: false, text: "# SQS triggers the cropping Lambda" },
+    { prompt: false, text: "# → processed/photo_circular.png" },
+    { prompt: false, text: "# 3 failures → DLQ → CloudWatch alarm" },
+    { prompt: true, text: "terraform -chdir=envs/prod plan" },
+  ],
+}[lang];
+---
+
+<div class="cover" style={`--brand: ${data.accent}`}>
+  <div class="cover__window">
+    <div class="cover__bar" aria-hidden="true">
+      <span class="cover__dots">
+        <i></i>
+        <i></i>
+        <i></i>
+      </span>
+      <span class="cover__url mono">{host}</span>
+    </div>
+    {data.image && text.imageAlt ? (
+      <Picture
+        class="cover__shot"
+        src={data.image}
+        alt={text.imageAlt}
+        formats={["avif", "webp"]}
+        widths={[480, 720, 960]}
+        sizes="(min-width: 76rem) 34rem, (min-width: 48rem) 44vw, 92vw"
+        loading={eager ? "eager" : "lazy"}
+        decoding="async"
+      />
+    ) : (
+      <pre class="cover__terminal mono" aria-hidden="true">
+          {terminal.map((line) => (
+            <code class:list={{ prompt: line.prompt }}>{line.text}</code>
+          ))}
+        </pre>
+    )}
+  </div>
+</div>
+
+<style>
+  .cover {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    padding: 1.5rem 0 0 1.5rem;
+    border-radius: var(--radius-m);
+    background:
+      radial-gradient(
+        120% 90% at 100% 100%,
+        color-mix(in oklab, var(--brand) 42%, transparent),
+        transparent 62%
+      ),
+      linear-gradient(var(--grid-line) 1px, transparent 1px) 0 0 / 1.5rem 1.5rem,
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px) 0 0 / 1.5rem
+        1.5rem,
+      var(--surface-2);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .cover__window {
+    display: flex;
+    flex-direction: column;
+    block-size: calc(100% + 1rem);
+    border: 1px solid color-mix(in oklab, var(--brand) 30%, var(--line-strong));
+    border-radius: 0.6rem 0 0 0;
+    background: #0d0d11;
+    overflow: hidden;
+    box-shadow: 0 1.5rem 3rem -1.5rem rgb(0 0 0 / 0.55);
+    transform-origin: 0 0;
+    transition: transform 500ms var(--ease-out);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.project-card:hover) .cover__window,
+    :global(.project-card:focus-within) .cover__window {
+      transform: translate(-0.35rem, -0.35rem) scale(1.015);
+    }
+  }
+
+  .cover__bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex: none;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid rgb(255 255 255 / 0.08);
+    background: #16161c;
+  }
+
+  .cover__dots {
+    display: flex;
+    gap: 0.3rem;
+  }
+
+  .cover__dots i {
+    inline-size: 0.5rem;
+    block-size: 0.5rem;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.18);
+  }
+
+  .cover__url {
+    font-size: 0.75rem;
+    color: rgb(255 255 255 / 0.7);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .cover__window :global(picture) {
+    display: contents;
+  }
+
+  .cover__window :global(.cover__shot) {
+    flex: 1;
+    inline-size: 100%;
+    min-block-size: 0;
+    object-fit: cover;
+    object-position: top left;
+  }
+
+  .cover__terminal {
+    display: grid;
+    align-content: start;
+    gap: 0.45rem;
+    flex: 1;
+    margin: 0;
+    padding: 1.1rem 1.25rem;
+    font-size: clamp(0.72rem, 0.6rem + 0.45vw, 0.875rem);
+    line-height: 1.5;
+    color: #b6b1c3;
+    white-space: pre-wrap;
+    overflow: hidden;
+  }
+
+  .cover__terminal code {
+    font: inherit;
+  }
+
+  .cover__terminal .prompt {
+    color: #f3f1f8;
+  }
+
+  .cover__terminal .prompt::before {
+    content: "$ ";
+    color: var(--brand);
+  }
+</style>

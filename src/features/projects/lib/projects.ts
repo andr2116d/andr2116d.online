@@ -23,7 +23,7 @@ export const projectsCopy = {
     kicker: "Proyectos",
     title: "Lo que estoy construyendo.",
     intro:
-      "Cada proyecto se presenta como un diagrama de flujo: de dónde entran los datos, cómo se transforman y qué se entrega. La notación viene de la ingeniería química; el contenido, de los repositorios.",
+      "Productos web, datos e inteligencia artificial, y algo de infraestructura en la nube. Cada caso explica el problema, la propuesta y mi participación, a partir de la documentación de su repositorio.",
     allRepos: "Todos mis repositorios en GitHub",
     team: "En equipo",
     personal: "Personal",
@@ -41,6 +41,8 @@ export const projectsCopy = {
     approach: "La propuesta",
     role: "Mi participación",
     architecture: "Flujo del sistema",
+    architectureNote:
+      "Dibujado con la notación de los diagramas de flujo de procesos de ingeniería química.",
     stack: "Tecnologías",
     evidence:
       "Descripción basada en la documentación pública del repositorio. Sin métricas inventadas.",
@@ -58,7 +60,7 @@ export const projectsCopy = {
     kicker: "Projects",
     title: "What I’m building.",
     intro:
-      "Each project is shown as a process flow diagram: where data comes in, how it’s transformed and what gets delivered. The notation comes from chemical engineering; the content, from the repositories.",
+      "Web products, data and artificial intelligence, plus some cloud infrastructure. Each case explains the problem, the approach and my part, based on its repository’s documentation.",
     allRepos: "All my repositories on GitHub",
     team: "Team",
     personal: "Personal",
@@ -75,6 +77,8 @@ export const projectsCopy = {
     approach: "The approach",
     role: "My part",
     architecture: "System flow",
+    architectureNote:
+      "Drawn with the process flow diagram notation used in chemical engineering.",
     stack: "Technologies",
     evidence:
       "Description based on the repository’s public documentation. No invented metrics.",

@@ -188,6 +188,7 @@ const legend = ["source", "process", "store", "output"] as const;
 
       <section class="project__flow" aria-labelledby="flow-title">
         <h2 id="flow-title">{copy.architecture}</h2>
+        <p class="project__flow-note">{copy.architectureNote}</p>
         <figure>
           <ProcessFlow
             steps={data.flow}
@@ -402,6 +403,11 @@ const legend = ["source", "process", "store", "output"] as const;
 
   .project__role p {
     color: var(--text);
+  }
+
+  .project__flow-note {
+    margin-block: -0.5rem 1rem;
+    font-size: var(--step--1) !important;
   }
 
   .project__flow figure {
