@@ -24,7 +24,8 @@ Registro breve de las decisiones importantes y su motivo. Fecha de referencia: 2
 
 - **Concepto**: la intersección entre química y software. Dos tonos de marca: menta (química) y lila (sistemas e IA), presentes en el nudo de partículas, el diagrama de Venn, la tabla periódica y los acentos.
 - **Tokens con `light-dark()`**: un único juego de variables para ambos temas; el tema elegido se guarda y se aplica antes del primer pintado. Sin elección, sigue al sistema operativo.
-- **Proyectos con portadas reales**: capturas de las demos públicas en un marco de navegador, teñidas con el color de cada producto. El proyecto de infraestructura muestra los comandos de su README. El diagrama de flujo (notación PFD de ingeniería química) queda como detalle técnico dentro de cada caso.
+- **Proyectos ilustrados**: cada tarjeta es un panel con paleta propia y una composición HTML/CSS que evoca el producto (evolución del prototipo). Escalan con _container queries_, así la misma ilustración sirve en la tarjeta y en grande en la página del caso. Las capturas reales de las demos aparecen dentro de cada caso («Así se ve»), y el diagrama de flujo (notación PFD de ingeniería química) queda como detalle técnico.
+- **Pantallas muy grandes**: todo está en `rem`; a partir de 1800 px se aumenta el tamaño raíz por tramos (hasta 187,5 % en 4K) para que la composición crezca en proporción en lugar de quedar como una columna estrecha.
 - **Logotipos institucionales sobre placa blanca** en ambos temas: el manual de UPAO prohíbe su versión a color sobre fondo oscuro, y ambos manuales prohíben alterarlos.
 
 ## Accesibilidad
