@@ -12,7 +12,10 @@ import { SITE } from "@/shared/config/site";
 import { paths, type Lang } from "@/shared/i18n/config";
 import { useTranslations } from "@/shared/i18n/ui";
 import { getProjects } from "@/features/projects/lib/projects";
-import { institutions } from "@/features/education/education.content";
+import {
+  educationCopy,
+  institutions,
+} from "@/features/education/education.content";
 import {
   absolute,
   graph,
@@ -72,17 +75,11 @@ const contactLines = [
   ],
 ];
 
-const studies = institutions.map((institution) => {
-  const extra = cvExtras.studies[institution.id];
-  const end = extra.expected
-    ? `${copy.expected} ${extra.expected}`
-    : copy.present;
-  return {
-    institution,
-    period: `${institution.since} – ${end}`,
-    cycle: extra.cycle?.[lang],
-  };
-});
+const studies = institutions.map((institution) => ({
+  institution,
+  period: `${institution.since} – ${institution.expected} (${copy.expected})`,
+  cycle: educationCopy[lang].cycle(institution.cycle, institution.cycles),
+}));
 ---
 
 <BaseLayout

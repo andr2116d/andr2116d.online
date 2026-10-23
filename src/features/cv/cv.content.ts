@@ -7,11 +7,6 @@ import type { Localized } from "@/shared/i18n/config";
 export const cvExtras: {
   /** Shown in the contact line, e.g. "+51 999 999 999". */
   phone?: string;
-  /** Per institution id: expected graduation and current cycle (start year lives in education.content). */
-  studies: Record<
-    "unt" | "upao",
-    { expected?: string; cycle?: Localized<string> }
-  >;
   /** e.g. { name: { es: "Inglés", en: "English" }, level: { es: "Intermedio (B1)", en: "Intermediate (B1)" } } */
   languages: { name: Localized<string>; level: Localized<string> }[];
   /** Personal interests, shown as the last skills row. */
@@ -19,7 +14,6 @@ export const cvExtras: {
   /** Courses or certificates with issuer and year. */
   certifications: { name: string; issuer: string; year: string }[];
 } = {
-  studies: { unt: {}, upao: {} },
   languages: [
     {
       name: { es: "Español", en: "Spanish" },
@@ -80,9 +74,7 @@ export const cvCopy = {
     summary:
       "Estudiante de dos ingenierías en paralelo y desarrollador autodidacta. Construyo productos web, APIs, automatizaciones y soluciones de IA aplicada con Python, TypeScript y Go, combinando el pensamiento en procesos de la ingeniería química con el desarrollo de software.",
     educationTitle: "Educación",
-    ongoing: "En curso",
-    present: "presente",
-    expected: "Egreso previsto",
+    expected: "previsto",
     projectsTitle: "Proyectos",
     team: "En equipo",
     skillsTitle: "Habilidades técnicas",
@@ -107,9 +99,7 @@ export const cvCopy = {
     summary:
       "Student pursuing two engineering degrees at once and self-taught developer. I build web products, APIs, automations and applied AI solutions with Python, TypeScript and Go, combining chemical engineering’s process thinking with software development.",
     educationTitle: "Education",
-    ongoing: "In progress",
-    present: "present",
-    expected: "Expected",
+    expected: "expected",
     projectsTitle: "Projects",
     team: "Team",
     skillsTitle: "Technical skills",
