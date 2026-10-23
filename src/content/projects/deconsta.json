@@ -4,6 +4,7 @@
   "year": 2026,
   "team": true,
   "area": "product",
+  "accent": "#8a3d66",
   "repository": "https://github.com/andr2116d/Deconsta",
   "stack": [
     "Vue 3",

@@ -4,6 +4,7 @@
   "year": 2026,
   "team": false,
   "area": "product",
+  "accent": "#ffd400",
   "repository": "https://github.com/andr2116d/UNITRU-ACADEMIC",
   "demo": "https://unitru-academic.vercel.app/",
   "stack": [
@@ -40,6 +41,7 @@
       "type": "output"
     }
   ],
+  "image": "../../assets/projects/unitru-academic.png",
   "es": {
     "kind": "Producto · Educación",
     "tagline": "La vida académica del SUV, más clara.",
@@ -51,7 +53,8 @@
       "Frontend en Next.js con notas por unidad, asistencia, récord académico y analíticas por periodo.",
       "Predictor de las combinaciones de notas que permiten aprobar y optimizador de horarios sin conflictos.",
       "Las credenciales nunca se guardan: solo existen durante la sesión WebSocket activa."
-    ]
+    ],
+    "imageAlt": "Pantalla de inicio de UNITRU Academic: logotipo amarillo, el título y el botón «Iniciar sesión» para consultar notas, horarios y asistencia del SUV."
   },
   "en": {
     "kind": "Product · Education",
@@ -64,6 +67,7 @@
       "Next.js frontend with grades per unit, attendance, academic record and per-term analytics.",
       "Grade-combination predictor for passing courses and a conflict-free schedule optimizer.",
       "Credentials are never stored: they only exist during the active WebSocket session."
-    ]
+    ],
+    "imageAlt": "UNITRU Academic start screen: yellow logo, title and a “Sign in” button to check grades, schedules and attendance from the UNT portal."
   }
 }

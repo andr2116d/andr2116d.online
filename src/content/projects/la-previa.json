@@ -4,6 +4,7 @@
   "year": 2026,
   "team": true,
   "area": "product",
+  "accent": "#16a34a",
   "repository": "https://github.com/andr2116d/canchas-reservas",
   "demo": "https://canchas-reservas.vercel.app/",
   "stack": [
@@ -42,6 +43,7 @@
       "type": "store"
     }
   ],
+  "image": "../../assets/projects/la-previa.png",
   "es": {
     "kind": "Producto · Proyecto en equipo",
     "tagline": "Reservas de canchas, sin complicaciones.",
@@ -53,7 +55,8 @@
       "Roles de administrador, recepcionista y jugador, con datos de demostración para probar cada flujo.",
       "Trabajo por sprints, con una rama por integrante, CI y pull requests hacia la rama dev."
     ],
-    "role": "Según el flujo de trabajo documentado, apruebo los pull requests del equipo hacia dev. También soy autor de la mayoría de los commits del repositorio."
+    "role": "Según el flujo de trabajo documentado, apruebo los pull requests del equipo hacia dev. También soy autor de la mayoría de los commits del repositorio.",
+    "imageAlt": "Pantalla de inicio de La Previa con el logotipo, el lema «Reserva tu turno en segundos y juega sin complicarte» y los botones para iniciar sesión o crear cuenta."
   },
   "en": {
     "kind": "Product · Team project",
@@ -66,6 +69,7 @@
       "Administrator, receptionist and player roles, with demo data to try every flow.",
       "Sprint-based work, with one branch per member, CI and pull requests into the dev branch."
     ],
-    "role": "Per the documented workflow, I approve the team’s pull requests into dev. I also authored most of the repository’s commits."
+    "role": "Per the documented workflow, I approve the team’s pull requests into dev. I also authored most of the repository’s commits.",
+    "imageAlt": "La Previa start screen with its logo, the tagline “Book your slot in seconds and play hassle-free” and buttons to sign in or create an account."
   }
 }

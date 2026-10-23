@@ -4,6 +4,7 @@
   "year": 2026,
   "team": false,
   "area": "data-ai",
+  "accent": "#3b82f6",
   "repository": "https://github.com/andr2116d/gemelo-socioeconomico-ll",
   "demo": "https://gemelo-socioeconomico-ll.vercel.app/",
   "stack": [
@@ -47,6 +48,7 @@
       "type": "output"
     }
   ],
+  "image": "../../assets/projects/gemelo-socioeconomico.png",
   "es": {
     "kind": "Datos · Inteligencia artificial",
     "tagline": "La Libertad como una red de 83 distritos.",
@@ -57,7 +59,8 @@
       "Modelado de los 83 distritos como un grafo y aprendizaje de un embedding por distrito con GraphSAGE (PyTorch Geometric).",
       "Comparación de comunidades detectadas con Louvain y con GraphSAGE + KMeans, con el índice de Rand ajustado calculado en el navegador.",
       "Mapa en Leaflet, explorador de embeddings (t-SNE) y simulador «¿Qué pasaría si…?» que consulta el modelo a través de FastAPI."
-    ]
+    ],
+    "imageAlt": "Vista principal del Gemelo Digital: «Comunidades socioeconómicas de La Libertad», la explicación del modelo y tarjetas de métricas como los 83 distritos."
   },
   "en": {
     "kind": "Data · Artificial intelligence",
@@ -69,6 +72,7 @@
       "The 83 districts are modeled as a graph, and GraphSAGE (PyTorch Geometric) learns an embedding for each district.",
       "Communities found with Louvain are compared with GraphSAGE + KMeans, including the Adjusted Rand Index computed in the browser.",
       "Leaflet map, t-SNE embedding explorer and a “What if…?” simulator that queries the model through FastAPI."
-    ]
+    ],
+    "imageAlt": "Gemelo Digital main view: “Socioeconomic communities of La Libertad”, the model explanation and metric cards such as the 83 districts."
   }
 }
