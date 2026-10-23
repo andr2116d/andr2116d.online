@@ -4,7 +4,6 @@
   "year": 2026,
   "team": true,
   "area": "cloud",
-  "accent": "orange",
   "repository": "https://github.com/andr2116d/ias-aws-lambda",
   "stack": [
     "AWS Lambda",

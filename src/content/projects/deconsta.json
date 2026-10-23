@@ -4,7 +4,6 @@
   "year": 2026,
   "team": true,
   "area": "product",
-  "accent": "wine",
   "repository": "https://github.com/andr2116d/Deconsta",
   "stack": [
     "Vue 3",

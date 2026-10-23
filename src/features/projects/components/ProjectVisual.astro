@@ -1,0 +1,829 @@
+---
+/**
+ * Illustrated project panel, evolved from the HTML prototype: each project has its own
+ * palette and a small composition that hints at what it does. Pure HTML/CSS/SVG,
+ * sized with container query units so the same art works on cards and case pages.
+ * Decorative: the surrounding card or page always carries the real information.
+ */
+import type { Lang } from "@/shared/i18n/config";
+import type { Project } from "../lib/projects";
+
+interface Props {
+  project: Project;
+  lang: Lang;
+  size?: "card" | "hero";
+}
+
+const { project, lang, size = "card" } = Astro.props;
+const id = project.id;
+
+const copy = {
+  es: {
+    quikko: {
+      category: "Producto",
+      caption: "Menos enlace. Más posibilidades.",
+    },
+    "unitru-academic": {
+      category: "Educación",
+      caption: "Tu vida académica, más clara.",
+      week: "Tu semana, de un vistazo",
+      days: ["L", "M", "M", "J", "V"],
+    },
+    "gemelo-socioeconomico": {
+      category: "Datos e IA",
+      caption: "83 distritos. Nuevas perspectivas.",
+    },
+    deconsta: {
+      category: "Producto · IA",
+      caption: "Pagos con respaldo",
+      title: "Todo bajo control",
+      items: ["Documento revisado", "Comprobante adjunto", "Por autorizar"],
+      status: "Revisado",
+    },
+    "serverless-image-processor": {
+      category: "Cloud",
+      caption: "Infraestructura como código",
+    },
+    "la-previa": { category: "Producto", caption: "El juego empieza aquí." },
+  },
+  en: {
+    quikko: { category: "Product", caption: "Less link. More possibilities." },
+    "unitru-academic": {
+      category: "Education",
+      caption: "Your academic life, clearer.",
+      week: "Your week at a glance",
+      days: ["M", "T", "W", "T", "F"],
+    },
+    "gemelo-socioeconomico": {
+      category: "Data & AI",
+      caption: "83 districts. New perspectives.",
+    },
+    deconsta: {
+      category: "Product · AI",
+      caption: "Payments with a paper trail",
+      title: "Everything in order",
+      items: ["Document reviewed", "Receipt attached", "Awaiting approval"],
+      status: "Reviewed",
+    },
+    "serverless-image-processor": {
+      category: "Cloud",
+      caption: "Infrastructure as code",
+    },
+    "la-previa": { category: "Product", caption: "The game starts here." },
+  },
+}[lang] as Record<
+  string,
+  { category: string; caption: string; [key: string]: unknown }
+>;
+
+const c = (copy[id] ?? { category: "", caption: "" }) as {
+  category: string;
+  caption: string;
+  week?: string;
+  days?: string[];
+  title?: string;
+  items?: string[];
+  status?: string;
+};
+
+// Gemelo: topographic contour lines generated once at build time.
+const contours = Array.from({ length: 11 }, (_, i) => {
+  const x = 40 + i * 13;
+  const y = 110 + i * 3;
+  return `M${x} 285 C${x - 80} 200 ${x + 150} ${y - 80} ${x + 190} ${y} S${x + 240} 250 ${x + 130} 285 S${x + 30} 180 ${x} 285Z`;
+});
+const graphNodes = [
+  [125, 218, 5],
+  [180, 160, 7],
+  [250, 190, 9],
+  [320, 120, 6],
+  [370, 170, 5],
+  [352, 238, 7],
+  [208, 260, 5],
+];
+---
+
+<div
+  class:list={["visual", `visual--${id}`, `visual--${size}`]}
+  aria-hidden="true"
+>
+  <span class="visual__category">{c.category}</span>
+  <span class="visual__open">↗</span>
+
+  <div class="visual__stage">
+    {id === "quikko" && (
+      <div class="qk">
+        <span class="qk__orbit" />
+        <span class="qk__orbit qk__orbit--inner" />
+        <p class="qk__name">
+          quikko<span>.</span>
+        </p>
+        <p class="qk__url">
+          <span class="qk__link">⌁</span>
+          <span>quikko.io/lanzamiento</span>
+          <b>↗</b>
+        </p>
+        <span class="qk__bars">
+          <i />
+          <i />
+          <i />
+          <i />
+          <i />
+          <i />
+        </span>
+      </div>
+    )}
+
+    {id === "unitru-academic" && (
+      <div class="ut">
+        <p class="ut__logo">
+          <b>UNT</b> UNITRU Academic
+        </p>
+        <p class="ut__sub">{c.week}</p>
+        <div class="ut__days">
+          {c.days?.map((day) => (
+            <span>{day}</span>
+          ))}
+        </div>
+        <div class="ut__grid">
+          <span class="a" />
+          <span />
+          <span class="b" />
+          <span />
+          <span class="a" />
+          <span />
+          <span class="c" />
+          <span />
+          <span class="a" />
+          <span />
+          <span class="b" />
+          <span />
+          <span />
+          <span class="c" />
+          <span />
+        </div>
+      </div>
+    )}
+
+    {id === "gemelo-socioeconomico" && (
+      <svg
+        class="gm"
+        viewBox="0 0 550 340"
+        preserveAspectRatio="xMidYMid slice"
+      >
+        {contours.map((d) => (
+          <path class="gm__contour" d={d} />
+        ))}
+        <path
+          class="gm__links"
+          d="m125 218 55-58 70 30 70-70 50 50-18 68-102-48-42 70-83-42 125-28M180 160l28 100 144-22M320 120l32 118M125 218l195-98"
+        />
+        {graphNodes.map(([x, y, r]) => (
+          <circle cx={x} cy={y} r={r} />
+        ))}
+      </svg>
+    )}
+
+    {id === "deconsta" && (
+      <div class="dc">
+        <p class="dc__brand">
+          <span>d</span>deconsta
+        </p>
+        <p class="dc__title">{c.title}</p>
+        <p class="dc__item">
+          <b>✓</b>
+          {c.items?.[0]}
+        </p>
+        <p class="dc__item">
+          <b>↗</b>
+          {c.items?.[1]}
+          <em>{c.status}</em>
+        </p>
+        <p class="dc__item dc__item--wait">
+          <b>!</b>
+          {c.items?.[2]}
+        </p>
+      </div>
+    )}
+
+    {id === "serverless-image-processor" && (
+      <div class="aws">
+        <div class="aws__flow">
+          <span class="aws__node">
+            <i>⇪</i>API
+          </span>
+          <span class="aws__arrow">→</span>
+          <span class="aws__node">
+            <i>▣</i>S3
+          </span>
+          <span class="aws__arrow">→</span>
+          <span class="aws__node">
+            <i>≡</i>SQS
+          </span>
+          <span class="aws__arrow">→</span>
+          <span class="aws__node">
+            <i>λ</i>Lambda
+          </span>
+        </div>
+        <div class="aws__envs">
+          <span>dev</span>
+          <span>qa</span>
+          <span>prod</span>
+        </div>
+      </div>
+    )}
+
+    {id === "la-previa" && (
+      <div class="pv">
+        <div class="pv__pitch" />
+        <p class="pv__label">
+          la previa<span>.</span>
+        </p>
+      </div>
+    )}
+  </div>
+
+  <span class="visual__caption">{c.caption}</span>
+</div>
+
+<style>
+  .visual {
+    --panel: #e9e6ef;
+    --ink: #2b2733;
+    position: relative;
+    container-type: inline-size;
+    aspect-ratio: 16 / 10.5;
+    border-radius: var(--radius-m);
+    background: var(--panel);
+    color: var(--ink);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .visual--hero {
+    aspect-ratio: 21 / 9;
+    border-radius: var(--radius-l);
+  }
+
+  /* The composition lives in its own container: same art, any panel size. */
+  .visual__stage {
+    position: absolute;
+    inset: 0;
+    container-type: inline-size;
+  }
+
+  .visual--hero .visual__stage {
+    inset: 50% auto auto 50%;
+    inline-size: 58%;
+    aspect-ratio: 16 / 10.5;
+    transform: translate(-50%, -50%);
+  }
+
+  /* Narrow screens: a taller panel leaves room for labels around the art. */
+  @media (max-width: 52rem) {
+    .visual,
+    .visual--hero {
+      aspect-ratio: 4 / 3;
+    }
+
+    .visual--hero .visual__stage {
+      inset: 12% 0 12%;
+      inline-size: auto;
+      aspect-ratio: auto;
+      transform: none;
+    }
+  }
+
+  .visual--hero.visual--gemelo-socioeconomico .visual__stage {
+    inset: 0;
+    inline-size: auto;
+    aspect-ratio: auto;
+    transform: none;
+  }
+
+  .visual__category,
+  .visual__caption {
+    position: absolute;
+    z-index: 2;
+    left: 5cqi;
+    font-size: max(0.875rem, 2.6cqi);
+    font-weight: 600;
+  }
+
+  .visual--hero .visual__category,
+  .visual--hero .visual__caption {
+    font-size: max(0.875rem, 1.5cqi);
+    left: 3cqi;
+  }
+
+  .visual__category {
+    top: 5cqi;
+  }
+
+  .visual--hero .visual__category {
+    top: 3cqi;
+  }
+
+  .visual__caption {
+    bottom: 4.5cqi;
+    right: 5cqi;
+  }
+
+  .visual--hero .visual__caption {
+    bottom: 3cqi;
+  }
+
+  .visual__open {
+    position: absolute;
+    z-index: 2;
+    top: 4cqi;
+    right: 4cqi;
+    display: grid;
+    place-items: center;
+    inline-size: max(2.5rem, 8.5cqi);
+    block-size: max(2.5rem, 8.5cqi);
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.75);
+    color: #29232f;
+    font-size: max(1.1rem, 3.4cqi);
+    transition:
+      transform 300ms var(--ease-out),
+      background-color 300ms ease;
+  }
+
+  .visual--hero .visual__open {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.project-card:hover) .visual__open,
+    :global(.project-card:focus-within) .visual__open {
+      transform: rotate(45deg);
+      background: #fff;
+    }
+  }
+
+  /* All moving parts ease into place on hover, never animate on their own. */
+  .visual :is(.qk__url, .ut, .dc, .pv__pitch, .pv__label, .aws__flow) {
+    transition: transform 450ms var(--ease-out);
+  }
+
+  /* ---------- Quikko ---------- */
+  .visual--quikko {
+    --panel: #cfc1ef;
+    --ink: #2e1f45;
+  }
+
+  .qk {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 4cqi;
+  }
+
+  .qk__orbit {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    inline-size: 78cqi;
+    aspect-ratio: 1;
+    border: 1px solid rgb(105 69 149 / 0.25);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .qk__orbit--inner {
+    inline-size: 56cqi;
+  }
+
+  .qk__name {
+    font-size: 12cqi;
+    font-weight: 800;
+    letter-spacing: -0.08em;
+    line-height: 1;
+    transform: rotate(-6deg);
+  }
+
+  .qk__name span {
+    color: #7c3aed;
+  }
+
+  .qk__url {
+    display: flex;
+    align-items: center;
+    gap: 2.5cqi;
+    padding: 2.4cqi 3.6cqi;
+    border: 1px solid rgb(255 255 255 / 0.7);
+    border-radius: 99px;
+    background: #ece4fd;
+    box-shadow: 0 2cqi 4cqi rgb(87 55 140 / 0.15);
+    font-size: max(0.5rem, 2.6cqi);
+    font-weight: 600;
+    transform: rotate(-6deg);
+  }
+
+  .qk__link {
+    font-size: 3.4cqi;
+  }
+
+  .qk__url b {
+    display: grid;
+    place-items: center;
+    inline-size: 5.4cqi;
+    block-size: 5.4cqi;
+    border-radius: 50%;
+    background: #57378c;
+    color: #fff;
+    font-size: 2.6cqi;
+  }
+
+  .qk__bars {
+    position: absolute;
+    right: 6cqi;
+    bottom: 13cqi;
+    display: flex;
+    align-items: end;
+    gap: 1cqi;
+    block-size: 10cqi;
+  }
+
+  .qk__bars i {
+    inline-size: 2cqi;
+    border-radius: 0.5cqi 0.5cqi 0 0;
+    background: #8b6fd0;
+  }
+
+  .qk__bars i:nth-child(1) {
+    block-size: 35%;
+  }
+  .qk__bars i:nth-child(2) {
+    block-size: 55%;
+  }
+  .qk__bars i:nth-child(3) {
+    block-size: 45%;
+  }
+  .qk__bars i:nth-child(4) {
+    block-size: 70%;
+  }
+  .qk__bars i:nth-child(5) {
+    block-size: 60%;
+  }
+  .qk__bars i:nth-child(6) {
+    block-size: 100%;
+    background: #a3e635;
+  }
+
+  /* ---------- UNITRU Academic ---------- */
+  .visual--unitru-academic {
+    --panel: #f1e6ad;
+    --ink: #3a3213;
+  }
+
+  .ut {
+    position: absolute;
+    left: 13%;
+    right: 13%;
+    top: 20%;
+    padding: 3.6cqi 4cqi 4.4cqi;
+    border-radius: 2cqi;
+    background: #fffdf3;
+    box-shadow: 0 3cqi 6cqi rgb(90 74 20 / 0.18);
+    transform: rotate(4deg);
+  }
+
+  .ut__logo {
+    display: flex;
+    align-items: center;
+    gap: 2cqi;
+    font-size: max(0.5rem, 3.4cqi);
+    font-weight: 750;
+    letter-spacing: -0.03em;
+  }
+
+  .ut__logo b {
+    display: grid;
+    place-items: center;
+    padding: 0.8cqi 1.2cqi;
+    background: #ffd400;
+    color: #1f1a05;
+    font-size: 2.2cqi;
+  }
+
+  .ut__sub {
+    margin-top: 1.6cqi;
+    font-size: max(0.5rem, 2.4cqi);
+    color: #6b6033;
+  }
+
+  .ut__days,
+  .ut__grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1.2cqi;
+  }
+
+  .ut__days {
+    margin-top: 2.6cqi;
+    font-family: var(--font-mono);
+    font-size: 2cqi;
+    color: #8a7d45;
+    text-align: center;
+  }
+
+  .ut__grid {
+    margin-top: 1.2cqi;
+  }
+
+  .ut__grid span {
+    block-size: 5cqi;
+    border-radius: 0.8cqi;
+    background: #f3eed6;
+  }
+
+  .ut__grid .a {
+    background: #ffd400;
+  }
+  .ut__grid .b {
+    background: #e6c85a;
+  }
+  .ut__grid .c {
+    background: #c9d7b2;
+  }
+
+  /* ---------- Gemelo ---------- */
+  .visual--gemelo-socioeconomico {
+    --panel: #ebc3a5;
+    --ink: #5a3426;
+  }
+
+  .gm {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  .gm__contour {
+    fill: none;
+    stroke: #9b664b;
+    stroke-width: 1;
+    opacity: 0.32;
+  }
+
+  .gm__links {
+    fill: none;
+    stroke: #845039;
+    stroke-width: 1.2;
+    opacity: 0.65;
+  }
+
+  .gm circle {
+    fill: #fff2d9;
+    stroke: #8e553b;
+    stroke-width: 1.5;
+    transition: r 300ms var(--ease-out);
+  }
+
+  .visual--gemelo-socioeconomico .visual__caption {
+    left: auto;
+    max-inline-size: 45cqi;
+    font-size: max(1rem, 5cqi);
+    font-weight: 650;
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+    text-align: right;
+  }
+
+  .visual--hero.visual--gemelo-socioeconomico .visual__caption {
+    max-inline-size: 30cqi;
+    font-size: max(1rem, 3cqi);
+  }
+
+  /* ---------- Deconsta ---------- */
+  .visual--deconsta {
+    --panel: #ece4dd;
+    --ink: #4a3a3c;
+  }
+
+  .dc {
+    position: absolute;
+    left: 15%;
+    right: 15%;
+    top: 19%;
+    padding: 3.6cqi 4cqi 2cqi;
+    border-radius: 2cqi;
+    background: #fcfaf8;
+    box-shadow: 0 4cqi 8cqi rgb(74 49 52 / 0.18);
+    transform: rotate(-6deg);
+  }
+
+  .dc__brand {
+    display: flex;
+    align-items: center;
+    gap: 1.6cqi;
+    font-size: max(0.5rem, 3.8cqi);
+    font-weight: 750;
+    letter-spacing: -0.045em;
+  }
+
+  .dc__brand span {
+    display: grid;
+    place-items: center;
+    inline-size: 5cqi;
+    block-size: 5cqi;
+    border-radius: 1.2cqi;
+    background: #8a3346;
+    color: #fff;
+    font-size: 3cqi;
+  }
+
+  .dc__title {
+    margin: 2.6cqi 0 1.2cqi;
+    font-size: max(0.5rem, 2.4cqi);
+    color: #6d5c60;
+  }
+
+  .dc__item {
+    display: flex;
+    align-items: center;
+    gap: 1.8cqi;
+    padding-block: 1.8cqi;
+    border-top: 1px solid #e5dcda;
+    font-size: max(0.5rem, 2.4cqi);
+  }
+
+  .dc__item b {
+    display: grid;
+    place-items: center;
+    flex: none;
+    inline-size: 4.4cqi;
+    block-size: 4.4cqi;
+    border-radius: 50%;
+    background: #ebdce0;
+    color: #83394b;
+    font-size: 2.2cqi;
+  }
+
+  .dc__item--wait b {
+    background: #f4e2c4;
+    color: #8a5a12;
+  }
+
+  .dc__item em {
+    margin-inline-start: auto;
+    padding: 0.5cqi 1.6cqi;
+    border-radius: 99px;
+    background: #eee7e8;
+    font-style: normal;
+    font-size: max(0.5rem, 2.1cqi);
+  }
+
+  /* ---------- Serverless (AWS) ---------- */
+  .visual--serverless-image-processor {
+    --panel: #2f343b;
+    --ink: #ecebe6;
+  }
+
+  .aws {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 5cqi;
+  }
+
+  .aws__flow {
+    display: flex;
+    align-items: center;
+    gap: 1.6cqi;
+  }
+
+  .aws__node {
+    display: grid;
+    justify-items: center;
+    gap: 1.4cqi;
+    min-inline-size: 13cqi;
+    padding: 2.8cqi 2cqi;
+    border: 1px solid #8f9198;
+    border-radius: 2cqi;
+    background: rgb(255 255 255 / 0.04);
+    font-size: max(0.5rem, 2.4cqi);
+    font-weight: 600;
+  }
+
+  .aws__node i {
+    font-style: normal;
+    font-size: 4.4cqi;
+    line-height: 1;
+    color: #ffb347;
+  }
+
+  .aws__arrow {
+    color: #b9b8b0;
+    font-size: 3cqi;
+  }
+
+  .aws__envs {
+    display: flex;
+    gap: 1.6cqi;
+    font-family: var(--font-mono);
+    font-size: max(0.5rem, 2.2cqi);
+  }
+
+  .aws__envs span {
+    padding: 0.6cqi 2cqi;
+    border: 1px solid #5b6068;
+    border-radius: 99px;
+    color: #d6d4cc;
+  }
+
+  /* ---------- La Previa ---------- */
+  .visual--la-previa {
+    --panel: #c9d6a2;
+    --ink: #33401d;
+  }
+
+  .pv__pitch {
+    position: absolute;
+    left: 19%;
+    top: 18%;
+    inline-size: 62%;
+    block-size: 64%;
+    border: 2px solid rgb(77 97 62 / 0.5);
+    border-radius: 1cqi;
+    background: repeating-linear-gradient(
+      90deg,
+      #b3c28c 0 7cqi,
+      #bdca97 7cqi 14cqi
+    );
+    transform: rotate(-7deg);
+  }
+
+  .pv__pitch::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 50%;
+    border-left: 2px solid rgb(77 97 62 / 0.5);
+  }
+
+  .pv__pitch::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    inline-size: 14cqi;
+    aspect-ratio: 1;
+    border: 2px solid rgb(77 97 62 / 0.5);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .pv__label {
+    position: absolute;
+    left: 30%;
+    right: 30%;
+    top: 42%;
+    padding: 2.4cqi;
+    border-radius: 1.4cqi;
+    background: #fbfbea;
+    box-shadow: 0 1.6cqi 4cqi rgb(50 73 31 / 0.2);
+    color: #172554;
+    font-size: max(0.5rem, 4.6cqi);
+    font-weight: 800;
+    font-style: italic;
+    letter-spacing: -0.04em;
+    text-align: center;
+    text-transform: uppercase;
+    transform: rotate(-7deg);
+  }
+
+  .pv__label span {
+    color: #eab308;
+  }
+
+  /* ---------- Hover choreography ---------- */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.project-card:hover) .qk__url {
+      transform: rotate(0) translateX(1.5cqi);
+    }
+    :global(.project-card:hover) .ut {
+      transform: rotate(1deg) translateY(-1cqi);
+    }
+    :global(.project-card:hover) .dc {
+      transform: rotate(-2deg) translateY(-1cqi);
+    }
+    :global(.project-card:hover) .pv__pitch,
+    :global(.project-card:hover) .pv__label {
+      transform: rotate(-2deg);
+    }
+    :global(.project-card:hover) .aws__flow {
+      transform: translateY(-1cqi);
+    }
+    :global(.project-card:hover) .gm circle {
+      r: 9;
+    }
+  }
+</style>

@@ -62,10 +62,17 @@ const projects = await getProjects();
     margin-bottom: clamp(2rem, 4vw, 3.5rem);
   }
 
+  /* Equal columns keep each row's illustrations the same height. */
   .projects__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 30rem), 1fr));
-    gap: clamp(1rem, 2vw, 1.5rem);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(2.5rem, 4vw, 3.5rem) clamp(1.25rem, 2.5vw, 2rem);
+  }
+
+  @media (max-width: 52rem) {
+    .projects__grid {
+      grid-template-columns: 1fr;
+    }
   }
 
   .projects__grid > li {

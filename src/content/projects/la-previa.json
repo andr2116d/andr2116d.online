@@ -4,7 +4,6 @@
   "year": 2026,
   "team": true,
   "area": "product",
-  "accent": "green",
   "repository": "https://github.com/andr2116d/canchas-reservas",
   "demo": "https://canchas-reservas.vercel.app/",
   "stack": [
