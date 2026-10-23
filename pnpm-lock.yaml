@@ -33,6 +33,9 @@ importers:
       '@typescript-eslint/parser':
         specifier: 8.72.0
         version: 8.72.0(eslint@10.13.0)(typescript@6.0.3)
+      chrome-launcher:
+        specifier: 1.2.2
+        version: 1.2.2
       eslint:
         specifier: 10.13.0
         version: 10.13.0
