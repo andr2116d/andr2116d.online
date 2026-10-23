@@ -7,10 +7,10 @@ import type { Localized } from "@/shared/i18n/config";
 export const cvExtras: {
   /** Shown in the contact line, e.g. "+51 999 999 999". */
   phone?: string;
-  /** Per institution id: start and expected graduation, e.g. "2024" / "2029". */
+  /** Per institution id: expected graduation and current cycle (start year lives in education.content). */
   studies: Record<
     "unt" | "upao",
-    { start?: string; expected?: string; cycle?: Localized<string> }
+    { expected?: string; cycle?: Localized<string> }
   >;
   /** e.g. { name: { es: "Inglés", en: "English" }, level: { es: "Intermedio (B1)", en: "Intermediate (B1)" } } */
   languages: { name: Localized<string>; level: Localized<string> }[];
@@ -18,14 +18,23 @@ export const cvExtras: {
   certifications: { name: string; issuer: string; year: string }[];
 } = {
   studies: { unt: {}, upao: {} },
-  languages: [],
+  languages: [
+    {
+      name: { es: "Español", en: "Spanish" },
+      level: { es: "nativo", en: "native" },
+    },
+    {
+      name: { es: "Inglés", en: "English" },
+      level: { es: "intermedio", en: "intermediate" },
+    },
+  ],
   certifications: [],
 };
 
 /** Grouped from the GitHub profile stack and the documented projects. */
 export const cvSkills: { group: Localized<string>; items: string }[] = [
   {
-    group: { es: "Lenguajes", en: "Languages" },
+    group: { es: "Lenguajes", en: "Programming" },
     items: "Python, TypeScript, JavaScript, Go, Java, SQL",
   },
   {
@@ -66,6 +75,7 @@ export const cvCopy = {
       "Estudiante de dos ingenierías en paralelo y desarrollador autodidacta. Construyo productos web, APIs, automatizaciones y soluciones de IA aplicada con Python, TypeScript y Go, combinando el pensamiento en procesos de la ingeniería química con el desarrollo de software.",
     educationTitle: "Educación",
     ongoing: "En curso",
+    present: "presente",
     expected: "Egreso previsto",
     projectsTitle: "Proyectos",
     team: "En equipo",
@@ -91,6 +101,7 @@ export const cvCopy = {
       "Student pursuing two engineering degrees at once and self-taught developer. I build web products, APIs, automations and applied AI solutions with Python, TypeScript and Go, combining chemical engineering’s process thinking with software development.",
     educationTitle: "Education",
     ongoing: "In progress",
+    present: "present",
     expected: "Expected",
     projectsTitle: "Projects",
     team: "Team",

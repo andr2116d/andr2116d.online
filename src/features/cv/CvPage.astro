@@ -15,7 +15,6 @@ import { getProjects } from "@/features/projects/lib/projects";
 import { institutions } from "@/features/education/education.content";
 import {
   absolute,
-  breadcrumbNode,
   graph,
   personNode,
   webPageNode,
@@ -45,10 +44,6 @@ const jsonLd = graph([
     title: copy.title,
     description: copy.description,
   }),
-  breadcrumbNode([
-    { name: t("nav.home"), url: absolute(paths.home(lang), site) },
-    { name: copy.pageLabel, url },
-  ]),
 ]);
 
 const bare = (href: string) =>
@@ -79,10 +74,14 @@ const contactLines = [
 
 const studies = institutions.map((institution) => {
   const extra = cvExtras.studies[institution.id];
-  const period = extra.start
-    ? `${extra.start} – ${extra.expected ? `${copy.expected} ${extra.expected}` : copy.ongoing}`
-    : copy.ongoing;
-  return { institution, period, cycle: extra.cycle?.[lang] };
+  const end = extra.expected
+    ? `${copy.expected} ${extra.expected}`
+    : copy.present;
+  return {
+    institution,
+    period: `${institution.since} – ${end}`,
+    cycle: extra.cycle?.[lang],
+  };
 });
 ---
 
@@ -202,18 +201,15 @@ const studies = institutions.map((institution) => {
             <strong>{skill.group[lang]}:</strong> {skill.items}
           </p>
         ))}
-      </section>
-
-      {cvExtras.languages.length > 0 && (
-        <section class="sheet__section" aria-labelledby="cv-languages">
-          <h2 id="cv-languages">{copy.languagesTitle}</h2>
-          <p>
+        {cvExtras.languages.length > 0 && (
+          <p class="sheet__skill">
+            <strong>{copy.languagesTitle}:</strong>{" "}
             {cvExtras.languages
-              .map((l) => `${l.name[lang]}: ${l.level[lang]}`)
-              .join(" · ")}
+              .map((l) => `${l.name[lang]} (${l.level[lang]})`)
+              .join(", ")}
           </p>
-        </section>
-      )}
+        )}
+      </section>
 
       {cvExtras.certifications.length > 0 && (
         <section class="sheet__section" aria-labelledby="cv-certs">
