@@ -1,0 +1,70 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Hero from "@/features/hero/Hero.astro";
+import ProjectsSection from "@/features/projects/ProjectsSection.astro";
+import EducationSection from "@/features/education/EducationSection.astro";
+import StackSection from "@/features/stack/StackSection.astro";
+import ContactSection from "@/features/contact/ContactSection.astro";
+import { SITE } from "@/shared/config/site";
+import { paths, type Lang } from "@/shared/i18n/config";
+import {
+  absolute,
+  graph,
+  personNode,
+  profilePageNode,
+  websiteNode,
+} from "@/features/seo/structured-data";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const site = Astro.site ?? new URL(`https://${SITE.domain}`);
+
+const meta = {
+  es: {
+    title: `${SITE.name} | Química, Sistemas e IA`,
+    description:
+      "Portafolio de Johel Andreé Vargas Villanueva, estudiante de Ingeniería Química (UNT) y de Sistemas e IA (UPAO) en Trujillo, Perú. Proyectos web, datos e IA.",
+    imageAlt:
+      "Johel Andreé Vargas Villanueva: Ingeniería Química × Sistemas e Inteligencia Artificial",
+  },
+  en: {
+    title: `${SITE.name} | Chemical Eng., Systems & AI`,
+    description:
+      "Portfolio of Johel Andreé Vargas Villanueva, a Chemical Engineering (UNT) and Systems & AI (UPAO) student in Trujillo, Peru. Web, data and AI projects.",
+    imageAlt:
+      "Johel Andreé Vargas Villanueva: Chemical Engineering × Systems & Artificial Intelligence",
+  },
+}[lang];
+
+const alternates = { es: paths.home("es"), en: paths.home("en") };
+const jsonLd = graph([
+  personNode(lang, site),
+  websiteNode(site),
+  profilePageNode({
+    lang,
+    site,
+    url: absolute(alternates[lang], site),
+    title: meta.title,
+    description: meta.description,
+  }),
+]);
+---
+
+<BaseLayout
+  lang={lang}
+  title={meta.title}
+  description={meta.description}
+  alternates={alternates}
+  image={{ src: `/og/${lang}/home.png`, alt: meta.imageAlt }}
+  type="profile"
+  jsonLd={jsonLd}
+>
+  <Hero lang={lang} />
+  <ProjectsSection lang={lang} />
+  <EducationSection lang={lang} />
+  <StackSection lang={lang} />
+  <ContactSection lang={lang} />
+</BaseLayout>

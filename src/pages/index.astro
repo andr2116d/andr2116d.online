@@ -1,23 +1,5 @@
 ---
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import Hero from "@/features/hero/Hero.astro";
-import ProjectsSection from "@/features/projects/ProjectsSection.astro";
-import EducationSection from "@/features/education/EducationSection.astro";
-import StackSection from "@/features/stack/StackSection.astro";
-import ContactSection from "@/features/contact/ContactSection.astro";
-import { paths } from "@/shared/i18n/config";
+import HomePage from "@/features/home/HomePage.astro";
 ---
 
-<BaseLayout
-  lang="es"
-  title="Johel Andreé Vargas Villanueva"
-  description="Web personal en construcción."
-  alternates={{ es: paths.home("es"), en: paths.home("en") }}
-  image={{ src: "/og/home-es.png", alt: "Johel Andreé Vargas Villanueva" }}
->
-  <Hero lang="es" />
-  <ProjectsSection lang="es" />
-  <EducationSection lang="es" />
-  <StackSection lang="es" />
-  <ContactSection lang="es" />
-</BaseLayout>
+<HomePage lang="es" />
