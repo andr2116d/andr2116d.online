@@ -1,0 +1,103 @@
+/*
+ * Design tokens. Colors use light-dark(): the active scheme comes from
+ * <html data-theme> (set before paint) or, without JS, from the OS preference.
+ * Text pairs meet WCAG AA (≥ 4.5:1) on --bg and --surface in both schemes.
+ */
+:root {
+  color-scheme: light dark;
+
+  /* Surfaces */
+  --bg: light-dark(#f6f5f9, #0d0d11);
+  --surface: light-dark(#ffffff, #15151b);
+  --surface-2: light-dark(#eeecf3, #1c1c24);
+  --line: light-dark(#dcd8e4, #2a2a35);
+  --line-strong: light-dark(#bdb7ca, #3d3c4b);
+  --header-bg: light-dark(rgb(246 245 249 / 0.86), rgb(13 13 17 / 0.82));
+
+  /* Text */
+  --text: light-dark(#1c1a23, #f3f1f8);
+  --text-muted: light-dark(#575164, #b6b1c3);
+  --text-subtle: light-dark(#665f74, #918c9f);
+
+  /* Brand: lilac for systems & AI, mint for chemistry */
+  --accent: light-dark(#5a3990, #c6b6f7);
+  --on-accent: light-dark(#ffffff, #1a1330);
+  --accent-soft: light-dark(#ebe5f6, #241f36);
+  --chem: light-dark(#17694f, #8edcc3);
+  --chem-soft: light-dark(#e1f1eb, #15292a);
+  --focus: light-dark(#5a3990, #e0d4ff);
+
+  /* Technology groups (always paired with a text label) */
+  --group-backend: light-dark(#5a3990, #c6b6f7);
+  --group-frontend: light-dark(#963f55, #f0b9c0);
+  --group-data: light-dark(#7c5812, #e8c98c);
+  --group-cloud: light-dark(#2c6a49, #9fd4b6);
+
+  /* Decorative */
+  --grid-line: light-dark(rgb(28 26 35 / 0.055), rgb(255 255 255 / 0.04));
+  --glow: light-dark(rgb(90 57 144 / 0.1), rgb(198 182 247 / 0.11));
+  --plate: #ffffff;
+  --plate-line: light-dark(#dcd8e4, transparent);
+
+  /* Typography */
+  --font-sans: var(--font-manrope), system-ui, sans-serif;
+  --font-mono:
+    ui-monospace, "SFMono-Regular", "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
+  --step--1: clamp(0.875rem, 0.85rem + 0.12vw, 0.9375rem);
+  --step-0: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+  --step-1: clamp(1.18rem, 1.08rem + 0.45vw, 1.4rem);
+  --step-2: clamp(1.45rem, 1.25rem + 0.95vw, 2rem);
+  --step-3: clamp(1.9rem, 1.45rem + 2.1vw, 3.1rem);
+  --step-4: clamp(2.3rem, 1.4rem + 4.6vw, 5.6rem);
+
+  /* Layout */
+  --max: 76rem;
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+  --section-space: clamp(4.5rem, 3rem + 7vw, 9rem);
+  --radius-s: 0.5rem;
+  --radius-m: 0.875rem;
+  --radius-l: 1.375rem;
+  --header-h: 4.25rem;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.2, 0.65, 0.3, 1);
+  --dur-fast: 160ms;
+  --dur: 280ms;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+/* Browsers without light-dark() (pre-2024) get the light palette. */
+@supports not (color: light-dark(#000, #fff)) {
+  :root {
+    --bg: #f6f5f9;
+    --surface: #ffffff;
+    --surface-2: #eeecf3;
+    --line: #dcd8e4;
+    --line-strong: #bdb7ca;
+    --header-bg: rgb(246 245 249 / 0.94);
+    --text: #1c1a23;
+    --text-muted: #575164;
+    --text-subtle: #665f74;
+    --accent: #5a3990;
+    --on-accent: #ffffff;
+    --accent-soft: #ebe5f6;
+    --chem: #17694f;
+    --chem-soft: #e1f1eb;
+    --focus: #5a3990;
+    --group-backend: #5a3990;
+    --group-frontend: #963f55;
+    --group-data: #7c5812;
+    --group-cloud: #2c6a49;
+    --grid-line: rgb(28 26 35 / 0.055);
+    --glow: rgb(90 57 144 / 0.1);
+    --plate-line: #dcd8e4;
+  }
+}
