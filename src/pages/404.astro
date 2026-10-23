@@ -1,0 +1,87 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Icon from "@/shared/ui/Icon.astro";
+import { paths } from "@/shared/i18n/config";
+import { useTranslations } from "@/shared/i18n/ui";
+
+// One static 404 serves every route, so it speaks Spanish first and English second.
+const es = useTranslations("es");
+const en = useTranslations("en");
+---
+
+<BaseLayout
+  lang="es"
+  title={`${es("notFound.title")} | Johel Andreé Vargas Villanueva`}
+  description={es("notFound.body")}
+  alternates={{ es: "/404/", en: "/404/" }}
+  image={{ src: "/og/es/home.png", alt: "Johel Andreé Vargas Villanueva" }}
+  noindex
+>
+  <section class="not-found container" aria-labelledby="nf-title">
+    <p class="not-found__code mono" aria-hidden="true">
+      404
+    </p>
+    <h1 id="nf-title">{es("notFound.title")}</h1>
+    <p class="lead">{es("notFound.body")}</p>
+    <div class="not-found__actions">
+      <a class="button button--primary" href={paths.home("es")}>
+        {es("notFound.home")}
+        <Icon name="arrow-right" />
+      </a>
+      <a class="button button--ghost" href={paths.section("es", "projects")}>
+        {es("nav.projects")}
+      </a>
+    </div>
+    <div class="not-found__en" lang="en">
+      <h2>{en("notFound.title")}</h2>
+      <p>
+        {en("notFound.body")}
+        <a class="text-link" href={paths.home("en")}>
+          {en("notFound.home")}
+        </a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    display: grid;
+    gap: 1.25rem;
+    justify-items: start;
+    padding-block: clamp(4rem, 12vw, 9rem);
+  }
+
+  .not-found__code {
+    font-size: clamp(4rem, 12vw, 8rem);
+    line-height: 1;
+    background: linear-gradient(90deg, var(--chem), var(--accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .not-found h1 {
+    font-size: var(--step-3);
+  }
+
+  .not-found__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .not-found__en {
+    display: grid;
+    gap: 0.5rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+    color: var(--text-muted);
+  }
+
+  .not-found__en h2 {
+    font-size: var(--step-1);
+    color: var(--text);
+  }
+</style>
