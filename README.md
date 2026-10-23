@@ -99,17 +99,17 @@ Regla del proyecto: no se añade experiencia, métricas, roles ni característic
 
 ## Despliegue
 
-El resultado es estático (`dist/`) y funciona en cualquier hosting estático. Pasos generales:
+Producción en **Vercel**, desplegada automáticamente desde la rama `main` de GitHub (cada push publica; cada pull request genera una vista previa).
 
-1. Conectar el repositorio al hosting (Cloudflare Pages, Netlify o Vercel) con:
-   - Comando de build: `pnpm build`
-   - Directorio de salida: `dist`
-   - Versión de Node: 24
-2. Configurar el dominio `andr2116d.online` con HTTPS y redirección de `www` al dominio raíz (o al revés, pero uno solo).
-3. `public/_headers` aplica cabeceras de seguridad y caché en Cloudflare Pages y Netlify. En Vercel, replicarlas en `vercel.json`.
-4. Si el dominio cambia, compila con `SITE_URL=https://otro-dominio pnpm build` (canonical, sitemap, OG y `robots.txt` se ajustan solos) y actualiza `SITE.domain`.
+- `vercel.json` fija pnpm 12.4.1, el build (`pnpm run build` → `dist/`), las cabeceras de seguridad y caché, y las URL con barra final (coinciden con las canónicas).
+- Si el dominio cambia, compila con `SITE_URL=https://otro-dominio` (variable de entorno en Vercel) y actualiza `SITE.domain`: canonical, sitemap, OG y `robots.txt` se ajustan solos.
 
-Tras publicar, sigue la lista de `docs/SEO.md` (Search Console, sitemap, enlaces desde perfiles).
+### Primera vez
+
+1. En [vercel.com/new](https://vercel.com/new), importar el repositorio `andr2116d/andr2116d.online`. Vercel detecta Astro y usa `vercel.json`; no hace falta cambiar nada.
+2. En **Settings → Domains**, añadir `andr2116d.online` y `www.andr2116d.online`, y marcar la redirección de `www` al dominio raíz.
+3. En el registrador del dominio, crear los registros DNS que indique Vercel (normalmente un registro `A` para `@` y un `CNAME` para `www`).
+4. Cuando el dominio muestre «Valid Configuration», seguir la lista de `docs/SEO.md` (Search Console, sitemap, enlaces desde perfiles).
 
 ## Calidad verificada
 
