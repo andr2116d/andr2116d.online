@@ -1,0 +1,33 @@
+---
+/** Two crossed orbits: the personal mark inherited from the prototype and the favicon. */
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+
+<svg
+  class:list={["brand-mark", className]}
+  viewBox="0 0 40 40"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2.4"
+  aria-hidden="true"
+  focusable="false"
+>
+  <ellipse
+    cx="20"
+    cy="20"
+    rx="17"
+    ry="7"
+    transform="rotate(-45 20 20)"
+  ></ellipse>
+  <ellipse
+    cx="20"
+    cy="20"
+    rx="17"
+    ry="7"
+    transform="rotate(45 20 20)"
+  ></ellipse>
+  <circle cx="20" cy="20" r="2.6" fill="currentColor" stroke="none"></circle>
+</svg>

@@ -1,0 +1,51 @@
+---
+/**
+ * Decorative stroke icons. They are always aria-hidden: the accessible name must come
+ * from the surrounding control or text.
+ */
+const icons = {
+  "arrow-right": "M5 12h14m-6-6 6 6-6 6",
+  "arrow-down": "M12 5v14m-6-6 6 6 6-6",
+  "arrow-up": "M12 19V5m-6 6 6-6 6 6",
+  "arrow-up-right": "M7 17 17 7M8 7h9v9",
+  "arrow-left": "M19 12H5m6-6-6 6 6 6",
+  sun: "M12 3v2m0 14v2M3 12h2m14 0h2M5.6 5.6 7 7m10 10 1.4 1.4M5.6 18.4 7 17M17 7l1.4-1.4M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z",
+  moon: "M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z",
+  menu: "M4 8h16M4 16h16",
+  close: "m6 6 12 12M18 6 6 18",
+  pause: "M9 5v14m6-14v14",
+  play: "m8 5 11 7-11 7Z",
+  pin: "M12 21s-7-6-7-11a7 7 0 1 1 14 0c0 5-7 11-7 11Zm0-8.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z",
+  mail: "M4 6h16v12H4Zm0 0 8 7 8-7",
+  code: "m9 8-4 4 4 4m6-8 4 4-4 4",
+  print:
+    "M7 9V4h10v5M7 17H5a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-2M7 14h10v6H7Z",
+  team: "M16 19v-1a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v1m16 0v-1a4 4 0 0 0-3-3.9M14 4.1a4 4 0 0 1 0 7.8M10 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z",
+} as const;
+
+export type IconName = keyof typeof icons;
+
+interface Props {
+  name: IconName;
+  class?: string;
+  size?: string;
+}
+
+const { name, class: className, size = "1em" } = Astro.props;
+---
+
+<svg
+  class:list={["icon", className]}
+  viewBox="0 0 24 24"
+  width={size}
+  height={size}
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.75"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  focusable="false"
+>
+  <path d={icons[name]}></path>
+</svg>

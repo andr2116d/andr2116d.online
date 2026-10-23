@@ -1,0 +1,88 @@
+---
+import Icon from "@/shared/ui/Icon.astro";
+import { useTranslations } from "@/shared/i18n/ui";
+import type { Lang } from "@/shared/i18n/config";
+
+interface Props {
+  lang: Lang;
+}
+
+const t = useTranslations(Astro.props.lang);
+---
+
+<button
+  class="theme-toggle"
+  type="button"
+  aria-pressed="false"
+  data-theme-toggle
+  title={t("theme.label")}
+>
+  <span class="visually-hidden">{t("theme.dark")}</span>
+  <Icon name="moon" class="theme-toggle__moon" size="1.25rem" />
+  <Icon name="sun" class="theme-toggle__sun" size="1.25rem" />
+</button>
+
+<style>
+  .theme-toggle {
+    display: inline-grid;
+    place-items: center;
+    inline-size: 2.75rem;
+    block-size: 2.75rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--text);
+    transition: border-color var(--dur-fast) ease;
+  }
+
+  .theme-toggle:hover {
+    border-color: var(--line-strong);
+  }
+
+  .theme-toggle > :global(svg) {
+    grid-area: 1 / 1;
+  }
+
+  /* Shows the icon of the theme you would switch to. */
+  .theme-toggle[aria-pressed="true"] :global(.theme-toggle__moon),
+  .theme-toggle[aria-pressed="false"] :global(.theme-toggle__sun) {
+    display: none;
+  }
+
+  :global(html:not([data-js])) .theme-toggle {
+    display: none;
+  }
+</style>
+
+<script>
+  const root = document.documentElement;
+  const media = matchMedia("(prefers-color-scheme: dark)");
+  const isDark = () =>
+    root.dataset.theme ? root.dataset.theme === "dark" : media.matches;
+
+  function sync() {
+    for (const button of document.querySelectorAll("[data-theme-toggle]")) {
+      button.setAttribute("aria-pressed", String(isDark()));
+    }
+  }
+
+  for (const button of document.querySelectorAll("[data-theme-toggle]")) {
+    button.addEventListener("click", () => {
+      const next = isDark() ? "light" : "dark";
+      root.dataset.theme = next;
+      try {
+        localStorage.setItem("theme", next);
+      } catch {
+        /* The choice still applies for this visit. */
+      }
+      sync();
+      document.dispatchEvent(new CustomEvent("themechange"));
+    });
+  }
+
+  media.addEventListener("change", () => {
+    sync();
+    document.dispatchEvent(new CustomEvent("themechange"));
+  });
+  sync();
+</script>

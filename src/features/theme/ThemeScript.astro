@@ -1,0 +1,20 @@
+---
+/**
+ * Runs before first paint (render-blocking on purpose, < 300 bytes) so a stored theme
+ * never flashes. Without a stored choice the page follows the OS via `color-scheme`.
+ * `data-js` lets CSS hide controls that need JavaScript.
+ */
+---
+
+<script is:inline>
+  (() => {
+    const root = document.documentElement;
+    root.dataset.js = "";
+    try {
+      const theme = localStorage.getItem("theme");
+      if (theme === "light" || theme === "dark") root.dataset.theme = theme;
+    } catch {
+      /* Storage can be blocked; the OS preference still applies. */
+    }
+  })();
+</script>
