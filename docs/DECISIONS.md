@@ -33,6 +33,10 @@ Registro breve de las decisiones importantes y su motivo. Fecha de referencia: 2
 - **Idioma**: no se redirige nunca según el idioma del navegador (Google lo desaconseja, porque oculta versiones a buscadores y personas). Si `navigator.languages` no incluye español en una página en español (o empieza por español en una página en inglés), aparece un aviso discreto para cambiar. La elección o el descarte se recuerdan en `localStorage`. El país no se usa: un sitio estático no lo conoce sin servidor y no indica el idioma.
 - **Tema**: sin elección guardada se sigue `prefers-color-scheme` en tiempo real. Si se elige manualmente el mismo tema que el sistema, se borra la preferencia y se vuelve a seguir al sistema.
 
+## Navegación en los casos
+
+- Sin migas de pan: las guías de diseño basadas en Nielsen Norman Group las reservan para jerarquías de tres o más niveles, y Google ya no las muestra en resultados móviles (enero de 2025). Cada caso tiene «← Todos los proyectos», su posición («04 / 06») con anterior y siguiente, y al final «Más proyectos».
+
 ## CV
 
 - Basado en guías de reclutamiento y ATS (Harvard Office of Career Services, estudio de _eye tracking_ de Ladders 2018, guías de formato ATS): una página A4, una columna, títulos estándar, viñetas con verbo de acción, enlaces visibles como texto, sin foto, edad, iconos ni gráficos con información.
