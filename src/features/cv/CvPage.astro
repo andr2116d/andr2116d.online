@@ -278,6 +278,8 @@ const studies = institutions.map((institution) => {
     --ink-3: #5b5566;
     --rule: #dcd8e3;
     --brand: #4b2f7d;
+    /* Dark theme: softer, warmer paper on screen to avoid glare. Print stays #fff. */
+    --paper: light-dark(#ffffff, #f3f1ec);
     position: relative;
     box-sizing: border-box;
     inline-size: min(100%, 210mm);
@@ -285,7 +287,7 @@ const studies = institutions.map((institution) => {
     margin-inline: auto;
     padding: 11mm 14mm 9mm;
     border-radius: 0.35rem;
-    background: #fff;
+    background: var(--paper);
     color: var(--ink);
     font-family: var(--font-cv);
     font-size: 9.5pt;
@@ -342,6 +344,7 @@ const studies = institutions.map((institution) => {
   .sheet__contact {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 0.15em 0;
     font-size: 0.9em;
     color: var(--ink-2);
@@ -533,6 +536,7 @@ const studies = institutions.map((institution) => {
       margin: 0;
       border-radius: 0;
       box-shadow: none;
+      background: #fff;
       overflow: hidden;
       print-color-adjust: exact;
       -webkit-print-color-adjust: exact;

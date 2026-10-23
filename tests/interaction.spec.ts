@@ -141,6 +141,18 @@ test.describe("CV", () => {
     });
   }
 
+  test("dark theme softens the paper on screen only", async ({ page }) => {
+    await page.emulateMedia({ colorScheme: "dark" });
+    await page.goto("/cv/");
+    const paper = () =>
+      page
+        .locator(".sheet")
+        .evaluate((el) => getComputedStyle(el).backgroundColor);
+    expect(await paper()).toBe("rgb(243, 241, 236)");
+    await page.emulateMedia({ colorScheme: "dark", media: "print" });
+    expect(await paper()).toBe("rgb(255, 255, 255)");
+  });
+
   test("printing shows only the A4 sheet", async ({ page }) => {
     await page.goto("/cv/");
     await page.emulateMedia({ media: "print" });
