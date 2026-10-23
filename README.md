@@ -91,6 +91,7 @@ Además: `/404.html`, `/robots.txt`, `/sitemap-index.xml`.
 - **Datos personales y enlaces**: `src/shared/config/site.ts`. Actualiza `updated` al revisar contenido (se usa en el sitemap y en JSON-LD).
 - **Proyectos**: añade o edita `src/content/projects/<slug>.json`. El esquema valida campos y longitudes al compilar. Luego ejecuta `node scripts/generate-og.mjs`. Las pruebas detectan el nuevo proyecto automáticamente.
 - **Textos de secciones**: archivo `*.content.ts` de cada feature; textos de interfaz en `src/shared/i18n/ui.ts`.
+- **Ciclo y egreso**: `src/features/education/education.content.ts` (`since`, `cycle`, `cycles`, `expected`). Es la fuente única para la web y el CV: **actualiza `cycle` cada semestre** y ejecuta `pnpm cv:pdf`.
 - **CV**: datos opcionales que solo tú puedes confirmar (teléfono, fechas de estudio, ciclo, idiomas y certificaciones) en `src/features/cv/cv.content.ts`. Los bloques vacíos no se muestran. Las viñetas del CV están en el campo `highlights` de cada proyecto. Después ejecuta `pnpm cv:pdf`.
 - **Stack**: `src/features/stack/stack.content.ts` (cada tecnología enlaza a los proyectos donde se usa).
 
