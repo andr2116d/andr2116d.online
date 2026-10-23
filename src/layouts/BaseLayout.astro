@@ -5,7 +5,8 @@ import SeoHead, { type SeoProps } from "@/features/seo/SeoHead.astro";
 import ThemeScript from "@/features/theme/ThemeScript.astro";
 import SiteHeader from "@/features/navigation/SiteHeader.astro";
 import SiteFooter from "@/features/navigation/SiteFooter.astro";
-import { LOCALES } from "@/shared/i18n/config";
+import LanguageSuggestion from "@/features/navigation/LanguageSuggestion.astro";
+import { LOCALES, otherLang } from "@/shared/i18n/config";
 import { useTranslations } from "@/shared/i18n/ui";
 
 type Props = SeoProps & {
@@ -15,6 +16,8 @@ type Props = SeoProps & {
 
 const { bodyClass, ...seo } = Astro.props;
 const t = useTranslations(seo.lang);
+const translated = seo.alternates[otherLang(seo.lang)];
+const hasTranslation = translated !== seo.alternates[seo.lang];
 ---
 
 <!doctype html>
@@ -50,6 +53,7 @@ const t = useTranslations(seo.lang);
       <slot />
     </main>
     <SiteFooter lang={seo.lang} />
+    {hasTranslation && <LanguageSuggestion lang={seo.lang} href={translated} />}
   </body>
 </html>
 

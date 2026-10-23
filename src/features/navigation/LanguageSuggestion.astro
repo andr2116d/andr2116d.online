@@ -1,0 +1,165 @@
+---
+/**
+ * Suggests the other language when the browser's languages don't match the page.
+ * It never redirects: Google advises against language-based redirects because they
+ * hide versions from people and crawlers. Choices are remembered in localStorage.
+ */
+import { LOCALES, otherLang, type Lang } from "@/shared/i18n/config";
+
+interface Props {
+  lang: Lang;
+  /** URL of this page in the other language. */
+  href: string;
+}
+
+const { lang, href } = Astro.props;
+const target = otherLang(lang);
+
+// Written in the suggested language, since that is the one the visitor reads.
+const copy = {
+  en: {
+    text: "This site is also available in English.",
+    action: "Read in English",
+    dismiss: "Keep Spanish",
+  },
+  es: {
+    text: "Esta web también está disponible en español.",
+    action: "Leer en español",
+    dismiss: "Seguir en inglés",
+  },
+}[target];
+---
+
+<aside
+  class="lang-suggest"
+  lang={LOCALES[target].html}
+  aria-label={copy.text}
+  data-lang-suggest={target}
+  hidden
+>
+  <p>{copy.text}</p>
+  <div class="lang-suggest__actions">
+    <a
+      class="button button--primary"
+      href={href}
+      hreflang={LOCALES[target].html}
+      data-lang-choice={target}
+    >
+      {copy.action}
+    </a>
+    <button class="button button--ghost" type="button" data-lang-dismiss>
+      {copy.dismiss}
+    </button>
+  </div>
+</aside>
+
+<style>
+  .lang-suggest {
+    position: fixed;
+    z-index: 60;
+    right: max(1rem, env(safe-area-inset-right));
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    display: grid;
+    gap: 0.9rem;
+    max-inline-size: min(24rem, calc(100vw - 2rem));
+    padding: 1.1rem 1.2rem;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-l);
+    background: var(--surface);
+    box-shadow: 0 1.5rem 3rem -1rem rgb(0 0 0 / 0.35);
+  }
+
+  .lang-suggest[hidden] {
+    display: none;
+  }
+
+  .lang-suggest p {
+    font-weight: 600;
+  }
+
+  .lang-suggest__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .lang-suggest .button {
+    min-height: 2.75rem;
+    padding: 0.55rem 1rem;
+    font-size: var(--step--1);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .lang-suggest:not([hidden]) {
+      animation: suggest-in 400ms var(--ease-out);
+    }
+  }
+
+  @keyframes suggest-in {
+    from {
+      opacity: 0;
+      transform: translateY(1rem);
+    }
+  }
+
+  @media print {
+    .lang-suggest {
+      display: none !important;
+    }
+  }
+</style>
+
+<script>
+  const KEY = "lang-choice";
+  const box = document.querySelector<HTMLElement>("[data-lang-suggest]");
+  const pageLang = document.documentElement.lang.slice(0, 2);
+
+  const read = () => {
+    try {
+      return localStorage.getItem(KEY);
+    } catch {
+      return null;
+    }
+  };
+  const remember = (value: string) => {
+    try {
+      localStorage.setItem(KEY, value);
+    } catch {
+      /* Without storage the suggestion simply appears again next visit. */
+    }
+  };
+
+  // Any language link (header, menu, this box) counts as an explicit choice.
+  for (const link of document.querySelectorAll<HTMLAnchorElement>(
+    "a[hreflang]",
+  )) {
+    link.addEventListener("click", () => {
+      const choice = link.hreflang.slice(0, 2);
+      if (choice === "es" || choice === "en") remember(choice);
+    });
+  }
+
+  if (box) {
+    const target = box.dataset.langSuggest;
+    const browser = (navigator.languages ?? [navigator.language]).map((l) =>
+      l.toLowerCase().slice(0, 2),
+    );
+    const choice = read();
+    const wantsTarget =
+      choice === target ||
+      (!choice &&
+        (target === "en"
+          ? !browser.includes("es") // non-Spanish browser on a Spanish page
+          : browser[0] === "es")); // Spanish-first browser on an English page
+
+    if (wantsTarget && pageLang !== target) {
+      box.hidden = false;
+      box
+        .querySelector("[data-lang-dismiss]")
+        ?.addEventListener("click", () => {
+          remember(pageLang);
+          box.hidden = true;
+        });
+    }
+  }
+</script>
