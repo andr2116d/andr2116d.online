@@ -40,7 +40,7 @@ const logoWidth = Math.round((logo.width / logo.height) * logoHeight);
   <div class="institution__body">
     <p class="institution__status mono">
       <span class="institution__dot" aria-hidden="true"></span>
-      {copy.status}
+      {copy.status} · {copy.since} {institution.since}
     </p>
     <h3 id={`edu-${institution.id}`}>{institution.degree[lang]}</h3>
     <p class="institution__university">{institution.university}</p>

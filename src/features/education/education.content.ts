@@ -9,6 +9,8 @@ export interface Institution {
   logo: ImageMetadata;
   /** Display height in px; width follows the official aspect ratio. */
   logoHeight: number;
+  /** Year the degree started (confirmed by the owner). */
+  since: string;
   url: string;
   university: string;
   degree: Localized<string>;
@@ -21,6 +23,7 @@ export const institutions: Institution[] = [
     discipline: "chem",
     logo: untEscudo,
     logoHeight: 72,
+    since: "2024",
     url: "https://www.unitru.edu.pe/",
     university: "Universidad Nacional de Trujillo",
     degree: { es: "Ingeniería Química", en: "Chemical Engineering" },
@@ -34,6 +37,7 @@ export const institutions: Institution[] = [
     discipline: "ai",
     logo: upaoLogo,
     logoHeight: 46,
+    since: "2024",
     url: "https://www.upao.edu.pe/",
     university: "Universidad Privada Antenor Orrego",
     degree: {
@@ -56,6 +60,7 @@ export const educationCopy = {
       "La primera me enseña a entender los procesos; la segunda, a transformarlos con tecnología. Me interesa lo que sucede entre disciplinas: una interfaz que simplifica lo complejo, una API bien pensada o un proceso que deja de hacerse a mano.",
     ],
     status: "En curso",
+    since: "desde",
     website: "Sitio oficial",
     venn: {
       label:
@@ -75,6 +80,7 @@ export const educationCopy = {
       "The first teaches me to understand processes; the second, to transform them with technology. I’m drawn to what happens between disciplines: an interface that makes complexity manageable, a well-designed API or a process that no longer has to be done by hand.",
     ],
     status: "In progress",
+    since: "since",
     website: "Official website",
     venn: {
       label:
