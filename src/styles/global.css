@@ -23,6 +23,34 @@ html {
   }
 }
 
+/*
+ * Very large screens: everything is sized in rem, so raising the root size scales
+ * type, spacing and the content width together instead of leaving a narrow column.
+ */
+@media (min-width: 1800px) {
+  html {
+    font-size: 112.5%;
+  }
+}
+
+@media (min-width: 2300px) {
+  html {
+    font-size: 131.25%;
+  }
+}
+
+@media (min-width: 3000px) {
+  html {
+    font-size: 162.5%;
+  }
+}
+
+@media (min-width: 3600px) {
+  html {
+    font-size: 187.5%;
+  }
+}
+
 body {
   min-height: 100dvh;
   font-family: var(--font-sans);

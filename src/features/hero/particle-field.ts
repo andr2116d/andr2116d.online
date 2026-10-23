@@ -148,7 +148,8 @@ export function mountParticleField({
     const sz = Math.sin(az),
       cz = Math.cos(az);
     const scale = Math.min(width, height) * 0.145;
-    const dot = width < 480 ? 0.85 : 1;
+    // Dot radius follows the canvas size so 4K screens get the same density of ink.
+    const dot = Math.min(2.4, Math.max(0.85, width / 520));
 
     for (let i = 0; i < field.count; i++) {
       // Rotate position (X, then Y, then Z axis) and normal with the same matrix.
