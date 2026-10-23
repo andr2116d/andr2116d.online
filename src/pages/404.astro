@@ -55,10 +55,17 @@ const en = useTranslations("en");
   .not-found__code {
     font-size: clamp(4rem, 12vw, 8rem);
     line-height: 1;
-    background: linear-gradient(90deg, var(--chem), var(--accent));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    color: var(--chem);
+  }
+
+  /* Gradient text only where light-dark() works, see the hero name. */
+  @supports (color: light-dark(#000, #fff)) {
+    .not-found__code {
+      background: linear-gradient(90deg, var(--chem), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
   }
 
   .not-found h1 {
