@@ -1,0 +1,71 @@
+{
+  "name": "La Previa",
+  "order": 6,
+  "year": 2026,
+  "team": true,
+  "area": "product",
+  "repository": "https://github.com/andr2116d/canchas-reservas",
+  "demo": "https://canchas-reservas.vercel.app/",
+  "stack": [
+    "Next.js",
+    "TypeScript",
+    "Tailwind CSS",
+    "TanStack Query",
+    "NestJS",
+    "Prisma",
+    "PostgreSQL",
+    "Docker"
+  ],
+  "languages": ["TypeScript"],
+  "flow": [
+    {
+      "label": {
+        "es": "Reserva",
+        "en": "Booking"
+      },
+      "type": "source"
+    },
+    {
+      "label": "Next.js",
+      "type": "process"
+    },
+    {
+      "label": "NestJS",
+      "type": "process"
+    },
+    {
+      "label": "Prisma",
+      "type": "process"
+    },
+    {
+      "label": "PostgreSQL",
+      "type": "store"
+    }
+  ],
+  "es": {
+    "kind": "Producto · Proyecto en equipo",
+    "tagline": "Reservas de canchas, sin complicaciones.",
+    "description": "La Previa: sistema web de reservas y gestión de canchas de fútbol 5 y 7, desarrollado en equipo con Next.js, NestJS, Prisma y PostgreSQL.",
+    "summary": "Sistema web de reservas y gestión de canchas de fútbol 5 y 7, desarrollado en equipo con Next.js, NestJS, Prisma y PostgreSQL.",
+    "problem": "Reservar una cancha conecta a jugadores, recepción y administración, y cada rol necesita ver y gestionar los turnos de una forma distinta.",
+    "approach": [
+      "Frontend en Next.js con Tailwind CSS y TanStack Query; backend en NestJS con Prisma y PostgreSQL.",
+      "Roles de administrador, recepcionista y jugador, con datos de demostración para probar cada flujo.",
+      "Trabajo por sprints, con una rama por integrante, CI y pull requests hacia la rama dev."
+    ],
+    "role": "Según el flujo de trabajo documentado, apruebo los pull requests del equipo hacia dev. También soy autor de la mayoría de los commits del repositorio."
+  },
+  "en": {
+    "kind": "Product · Team project",
+    "tagline": "Football pitch bookings, made simple.",
+    "description": "La Previa: team-built booking and management system for five- and seven-a-side football pitches with Next.js, NestJS, Prisma and PostgreSQL.",
+    "summary": "Team-built web system for booking and managing five- and seven-a-side football pitches with Next.js, NestJS, Prisma and PostgreSQL.",
+    "problem": "Booking a pitch connects players, reception and administration, and each role needs to see and manage time slots differently.",
+    "approach": [
+      "Next.js frontend with Tailwind CSS and TanStack Query; NestJS backend with Prisma and PostgreSQL.",
+      "Administrator, receptionist and player roles, with demo data to try every flow.",
+      "Sprint-based work, with one branch per member, CI and pull requests into the dev branch."
+    ],
+    "role": "Per the documented workflow, I approve the team’s pull requests into dev. I also authored most of the repository’s commits."
+  }
+}

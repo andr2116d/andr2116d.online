@@ -1,0 +1,69 @@
+{
+  "name": "UNITRU Academic",
+  "order": 2,
+  "year": 2026,
+  "team": false,
+  "area": "product",
+  "repository": "https://github.com/andr2116d/UNITRU-ACADEMIC",
+  "demo": "https://unitru-academic.vercel.app/",
+  "stack": [
+    "Python",
+    "FastAPI",
+    "Playwright",
+    "Tesseract",
+    "Next.js",
+    "React",
+    "TypeScript",
+    "Tailwind CSS",
+    "Docker"
+  ],
+  "languages": ["Python", "TypeScript"],
+  "flow": [
+    {
+      "label": "SUV UNT",
+      "type": "source"
+    },
+    {
+      "label": "Playwright",
+      "type": "process"
+    },
+    {
+      "label": "FastAPI",
+      "type": "process"
+    },
+    {
+      "label": "WebSocket",
+      "type": "process"
+    },
+    {
+      "label": "Dashboard",
+      "type": "output"
+    }
+  ],
+  "es": {
+    "kind": "Producto · Educación",
+    "tagline": "La vida académica del SUV, más clara.",
+    "description": "UNITRU Academic: dashboard para estudiantes de la UNT que automatiza el SUV con Playwright y FastAPI, predice notas y optimiza horarios.",
+    "summary": "Dashboard académico para estudiantes de la UNT que automatiza el acceso al SUV, predice notas y optimiza horarios.",
+    "problem": "La información del Sistema Universitario Virtual (SUV) de la UNT está repartida en varias pantallas, lo que dificulta decidir sobre notas, asistencia y horarios.",
+    "approach": [
+      "Backend en FastAPI que, con Playwright (Chromium headless), extrae la información académica en una sola sesión; el captcha se resuelve con OCR local (Tesseract).",
+      "Frontend en Next.js con notas por unidad, asistencia, récord académico y analíticas por periodo.",
+      "Predictor de las combinaciones de notas que permiten aprobar y optimizador de horarios sin conflictos.",
+      "Las credenciales nunca se guardan: solo existen durante la sesión WebSocket activa."
+    ]
+  },
+  "en": {
+    "kind": "Product · Education",
+    "tagline": "University portal data, made clear.",
+    "description": "UNITRU Academic: a dashboard for UNT students that automates the university portal with Playwright and FastAPI, predicts grades and optimizes schedules.",
+    "summary": "Academic dashboard for UNT students that automates the university portal, predicts grades and optimizes schedules.",
+    "problem": "UNT’s virtual university system (SUV) spreads academic data across many screens, which makes it hard to plan around grades, attendance and schedules.",
+    "approach": [
+      "FastAPI backend that uses Playwright (headless Chromium) to collect all academic data in one session, solving the captcha with local OCR (Tesseract).",
+      "Next.js frontend with grades per unit, attendance, academic record and per-term analytics.",
+      "Grade-combination predictor for passing courses and a conflict-free schedule optimizer.",
+      "Credentials are never stored: they only exist during the active WebSocket session."
+    ]
+  }
+}

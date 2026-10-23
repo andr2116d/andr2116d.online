@@ -1,0 +1,67 @@
+{
+  "name": "Serverless Image Processor",
+  "order": 5,
+  "year": 2026,
+  "team": true,
+  "area": "cloud",
+  "repository": "https://github.com/andr2116d/ias-aws-lambda",
+  "stack": [
+    "AWS Lambda",
+    "API Gateway",
+    "S3",
+    "SQS",
+    "CloudWatch",
+    "Terraform",
+    "GitHub Actions",
+    "Node.js"
+  ],
+  "languages": ["HCL", "JavaScript"],
+  "flow": [
+    {
+      "label": "API Gateway",
+      "type": "source"
+    },
+    {
+      "label": "S3",
+      "type": "store"
+    },
+    {
+      "label": "SQS",
+      "type": "process"
+    },
+    {
+      "label": "Lambda",
+      "type": "process"
+    },
+    {
+      "label": "PNG",
+      "type": "output"
+    }
+  ],
+  "es": {
+    "kind": "Cloud · Proyecto en equipo",
+    "tagline": "Un pipeline de imágenes en AWS, descrito como código.",
+    "description": "Procesador de imágenes serverless en AWS (API Gateway, Lambda, S3, SQS) con Terraform en tres entornos y GitHub Actions. Proyecto en equipo.",
+    "summary": "Procesador de imágenes serverless en AWS con Terraform en tres entornos y despliegue con GitHub Actions.",
+    "problem": "Procesar imágenes de forma asíncrona exige coordinar almacenamiento, colas y cómputo, con despliegues reproducibles y seguros en varios entornos.",
+    "approach": [
+      "Carga mediante API Gateway, almacenamiento en S3 y recorte circular en una Lambda disparada por SQS, con cola de mensajes fallidos y alarma en CloudWatch.",
+      "Infraestructura en módulos de Terraform para dev, qa y prod, con estado remoto por entorno.",
+      "Pipeline en GitHub Actions con autenticación OIDC, sin access keys guardadas en el repositorio."
+    ],
+    "role": "Mi responsabilidad documentada: bootstrap (estado remoto, OIDC y roles de despliegue), pipeline, módulo de red y entornos de QA y producción."
+  },
+  "en": {
+    "kind": "Cloud · Team project",
+    "tagline": "An AWS image pipeline, described as code.",
+    "description": "Serverless image processor on AWS (API Gateway, Lambda, S3, SQS) with Terraform across three environments and GitHub Actions. Team project.",
+    "summary": "Serverless image processor on AWS with Terraform across three environments and GitHub Actions deployments.",
+    "problem": "Asynchronous image processing requires coordinating storage, queues and compute, with reproducible and secure deployments across environments.",
+    "approach": [
+      "Uploads through API Gateway, storage in S3 and circular cropping in an SQS-triggered Lambda, with a dead-letter queue and a CloudWatch alarm.",
+      "Terraform modules for dev, qa and prod, each with its own remote state.",
+      "GitHub Actions pipeline with OIDC authentication, so no access keys live in the repository."
+    ],
+    "role": "My documented responsibilities: bootstrap (remote state, OIDC and deployment roles), pipeline, networking module, and the QA and production environments."
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "name": "Quikko",
+  "order": 1,
+  "year": 2026,
+  "team": false,
+  "area": "product",
+  "repository": "https://github.com/andr2116d/Quikko",
+  "demo": "https://quikko.vercel.app/",
+  "stack": [
+    "Go",
+    "Echo",
+    "Next.js",
+    "TypeScript",
+    "MongoDB",
+    "Redis",
+    "InfluxDB",
+    "Docker"
+  ],
+  "languages": ["Go", "TypeScript"],
+  "flow": [
+    {
+      "label": "Next.js",
+      "type": "source"
+    },
+    {
+      "label": "API Go",
+      "type": "process"
+    },
+    {
+      "label": "Redis",
+      "type": "store"
+    },
+    {
+      "label": "InfluxDB",
+      "type": "store"
+    },
+    {
+      "label": "WebSocket",
+      "type": "output"
+    }
+  ],
+  "image": "../../assets/projects/quikko.png",
+  "es": {
+    "kind": "Producto · Full stack",
+    "tagline": "Enlaces cortos con métricas en tiempo real.",
+    "description": "Quikko: acortador de URLs con API en Go, caché en Redis, métricas en tiempo real por WebSocket, GeoIP y dashboard en Next.js.",
+    "summary": "Acortador de URLs con API en Go, métricas en tiempo real por WebSocket, GeoIP y un dashboard en Next.js.",
+    "problem": "Un enlace corto puede ser más que una redirección: debe resolverse con baja latencia, registrar cada clic y mostrar esas métricas sin esperar a un reporte.",
+    "approach": [
+      "API REST en Go con Echo y Clean Architecture; Redis como caché para resolver las redirecciones.",
+      "Analíticas en InfluxDB con país de origen por GeoIP y actualizaciones en vivo por WebSocket.",
+      "Dashboard responsive en Next.js con autenticación JWT (access y refresh tokens) y documentación OpenAPI."
+    ],
+    "imageAlt": "Página de inicio de Quikko con el titular «Acorta enlaces. Mira los clics llegar al instante» y una vista previa del dashboard con clics por hora."
+  },
+  "en": {
+    "kind": "Product · Full stack",
+    "tagline": "Short links with real-time metrics.",
+    "description": "Quikko: a URL shortener with a Go API, Redis caching, real-time WebSocket metrics, GeoIP and a Next.js dashboard.",
+    "summary": "URL shortener with a Go API, real-time metrics over WebSockets, GeoIP and a Next.js dashboard.",
+    "problem": "A short link can be more than a redirect: it has to resolve with low latency, record every click and show those metrics without waiting for a report.",
+    "approach": [
+      "Go REST API built with Echo and Clean Architecture, using Redis as a cache to resolve redirects.",
+      "InfluxDB analytics with GeoIP country detection and live WebSocket updates.",
+      "Responsive Next.js dashboard with JWT authentication (access and refresh tokens) and OpenAPI docs."
+    ],
+    "imageAlt": "Quikko landing page with the headline “Shorten links. Watch clicks arrive instantly” and a dashboard preview showing clicks per hour."
+  }
+}

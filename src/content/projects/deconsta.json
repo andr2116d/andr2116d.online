@@ -1,0 +1,84 @@
+{
+  "name": "Deconsta",
+  "order": 4,
+  "year": 2026,
+  "team": true,
+  "area": "product",
+  "repository": "https://github.com/andr2116d/Deconsta",
+  "stack": [
+    "Vue 3",
+    "TypeScript",
+    "Pinia",
+    "Tailwind CSS",
+    "FastAPI",
+    "PostgreSQL",
+    "Redis",
+    "Celery",
+    "PaddleOCR",
+    "Claude API"
+  ],
+  "languages": ["Python", "TypeScript"],
+  "flow": [
+    {
+      "label": {
+        "es": "Documento",
+        "en": "Document"
+      },
+      "type": "source"
+    },
+    {
+      "label": "OCR",
+      "type": "process"
+    },
+    {
+      "label": {
+        "es": "Revisión IA",
+        "en": "AI review"
+      },
+      "type": "process"
+    },
+    {
+      "label": {
+        "es": "Reglas",
+        "en": "Rules"
+      },
+      "type": "process"
+    },
+    {
+      "label": {
+        "es": "Pago",
+        "en": "Payment"
+      },
+      "type": "output"
+    }
+  ],
+  "image": "../../assets/projects/deconsta.webp",
+  "es": {
+    "kind": "Producto · Automatización con IA",
+    "tagline": "Pagos delegados, sin perder el control.",
+    "description": "Deconsta: plataforma para delegar pagos con control, con revisión de documentos por OCR e IA, reglas de autorización y auditoría.",
+    "summary": "Plataforma para delegar el pago de deudas a un equipo sin perder el control: cada deuda con su documento, cada pago con su voucher y cada decisión registrada.",
+    "problem": "En una familia, un consultorio o una empresa pequeña, los pagos del día a día se delegan, y el control termina repartido entre mensajes, capturas de vouchers y hojas de cálculo.",
+    "approach": [
+      "Roles de gerencia y asistencia con reglas de autorización (límite en soles y titulares autorizados), calendario de vencimientos e historial auditable.",
+      "Análisis de documentos en tres capas independientes: inspección del archivo, lectura con PaddleOCR y revisión estructurada con Claude. Ninguna decide sola.",
+      "Backend en FastAPI con arquitectura hexagonal, workers de Celery sobre Redis y notificaciones en tiempo real por SSE."
+    ],
+    "role": "Proyecto de tres integrantes. Soy autor de la mayoría de los commits del repositorio.",
+    "imageAlt": "Resumen de la gerencia en Deconsta: montos por pagar, deudas que esperan autorización y una bandeja de decisiones ordenada por vencimiento."
+  },
+  "en": {
+    "kind": "Product · AI-assisted automation",
+    "tagline": "Delegated payments, without losing control.",
+    "description": "Deconsta: a platform for delegating payments with control, featuring OCR and AI document review, approval rules and auditing.",
+    "summary": "Platform to delegate bill payments to a team without losing control: every debt backed by its document, every payment by its receipt and every decision recorded.",
+    "problem": "In a family, a clinic or a small business, everyday payments get delegated, and control ends up scattered across messages, receipt screenshots and spreadsheets.",
+    "approach": [
+      "Manager and assistant roles with approval rules (amount limit and authorized account holders), a due-date calendar and an auditable history.",
+      "Document analysis in three independent layers: file inspection, PaddleOCR reading and structured review with Claude. None of them decides alone.",
+      "FastAPI backend with hexagonal architecture, Celery workers on Redis and real-time notifications over SSE."
+    ],
+    "role": "Three-person project. I authored most of the repository’s commits.",
+    "imageAlt": "Deconsta manager overview: amounts due, debts awaiting approval and a decision inbox sorted by due date."
+  }
+}
