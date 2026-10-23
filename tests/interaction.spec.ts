@@ -118,3 +118,38 @@ test.describe("without JavaScript", () => {
     await expect(page.locator("[data-motion-toggle]")).toBeHidden();
   });
 });
+
+test.describe("CV", () => {
+  for (const [path, pdf] of [
+    ["/cv/", "/cv/Johel-Andree-Vargas-Villanueva-CV.pdf"],
+    ["/en/cv/", "/cv/Johel-Andree-Vargas-Villanueva-Resume.pdf"],
+  ] as const) {
+    test(`${path} offers its PDF and keeps ATS-friendly structure`, async ({
+      page,
+      request,
+    }) => {
+      await page.goto(path);
+      await expect(page.locator(`a[href="${pdf}"][download]`)).toBeVisible();
+      const response = await request.get(pdf);
+      expect(response.status()).toBe(200);
+      expect(response.headers()["content-type"]).toContain("application/pdf");
+
+      // Single column of real text: standard headings, no images inside the sheet.
+      const sheet = page.locator(".sheet");
+      await expect(sheet.locator("h2")).toHaveCount(4);
+      await expect(sheet.locator("img, svg, canvas")).toHaveCount(0);
+    });
+  }
+
+  test("printing shows only the A4 sheet", async ({ page }) => {
+    await page.goto("/cv/");
+    await page.emulateMedia({ media: "print" });
+    await expect(page.locator(".site-header")).toBeHidden();
+    await expect(page.locator(".cv-toolbar")).toBeHidden();
+    const size = await page
+      .locator(".sheet")
+      .evaluate((el) => [el.clientWidth, el.clientHeight]);
+    expect(size[0]).toBeCloseTo(794, -1); // 210 mm at 96 dpi
+    expect(size[1]).toBeCloseTo(1123, -1); // 297 mm
+  });
+});
